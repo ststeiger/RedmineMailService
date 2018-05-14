@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedmineMailService", "RedmineMailService\RedmineMailService.csproj", "{8AF938B5-D692-43B8-93F7-1233E7EE3310}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DasMulli.Win32.ServiceUtils", "DasMulli.Win32.ServiceUtils\DasMulli.Win32.ServiceUtils.csproj", "{310F484C-8E84-4F40-BEA0-F4C96E802E33}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedmineAPI", "RedmineAPI\RedmineAPI.csproj", "{D5A225A6-1956-4D10-903A-BF2669BDBF1C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8AF938B5-D692-43B8-93F7-1233E7EE3310}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AF938B5-D692-43B8-93F7-1233E7EE3310}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AF938B5-D692-43B8-93F7-1233E7EE3310}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AF938B5-D692-43B8-93F7-1233E7EE3310}.Release|Any CPU.Build.0 = Release|Any CPU
+		{310F484C-8E84-4F40-BEA0-F4C96E802E33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{310F484C-8E84-4F40-BEA0-F4C96E802E33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{310F484C-8E84-4F40-BEA0-F4C96E802E33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{310F484C-8E84-4F40-BEA0-F4C96E802E33}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5A225A6-1956-4D10-903A-BF2669BDBF1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5A225A6-1956-4D10-903A-BF2669BDBF1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5A225A6-1956-4D10-903A-BF2669BDBF1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5A225A6-1956-4D10-903A-BF2669BDBF1C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {954743EC-3D31-4364-9E4F-74F0D9F94C4D}
+	EndGlobalSection
+EndGlobal
