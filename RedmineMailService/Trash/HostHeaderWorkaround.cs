@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
 namespace RedmineClient
 {
+
+
     class HostHeaderWorkaround
     {
-
 
 
         public class ModifiedWebClient : System.Net.WebClient
@@ -40,8 +38,6 @@ namespace RedmineClient
                 horribleProxyServicePoint.SetValue(foo.ServicePoint, false);
                 return foo;
 
-
-
                 return request;
             }
 
@@ -63,4 +59,6 @@ namespace RedmineClient
 
 
     }
+
+
 }

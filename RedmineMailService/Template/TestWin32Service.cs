@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace RedmineMailService
 {
 
+
     internal class TestWin32Service : DasMulli.Win32.ServiceUtils.IWin32Service
     {
         private readonly string[] commandLineArguments;
@@ -21,13 +22,14 @@ namespace RedmineMailService
                 // throw new System.NotImplementedException();
                 return "Test Service";
             }
-        }
+
+        } // End Property ServiceName 
 
 
         public TestWin32Service(string[] commandLineArguments)
         {
             this.commandLineArguments = commandLineArguments;
-        } // ENd Constructor 
+        } // End Constructor 
 
 
 
@@ -77,7 +79,7 @@ namespace RedmineMailService
                });
 
             webHost.Start();
-        }
+        } // End Sub Start 
 
 
         void DasMulli.Win32.ServiceUtils.IWin32Service.Stop()
@@ -86,12 +88,14 @@ namespace RedmineMailService
 
             if (webHost != null)
                 webHost.Dispose();
-        }
-    }
+        } // End Sub Stop 
+
+    } // End Class TestWin32Service 
 
 
     internal class AspNetCoreStartup
     {
+
         public void Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder app)
         {
             // app.Run(async (context) =>
@@ -101,9 +105,9 @@ namespace RedmineMailService
                 await Microsoft.AspNetCore.Http.HttpResponseWritingExtensions.WriteAsync(context.Response, "Hello World !");
             });
 
-        }
-    }
+        } // End Sub Configure 
 
-}
+    } // End Class AspNetCoreStartup 
 
 
+} // End Namespace 

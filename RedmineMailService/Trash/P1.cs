@@ -1,6 +1,5 @@
 ﻿
 using System.Collections.Generic;
-using System.Windows.Forms;
 
 
 namespace RedmineClient
@@ -46,7 +45,7 @@ namespace RedmineClient
             System.Text.RegularExpressions.Regex reg = new System.Text.RegularExpressions.Regex("^[0-9].*");
             if (reg.IsMatch(str))
                 str = "___" + str;
-            
+
             return str;
         } // End Function GenerateVariableSlug 
 
@@ -159,9 +158,9 @@ namespace RedmineClient
 
 
 
-            
 
-            
+
+
             //List<Redmine.Net.Api.Types.Upload> trackers = redman.GetObjects<Redmine.Net.Api.Types.Upload>();
             //foreach (Redmine.Net.Api.Types.Upload thisUpload in trackers)
             //{
@@ -208,7 +207,7 @@ namespace RedmineClient
             uploads.Add(fileToAttach);
             */
 
-            List<Redmine.Net.Api.Types.IssueCustomField> CustomFields = 
+            List<Redmine.Net.Api.Types.IssueCustomField> CustomFields =
                 new List<Redmine.Net.Api.Types.IssueCustomField>
                 {
                         new Redmine.Net.Api.Types.IssueCustomField
@@ -229,7 +228,7 @@ namespace RedmineClient
 
             string fn = @"D:\username\Pictures\umm-al-maa-idehan-ubari-sand-sea-libya-1.jpg";
             fn = "/home/<user>/Pictures/DA-NANG-CITY.jpg";
-            
+
             byte[] documentData = System.IO.File.ReadAllBytes(fn);
 
             // Fixed: https://www.redmine.org/projects/redmine/wiki/Rest_api
@@ -242,7 +241,7 @@ namespace RedmineClient
 
             List<Redmine.Net.Api.Types.Upload> attachments = new List<Redmine.Net.Api.Types.Upload>();
             attachments.Add(attachment);
-            
+
 
             redman.CreateObject<Redmine.Net.Api.Types.Issue>(
                 new Redmine.Net.Api.Types.Issue()
@@ -296,12 +295,12 @@ namespace RedmineClient
                     CustomFields = CustomFields
                 }
             );
-            
+
 
             System.Console.WriteLine(System.Environment.NewLine);
             System.Console.WriteLine(System.Environment.NewLine);
             System.Console.WriteLine(" --- Press any key to continue --- ");
-             System.Console.ReadKey();
+            System.Console.ReadKey();
         } // End Sub Main 
 
 
