@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Threading.Tasks;
 using Microsoft.Exchange.WebServices.Data;
 
@@ -24,7 +25,8 @@ namespace RedmineMailService
         public static async void ListAllMails()
         {
             ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
-            service.Credentials = new WebCredentials(RedmineMailService.Trash.UserData.Email, RedmineMailService.Trash.UserData.Password);
+            service.Credentials = new WebCredentials(RedmineMailService.Trash.UserData.Email
+                , RedmineMailService.Trash.UserData.Password);
 
             Microsoft.Exchange.WebServices.Data.ITraceListener listener = new NoTrace();
 
@@ -212,11 +214,19 @@ namespace RedmineMailService
                 service.TraceEnabled = true;
             } // End if (listener != null) 
 
-            service.AutodiscoverUrl(RedmineMailService.Trash.UserData.Email, RedirectionUrlValidationCallback);
+            service.Url = new System.Uri("https://webmail.cor-management.ch/ews/exchange.asmx");
+            // service.AutodiscoverUrl(RedmineMailService.Trash.UserData.Email, RedirectionUrlValidationCallback);
 
+            try
+            {
+                Folder inbox = await Folder.Bind(service, WellKnownFolderName.Inbox);
 
-            Folder inbox = await Folder.Bind(service, WellKnownFolderName.Inbox);
-
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+            
             // The search filter to get unread email.
             SearchFilter sf = new SearchFilter.SearchFilterCollection(LogicalOperator.And
                 , new SearchFilter.IsEqualTo(EmailMessageSchema.IsRead, false));
@@ -305,7 +315,8 @@ namespace RedmineMailService
             service.Credentials = new WebCredentials(RedmineMailService.Trash.UserData.Email, RedmineMailService.Trash.UserData.Password);
 
             Microsoft.Exchange.WebServices.Data.ITraceListener listener = new NoTrace();
-
+            listener = null;
+            
             if (listener != null)
             {
                 service.TraceListener = listener;
@@ -313,8 +324,13 @@ namespace RedmineMailService
                 service.TraceEnabled = true;
             } // End if (listener != null) 
 
+            service.TraceFlags = TraceFlags.All;
+            service.TraceEnabled = true;
+            
+            // service.Url = new System.Uri("https://webmail.cor-management.ch/ews/exchange.asmx");
+            // nslookup -type=srv _autodiscover._tcp.cor-management.ch
             service.AutodiscoverUrl(RedmineMailService.Trash.UserData.Email, RedirectionUrlValidationCallback);
-
+            
             Folder rootfolder = await Folder.Bind(service, WellKnownFolderName.MsgFolderRoot);
 
             // Set the properties you want to retrieve when you load the folder.

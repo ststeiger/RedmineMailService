@@ -61,7 +61,7 @@ namespace RedmineMailService
         public static void Start(string[] args)
         {
             // args = new string[] { INTERACTIVE };
-            // args = new string[] { REGISTER_SERVICE };
+            args = new string[] { REGISTER_SERVICE };
             // args = new string[] { RUN_AS_SERVICE };
             // args = new string[] { UNREGISTER_SERVICE };
 
@@ -241,10 +241,14 @@ WantedBy=multi-user.target
                 string serviceFile = @"/etc/systemd/system/RedmineMailService.service";
                 if (!System.IO.File.Exists(serviceFile))
                     System.IO.File.WriteAllText(serviceFile, serviceFileContent, System.Text.Encoding.UTF8);
-
-                Mono.Unix.Native.Passwd pw = Mono.Unix.Native.Syscall.getpwnam("www-data");
-                Mono.Unix.Native.Syscall.chown(serviceFile, pw.pw_uid, pw.pw_gid);
-
+                
+                Posix.passwd_t pw = Posix.Syscalls.getpwnam("www-data");
+                Posix.Syscalls.chown(serviceFile, pw.pw_uid, pw.pw_gid);
+                
+                // Remove dependency on mono...
+                // Mono.Unix.Native.Passwd pw = Mono.Unix.Native.Syscall.getpwnam("www-data");
+                // Mono.Unix.Native.Syscall.chown(serviceFile, pw.pw_uid, pw.pw_gid);
+                
                 using (System.Diagnostics.Process p = new System.Diagnostics.Process()
                 {
                     StartInfo = new System.Diagnostics.ProcessStartInfo("sudo", "systemctl enable RedmineMailService")

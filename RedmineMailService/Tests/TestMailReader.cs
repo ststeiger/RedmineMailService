@@ -20,14 +20,15 @@ namespace RedmineMailService
             // RedmineMailService.Trash.Exchange.TestSend();
             // RedmineMailService.Trash.Exchange.Test();
 
-            TestPop3(Trash.UserData.RSN, Trash.UserData.RSNA);
-            TestImap(Trash.UserData.RSN, Trash.UserData.RSNA);
-            TestSMTP(Trash.UserData.RSN, Trash.UserData.RSNA);
+            // TestPop3(Trash.UserData.RSN, Trash.UserData.RSNA);
+            // TestImap(Trash.UserData.RSN, Trash.UserData.RSNA);
+            // TestSMTP(Trash.UserData.RSN, Trash.UserData.RSNA);
 
             // ExchangeShared();
-            // RedmineMailService.Trash.Exchange.FindUnreadEmail();
-            // RedmineMailService.Trash.Exchange.DelaySendEmail();
-            // RedmineMailService.Trash.Exchange.PlayEmailOnPhone();
+            RedmineMailService.Exchange.ListFolders();
+            // RedmineMailService.Exchange.FindUnreadEmail();
+            // RedmineMailService.Exchange.DelaySendEmail();
+            // RedmineMailService.Exchange.PlayEmailOnPhone();
             
         }
 

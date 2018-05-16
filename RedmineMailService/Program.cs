@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 namespace RedmineMailService
 {
 
@@ -11,9 +13,9 @@ namespace RedmineMailService
         static void Main(string[] args)
         {
             // https://github.com/dasMulli/dotnet-win32-service
-            ServiceStarter.Start(args);
+            // ServiceStarter.Start(args);
             
-            MailSender.Test();
+            // MailSender.Test();
             TestMailReader.Test();
 
             System.Console.WriteLine(System.Environment.NewLine);
