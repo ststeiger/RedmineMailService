@@ -1,4 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿
+using System.Diagnostics.CodeAnalysis;
+
 
 namespace DasMulli.Win32.ServiceUtils
 {
@@ -56,7 +58,7 @@ namespace DasMulli.Win32.ServiceUtils
             {
                 statusReportCallback(ServiceState.StopPending, ServiceAcceptedControlCommandsFlags.None, win32ExitCode: 0, waitHint: 3000);
 
-                var win32ExitCode = 0;
+                int win32ExitCode = 0;
 
                 try
                 {

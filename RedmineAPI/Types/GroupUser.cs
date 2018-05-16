@@ -14,14 +14,13 @@
    limitations under the License.
 */
 
-using System.Xml.Serialization;
 
 namespace Redmine.Net.Api.Types
 {
     /// <summary>
     /// 
     /// </summary>
-    [XmlRoot(RedmineKeys.USER)]
+    [System.Xml.Serialization.XmlRoot(RedmineKeys.USER)]
     public class GroupUser : IdentifiableName
     {
         /// <summary>

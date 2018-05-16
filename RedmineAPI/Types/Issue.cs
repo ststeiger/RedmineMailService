@@ -14,13 +14,9 @@
    limitations under the License.
 */
 
-using System;
-using System.Collections.Generic;
-using System.Xml;
-using System.Xml.Schema;
-using System.Xml.Serialization;
-using Redmine.Net.Api.Extensions;
 using Redmine.Net.Api.Internals;
+using Redmine.Net.Api.Extensions;
+
 
 namespace Redmine.Net.Api.Types
 {
@@ -30,84 +26,85 @@ namespace Redmine.Net.Api.Types
     ///Possible values: children, attachments, relations, changesets and journals. To fetch multiple associations use comma (e.g ?include=relations,journals). 
     /// See Issue journals for more information.
     /// </summary>
-    [XmlRoot(RedmineKeys.ISSUE)]
-    public class Issue : Identifiable<Issue>, IXmlSerializable, IEquatable<Issue>, ICloneable
+    [System.Xml.Serialization.XmlRoot(RedmineKeys.ISSUE)]
+    public class Issue 
+        : Identifiable<Issue>, System.Xml.Serialization.IXmlSerializable, System.IEquatable<Issue>, System.ICloneable
     {
         /// <summary>
         /// Gets or sets the project.
         /// </summary>
         /// <value>The project.</value>
-        [XmlElement(RedmineKeys.PROJECT)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.PROJECT)]
         public IdentifiableName Project { get; set; }
 
         /// <summary>
         /// Gets or sets the tracker.
         /// </summary>
         /// <value>The tracker.</value>
-        [XmlElement(RedmineKeys.TRACKER)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.TRACKER)]
         public IdentifiableName Tracker { get; set; }
 
         /// <summary>
         /// Gets or sets the status.Possible values: open, closed, * to get open and closed issues, status id
         /// </summary>
         /// <value>The status.</value>
-        [XmlElement(RedmineKeys.STATUS)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.STATUS)]
         public IdentifiableName Status { get; set; }
 
         /// <summary>
         /// Gets or sets the priority.
         /// </summary>
         /// <value>The priority.</value>
-        [XmlElement(RedmineKeys.PRIORITY)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.PRIORITY)]
         public IdentifiableName Priority { get; set; }
 
         /// <summary>
         /// Gets or sets the author.
         /// </summary>
         /// <value>The author.</value>
-        [XmlElement(RedmineKeys.AUTHOR)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.AUTHOR)]
         public IdentifiableName Author { get; set; }
 
         /// <summary>
         /// Gets or sets the category.
         /// </summary>
         /// <value>The category.</value>
-        [XmlElement(RedmineKeys.CATEGORY)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.CATEGORY)]
         public IdentifiableName Category { get; set; }
 
         /// <summary>
         /// Gets or sets the subject.
         /// </summary>
         /// <value>The subject.</value>
-        [XmlElement(RedmineKeys.SUBJECT)]
-        public String Subject { get; set; }
+        [System.Xml.Serialization.XmlElement(RedmineKeys.SUBJECT)]
+        public string Subject { get; set; }
 
         /// <summary>
         /// Gets or sets the description.
         /// </summary>
         /// <value>The description.</value>
-        [XmlElement(RedmineKeys.DESCRIPTION)]
-        public String Description { get; set; }
+        [System.Xml.Serialization.XmlElement(RedmineKeys.DESCRIPTION)]
+        public string Description { get; set; }
 
         /// <summary>
         /// Gets or sets the start date.
         /// </summary>
         /// <value>The start date.</value>
-        [XmlElement(RedmineKeys.START_DATE, IsNullable = true)]
-        public DateTime? StartDate { get; set; }
+        [System.Xml.Serialization.XmlElement(RedmineKeys.START_DATE, IsNullable = true)]
+        public System.DateTime? StartDate { get; set; }
 
         /// <summary>
         /// Gets or sets the due date.
         /// </summary>
         /// <value>The due date.</value>
-        [XmlElement(RedmineKeys.DUE_DATE, IsNullable = true)]
-        public DateTime? DueDate { get; set; }
+        [System.Xml.Serialization.XmlElement(RedmineKeys.DUE_DATE, IsNullable = true)]
+        public System.DateTime? DueDate { get; set; }
 
         /// <summary>
         /// Gets or sets the done ratio.
         /// </summary>
         /// <value>The done ratio.</value>
-        [XmlElement(RedmineKeys.DONE_RATIO, IsNullable = true)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.DONE_RATIO, IsNullable = true)]
         public float? DoneRatio { get; set; }
 
         /// <summary>
@@ -116,56 +113,56 @@ namespace Redmine.Net.Api.Types
         /// <value>
         ///   <c>true</c> if [private notes]; otherwise, <c>false</c>.
         /// </value>
-        [XmlElement(RedmineKeys.PRIVATE_NOTES)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.PRIVATE_NOTES)]
         public bool PrivateNotes { get; set; }
 
         /// <summary>
         /// Gets or sets the estimated hours.
         /// </summary>
         /// <value>The estimated hours.</value>
-        [XmlElement(RedmineKeys.ESTIMATED_HOURS, IsNullable = true)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.ESTIMATED_HOURS, IsNullable = true)]
         public float? EstimatedHours { get; set; }
 
         /// <summary>
         /// Gets or sets the hours spent on the issue.
         /// </summary>
         /// <value>The hours spent on the issue.</value>
-        [XmlElement(RedmineKeys.SPENT_HOURS, IsNullable = true)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.SPENT_HOURS, IsNullable = true)]
         public float? SpentHours { get; set; }
 
         /// <summary>
         /// Gets or sets the custom fields.
         /// </summary>
         /// <value>The custom fields.</value>
-        [XmlArray(RedmineKeys.CUSTOM_FIELDS)]
-        [XmlArrayItem(RedmineKeys.CUSTOM_FIELD)]
-        public IList<IssueCustomField> CustomFields { get; set; }
+        [System.Xml.Serialization.XmlArray(RedmineKeys.CUSTOM_FIELDS)]
+        [System.Xml.Serialization.XmlArrayItem(RedmineKeys.CUSTOM_FIELD)]
+        public System.Collections.Generic.IList<IssueCustomField> CustomFields { get; set; }
 
         /// <summary>
         /// Gets or sets the created on.
         /// </summary>
         /// <value>The created on.</value>
-        [XmlElement(RedmineKeys.CREATED_ON, IsNullable = true)]
-        public DateTime? CreatedOn { get; set; }
+        [System.Xml.Serialization.XmlElement(RedmineKeys.CREATED_ON, IsNullable = true)]
+        public System.DateTime? CreatedOn { get; set; }
 
         /// <summary>
         /// Gets or sets the updated on.
         /// </summary>
         /// <value>The updated on.</value>
-        [XmlElement(RedmineKeys.UPDATED_ON, IsNullable = true)]
-        public DateTime? UpdatedOn { get; set; }
+        [System.Xml.Serialization.XmlElement(RedmineKeys.UPDATED_ON, IsNullable = true)]
+        public System.DateTime? UpdatedOn { get; set; }
 
         /// <summary>
         /// Gets or sets the closed on.
         /// </summary>
         /// <value>The closed on.</value>
-        [XmlElement(RedmineKeys.CLOSED_ON, IsNullable = true)]
-        public DateTime? ClosedOn { get; set; }
+        [System.Xml.Serialization.XmlElement(RedmineKeys.CLOSED_ON, IsNullable = true)]
+        public System.DateTime? ClosedOn { get; set; }
 
         /// <summary>
         /// Gets or sets the notes.
         /// </summary>
-        [XmlElement(RedmineKeys.NOTES)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.NOTES)]
         public string Notes { get; set; }
 
         /// <summary>
@@ -174,7 +171,7 @@ namespace Redmine.Net.Api.Types
         /// <value>
         /// The assigned to.
         /// </value>
-        [XmlElement(RedmineKeys.ASSIGNED_TO)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.ASSIGNED_TO)]
         public IdentifiableName AssignedTo { get; set; }
 
         /// <summary>
@@ -183,7 +180,7 @@ namespace Redmine.Net.Api.Types
         /// <value>
         /// The parent issue id.
         /// </value>
-        [XmlElement(RedmineKeys.PARENT)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.PARENT)]
         public IdentifiableName ParentIssue { get; set; }
 
         /// <summary>
@@ -192,7 +189,7 @@ namespace Redmine.Net.Api.Types
         /// <value>
         /// The fixed version.
         /// </value>
-        [XmlElement(RedmineKeys.FIXED_VERSION)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.FIXED_VERSION)]
         public IdentifiableName FixedVersion { get; set; }
 
         /// <summary>
@@ -201,7 +198,7 @@ namespace Redmine.Net.Api.Types
         /// <value>
         /// <c>true</c> if this issue is private; otherwise, <c>false</c>.
         /// </value>
-        [XmlElement(RedmineKeys.IS_PRIVATE)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.IS_PRIVATE)]
         public bool IsPrivate { get; set; }
 
         /// <summary>
@@ -210,9 +207,9 @@ namespace Redmine.Net.Api.Types
         /// <value>
         /// The journals.
         /// </value>
-        [XmlArray(RedmineKeys.JOURNALS)]
-        [XmlArrayItem(RedmineKeys.JOURNAL)]
-        public IList<Journal> Journals { get; set; }
+        [System.Xml.Serialization.XmlArray(RedmineKeys.JOURNALS)]
+        [System.Xml.Serialization.XmlArrayItem(RedmineKeys.JOURNAL)]
+        public System.Collections.Generic.IList<Journal> Journals { get; set; }
 
         /// <summary>
         /// Gets or sets the changesets.
@@ -220,9 +217,9 @@ namespace Redmine.Net.Api.Types
         /// <value>
         /// The changesets.
         /// </value>
-        [XmlArray(RedmineKeys.CHANGESETS)]
-        [XmlArrayItem(RedmineKeys.CHANGESET)]
-        public IList<ChangeSet> Changesets { get; set; }
+        [System.Xml.Serialization.XmlArray(RedmineKeys.CHANGESETS)]
+        [System.Xml.Serialization.XmlArrayItem(RedmineKeys.CHANGESET)]
+        public System.Collections.Generic.IList<ChangeSet> Changesets { get; set; }
 
         /// <summary>
         /// Gets or sets the attachments.
@@ -230,9 +227,9 @@ namespace Redmine.Net.Api.Types
         /// <value>
         /// The attachments.
         /// </value>
-        [XmlArray(RedmineKeys.ATTACHMENTS)]
-        [XmlArrayItem(RedmineKeys.ATTACHMENT)]
-        public IList<Attachment> Attachments { get; set; }
+        [System.Xml.Serialization.XmlArray(RedmineKeys.ATTACHMENTS)]
+        [System.Xml.Serialization.XmlArrayItem(RedmineKeys.ATTACHMENT)]
+        public System.Collections.Generic.IList<Attachment> Attachments { get; set; }
 
         /// <summary>
         /// Gets or sets the issue relations.
@@ -240,9 +237,9 @@ namespace Redmine.Net.Api.Types
         /// <value>
         /// The issue relations.
         /// </value>
-        [XmlArray(RedmineKeys.RELATIONS)]
-        [XmlArrayItem(RedmineKeys.RELATION)]
-        public IList<IssueRelation> Relations { get; set; }
+        [System.Xml.Serialization.XmlArray(RedmineKeys.RELATIONS)]
+        [System.Xml.Serialization.XmlArrayItem(RedmineKeys.RELATION)]
+        public System.Collections.Generic.IList<IssueRelation> Relations { get; set; }
 
         /// <summary>
         /// Gets or sets the issue children.
@@ -251,9 +248,9 @@ namespace Redmine.Net.Api.Types
         /// The issue children.
         /// NOTE: Only Id, tracker and subject are filled.
         /// </value>
-        [XmlArray(RedmineKeys.CHILDREN)]
-        [XmlArrayItem(RedmineKeys.ISSUE)]
-        public IList<IssueChild> Children { get; set; }
+        [System.Xml.Serialization.XmlArray(RedmineKeys.CHILDREN)]
+        [System.Xml.Serialization.XmlArrayItem(RedmineKeys.ISSUE)]
+        public System.Collections.Generic.IList<IssueChild> Children { get; set; }
 
         /// <summary>
         /// Gets or sets the attachments.
@@ -261,22 +258,22 @@ namespace Redmine.Net.Api.Types
         /// <value>
         /// The attachment.
         /// </value>
-        [XmlArray(RedmineKeys.UPLOADS)]
-        [XmlArrayItem(RedmineKeys.UPLOAD)]
-        public IList<Upload> Uploads { get; set; }
+        [System.Xml.Serialization.XmlArray(RedmineKeys.UPLOADS)]
+        [System.Xml.Serialization.XmlArrayItem(RedmineKeys.UPLOAD)]
+        public System.Collections.Generic.IList<Upload> Uploads { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        [XmlArray(RedmineKeys.WATCHERS)]
-        [XmlArrayItem(RedmineKeys.WATCHER)]
-        public IList<Watcher> Watchers { get; set; }
+        [System.Xml.Serialization.XmlArray(RedmineKeys.WATCHERS)]
+        [System.Xml.Serialization.XmlArrayItem(RedmineKeys.WATCHER)]
+        public System.Collections.Generic.IList<Watcher> Watchers { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        public XmlSchema GetSchema()
+        public System.Xml.Schema.XmlSchema GetSchema()
         {
             return null;
         }
@@ -285,7 +282,7 @@ namespace Redmine.Net.Api.Types
         /// 
         /// </summary>
         /// <param name="reader"></param>
-        public void ReadXml(XmlReader reader)
+        public void ReadXml(System.Xml.XmlReader reader)
         {
             reader.Read();
 
@@ -430,7 +427,7 @@ namespace Redmine.Net.Api.Types
         /// 
         /// </summary>
         /// <param name="writer"></param>
-        public void WriteXml(XmlWriter writer)
+        public void WriteXml(System.Xml.XmlWriter writer)
         {
             writer.WriteElementString(RedmineKeys.SUBJECT, Subject);
             writer.WriteElementString(RedmineKeys.NOTES, Notes);
@@ -463,7 +460,7 @@ namespace Redmine.Net.Api.Types
             writer.WriteArray(Uploads, RedmineKeys.UPLOADS);
             writer.WriteArray(CustomFields, RedmineKeys.CUSTOM_FIELDS);
 
-            writer.WriteListElements(Watchers as IList<IValue>, RedmineKeys.WATCHER_USER_IDS);
+            writer.WriteListElements(Watchers as System.Collections.Generic.IList<IValue>, RedmineKeys.WATCHER_USER_IDS);
         }
 
         /// <summary>
@@ -472,7 +469,7 @@ namespace Redmine.Net.Api.Types
         /// <returns></returns>
         public object Clone()
         {
-            var issue = new Issue
+            Issue issue = new Issue
             {
                 AssignedTo = AssignedTo,
                 Author = Author,
@@ -503,7 +500,9 @@ namespace Redmine.Net.Api.Types
         /// <returns></returns>
         public bool Equals(Issue other)
         {
-            if (other == null) return false;
+            if (other == null)
+                return false;
+
             return (
                 Id == other.Id
             && Project == other.Project
@@ -554,7 +553,7 @@ namespace Redmine.Net.Api.Types
         /// <returns></returns>
         public override int GetHashCode()
         {
-            var hashCode = base.GetHashCode();
+            int hashCode = base.GetHashCode();
 
             hashCode = HashCodeHelper.GetHashCode(Project, hashCode);
             hashCode = HashCodeHelper.GetHashCode(Tracker, hashCode);

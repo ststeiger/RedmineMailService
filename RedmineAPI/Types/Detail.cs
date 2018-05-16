@@ -14,19 +14,17 @@
    limitations under the License.
 */
 
-using System;
-using System.Xml;
-using System.Xml.Schema;
-using System.Xml.Serialization;
+
 using Redmine.Net.Api.Internals;
+
 
 namespace Redmine.Net.Api.Types
 {
     /// <summary>
     /// 
     /// </summary>
-    [XmlRoot(RedmineKeys.DETAIL)]
-    public class Detail : IXmlSerializable, IEquatable<Detail>
+    [System.Xml.Serialization.XmlRoot(RedmineKeys.DETAIL)]
+    public class Detail : System.Xml.Serialization.IXmlSerializable, System.IEquatable<Detail>
     {
         /// <summary>
         /// Gets or sets the property.
@@ -34,7 +32,7 @@ namespace Redmine.Net.Api.Types
         /// <value>
         /// The property.
         /// </value>
-        [XmlAttribute(RedmineKeys.PROPERTY)]
+        [System.Xml.Serialization.XmlAttribute(RedmineKeys.PROPERTY)]
         public string Property { get; set; }
 
         /// <summary>
@@ -43,7 +41,7 @@ namespace Redmine.Net.Api.Types
         /// <value>
         /// The name.
         /// </value>
-        [XmlAttribute(RedmineKeys.NAME)]
+        [System.Xml.Serialization.XmlAttribute(RedmineKeys.NAME)]
         public string Name { get; set; }
 
         /// <summary>
@@ -52,7 +50,7 @@ namespace Redmine.Net.Api.Types
         /// <value>
         /// The old value.
         /// </value>
-        [XmlElement(RedmineKeys.OLD_VALUE)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.OLD_VALUE)]
         public string OldValue { get; set; }
 
         /// <summary>
@@ -61,20 +59,20 @@ namespace Redmine.Net.Api.Types
         /// <value>
         /// The new value.
         /// </value>
-        [XmlElement(RedmineKeys.NEW_VALUE)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.NEW_VALUE)]
         public string NewValue { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        public XmlSchema GetSchema() { return null; }
+        public System.Xml.Schema.XmlSchema GetSchema() { return null; }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="reader"></param>
-        public void ReadXml(XmlReader reader)
+        public void ReadXml(System.Xml.XmlReader reader)
         {
             Property = reader.GetAttribute(RedmineKeys.PROPERTY);
             Name = reader.GetAttribute(RedmineKeys.NAME);
@@ -104,7 +102,7 @@ namespace Redmine.Net.Api.Types
         /// 
         /// </summary>
         /// <param name="writer"></param>
-        public void WriteXml(XmlWriter writer) { }
+        public void WriteXml(System.Xml.XmlWriter writer) { }
 
         /// <summary>
         /// 
@@ -113,7 +111,9 @@ namespace Redmine.Net.Api.Types
         /// <returns></returns>
         public bool Equals(Detail other)
         {
-            if (other == null) return false;
+            if (other == null)
+                return false;
+
             return (Property != null ? Property.Equals(other.Property) : other.Property == null)
                 && (Name != null ? Name.Equals(other.Name) : other.Name == null)
                 && (OldValue != null ? OldValue.Equals(other.OldValue) : other.OldValue == null)
@@ -127,9 +127,15 @@ namespace Redmine.Net.Api.Types
         /// <returns></returns>
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != GetType()) return false;
+            if (ReferenceEquals(null, obj))
+                return false;
+
+            if (ReferenceEquals(this, obj))
+                return true;
+
+            if (obj.GetType() != GetType())
+                return false;
+
             return Equals(obj as Detail);
         }
 
@@ -141,7 +147,7 @@ namespace Redmine.Net.Api.Types
         {
             unchecked
             {
-                var hashCode = 13;
+                int hashCode = 13;
                 hashCode = HashCodeHelper.GetHashCode(Property, hashCode);
                 hashCode = HashCodeHelper.GetHashCode(Name, hashCode);
                 hashCode = HashCodeHelper.GetHashCode(OldValue, hashCode);

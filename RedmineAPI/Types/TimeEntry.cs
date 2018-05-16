@@ -14,11 +14,7 @@
    limitations under the License.
 */
 
-using System;
-using System.Collections.Generic;
-using System.Xml;
-using System.Xml.Schema;
-using System.Xml.Serialization;
+
 using Redmine.Net.Api.Extensions;
 using Redmine.Net.Api.Internals;
 
@@ -28,8 +24,12 @@ namespace Redmine.Net.Api.Types
     /// <summary>
     /// Availability 1.1
     /// </summary>
-    [XmlRoot(RedmineKeys.TIME_ENTRY)]
-    public class TimeEntry : Identifiable<TimeEntry>, ICloneable, IEquatable<TimeEntry>, IXmlSerializable
+    [System.Xml.Serialization.XmlRoot(RedmineKeys.TIME_ENTRY)]
+    public class TimeEntry 
+        : Identifiable<TimeEntry>
+        , System.ICloneable
+        , System.IEquatable<TimeEntry>
+        , System.Xml.Serialization.IXmlSerializable
     {
         private string comments;
 
@@ -37,35 +37,35 @@ namespace Redmine.Net.Api.Types
         /// Gets or sets the issue id to log time on.
         /// </summary>
         /// <value>The issue id.</value>
-        [XmlAttribute(RedmineKeys.ISSUE)]
+        [System.Xml.Serialization.XmlAttribute(RedmineKeys.ISSUE)]
         public IdentifiableName Issue { get; set; }
 
         /// <summary>
         /// Gets or sets the project id to log time on.
         /// </summary>
         /// <value>The project id.</value>
-        [XmlAttribute(RedmineKeys.PROJECT)]
+        [System.Xml.Serialization.XmlAttribute(RedmineKeys.PROJECT)]
         public IdentifiableName Project { get; set; }
 
         /// <summary>
         /// Gets or sets the date the time was spent (default to the current date).
         /// </summary>
         /// <value>The spent on.</value>
-        [XmlAttribute(RedmineKeys.SPENT_ON)]
-        public DateTime? SpentOn { get; set; }
+        [System.Xml.Serialization.XmlAttribute(RedmineKeys.SPENT_ON)]
+        public System.DateTime? SpentOn { get; set; }
 
         /// <summary>
         /// Gets or sets the number of spent hours.
         /// </summary>
         /// <value>The hours.</value>
-        [XmlAttribute(RedmineKeys.HOURS)]
+        [System.Xml.Serialization.XmlAttribute(RedmineKeys.HOURS)]
         public decimal Hours { get; set; }
 
         /// <summary>
         /// Gets or sets the activity id of the time activity. This parameter is required unless a default activity is defined in Redmine..
         /// </summary>
         /// <value>The activity id.</value>
-        [XmlAttribute(RedmineKeys.ACTIVITY)]
+        [System.Xml.Serialization.XmlAttribute(RedmineKeys.ACTIVITY)]
         public IdentifiableName Activity { get; set; }
 
         /// <summary>
@@ -74,15 +74,15 @@ namespace Redmine.Net.Api.Types
         /// <value>
         /// The user.
         /// </value>
-        [XmlAttribute(RedmineKeys.USER)]
+        [System.Xml.Serialization.XmlAttribute(RedmineKeys.USER)]
         public IdentifiableName User { get; set; }
 
         /// <summary>
         /// Gets or sets the short description for the entry (255 characters max).
         /// </summary>
         /// <value>The comments.</value>
-        [XmlAttribute(RedmineKeys.COMMENTS)]
-        public String Comments
+        [System.Xml.Serialization.XmlAttribute(RedmineKeys.COMMENTS)]
+        public string Comments
         {
             get { return comments; }
             set
@@ -102,23 +102,23 @@ namespace Redmine.Net.Api.Types
         /// Gets or sets the created on.
         /// </summary>
         /// <value>The created on.</value>
-        [XmlElement(RedmineKeys.CREATED_ON)]
-        public DateTime? CreatedOn { get; set; }
+        [System.Xml.Serialization.XmlElement(RedmineKeys.CREATED_ON)]
+        public System.DateTime? CreatedOn { get; set; }
 
         /// <summary>
         /// Gets or sets the updated on.
         /// </summary>
         /// <value>The updated on.</value>
-        [XmlElement(RedmineKeys.UPDATED_ON)]
-        public DateTime? UpdatedOn { get; set; }
+        [System.Xml.Serialization.XmlElement(RedmineKeys.UPDATED_ON)]
+        public System.DateTime? UpdatedOn { get; set; }
 
         /// <summary>
         /// Gets or sets the custom fields.
         /// </summary>
         /// <value>The custom fields.</value>
-        [XmlArray(RedmineKeys.CUSTOM_FIELDS)]
-        [XmlArrayItem(RedmineKeys.CUSTOM_FIELD)]
-        public IList<IssueCustomField> CustomFields { get; set; }
+        [System.Xml.Serialization.XmlArray(RedmineKeys.CUSTOM_FIELDS)]
+        [System.Xml.Serialization.XmlArrayItem(RedmineKeys.CUSTOM_FIELD)]
+        public System.Collections.Generic.IList<IssueCustomField> CustomFields { get; set; }
 
         /// <summary>
         /// 
@@ -126,7 +126,7 @@ namespace Redmine.Net.Api.Types
         /// <returns></returns>
         public object Clone()
         {
-            var timeEntry = new TimeEntry { Activity = Activity, Comments = Comments, Hours = Hours, Issue = Issue, Project = Project, SpentOn = SpentOn, User = User, CustomFields = CustomFields };
+            TimeEntry timeEntry = new TimeEntry { Activity = Activity, Comments = Comments, Hours = Hours, Issue = Issue, Project = Project, SpentOn = SpentOn, User = User, CustomFields = CustomFields };
             return timeEntry;
         }
 
@@ -134,13 +134,13 @@ namespace Redmine.Net.Api.Types
         /// 
         /// </summary>
         /// <returns></returns>
-        public XmlSchema GetSchema() { return null; }
+        public System.Xml.Schema.XmlSchema GetSchema() { return null; }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="reader"></param>
-        public void ReadXml(XmlReader reader)
+        public void ReadXml(System.Xml.XmlReader reader)
         {
             reader.Read();
             while (!reader.EOF)
@@ -190,13 +190,13 @@ namespace Redmine.Net.Api.Types
         /// 
         /// </summary>
         /// <param name="writer"></param>
-        public void WriteXml(XmlWriter writer)
+        public void WriteXml(System.Xml.XmlWriter writer)
         {
             writer.WriteIdIfNotNull(Issue, RedmineKeys.ISSUE_ID);
             writer.WriteIdIfNotNull(Project, RedmineKeys.PROJECT_ID);
 
             if (!SpentOn.HasValue)
-                SpentOn = DateTime.Now;
+                SpentOn = System.DateTime.Now;
 
             writer.WriteDateOrEmpty(SpentOn, RedmineKeys.SPENT_ON);
             writer.WriteValueOrEmpty<decimal>(Hours, RedmineKeys.HOURS);
@@ -235,7 +235,7 @@ namespace Redmine.Net.Api.Types
         {
             unchecked
             {
-                var hashCode = base.GetHashCode();
+                int hashCode = base.GetHashCode();
                 hashCode = HashCodeHelper.GetHashCode(Issue, hashCode);
                 hashCode = HashCodeHelper.GetHashCode(Project, hashCode);
                 hashCode = HashCodeHelper.GetHashCode(SpentOn, hashCode);

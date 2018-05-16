@@ -1,4 +1,6 @@
-﻿using JetBrains.Annotations;
+﻿
+using JetBrains.Annotations;
+
 
 namespace DasMulli.Win32.ServiceUtils
 {

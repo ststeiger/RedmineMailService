@@ -1,14 +1,17 @@
-﻿using JetBrains.Annotations;
-using System;
-using System.ComponentModel;
+﻿
+using JetBrains.Annotations;
+
 
 namespace DasMulli.Win32.ServiceUtils
 {
+
+
     /// <summary>
     /// The state a service is in
     /// </summary>
     [PublicAPI]
-    public enum ServiceState : uint
+    public enum ServiceState 
+        : uint
     {
         /// <summary>
         /// The service is stopped (= not running)
@@ -49,10 +52,12 @@ namespace DasMulli.Win32.ServiceUtils
         /// The service is starting.
         /// </summary>
 #if NETSTANDARD2_0
-        [Browsable(false)]
+        [System.ComponentModel.Browsable(false)]
 #endif
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("Misspelled, use '" + nameof(StartPending) +"' instead. This member will be removed in upcoming versions.", true)]
+        [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+        [System.Obsolete("Misspelled, use '" + nameof(StartPending) +"' instead. This member will be removed in upcoming versions.", true)]
         StartPening = StartPending
     }
+
+
 }

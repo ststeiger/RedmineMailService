@@ -14,8 +14,6 @@
    limitations under the License.
 */
 
-using System;
-using System.Globalization;
 
 namespace Redmine.Net.Api.Logging
 {
@@ -40,7 +38,7 @@ namespace Redmine.Net.Api.Logging
         /// <param name="logger">The logger.</param>
         /// <param name="message">The message.</param>
         /// <param name="exception">The exception.</param>
-        public static void Debug(this ILogger logger, string message, Exception exception)
+        public static void Debug(this ILogger logger, string message, System.Exception exception)
         {
             logger.Log(new LogEntry(LoggingEventType.Debug, message, exception));
         }
@@ -52,7 +50,7 @@ namespace Redmine.Net.Api.Logging
         /// <param name="formatProvider">The format provider.</param>
         /// <param name="format">The format.</param>
         /// <param name="args">The arguments.</param>
-        public static void Debug(this ILogger logger, IFormatProvider formatProvider, string format, params object[] args)
+        public static void Debug(this ILogger logger, System.IFormatProvider formatProvider, string format, params object[] args)
         {
             logger.Log(new LogEntry(LoggingEventType.Debug, string.Format(formatProvider, format, args)));
         }
@@ -65,7 +63,7 @@ namespace Redmine.Net.Api.Logging
         /// <param name="args">The arguments.</param>
         public static void Debug(this ILogger logger, string format, params object[] args)
         {
-            logger.Log(new LogEntry(LoggingEventType.Debug, string.Format(CultureInfo.CurrentCulture, format, args)));
+            logger.Log(new LogEntry(LoggingEventType.Debug, string.Format(System.Globalization.CultureInfo.CurrentCulture, format, args)));
         }
 
         /// <summary>
@@ -85,7 +83,7 @@ namespace Redmine.Net.Api.Logging
         /// <param name="formatProvider">The format provider.</param>
         /// <param name="format">The format.</param>
         /// <param name="args">The arguments.</param>
-        public static void Information(this ILogger logger, IFormatProvider formatProvider, string format, params object[] args)
+        public static void Information(this ILogger logger, System.IFormatProvider formatProvider, string format, params object[] args)
         {
             logger.Log(new LogEntry(LoggingEventType.Information, string.Format(formatProvider, format, args)));
         }
@@ -98,7 +96,8 @@ namespace Redmine.Net.Api.Logging
         /// <param name="args">The arguments.</param>
         public static void Information(this ILogger logger, string format, params object[] args)
         {
-            logger.Log(new LogEntry(LoggingEventType.Information, string.Format(CultureInfo.CurrentCulture, format, args)));
+            logger.Log(new LogEntry(LoggingEventType.Information, 
+                string.Format(System.Globalization.CultureInfo.CurrentCulture, format, args)));
         }
 
         /// <summary>
@@ -118,7 +117,7 @@ namespace Redmine.Net.Api.Logging
         /// <param name="formatProvider">The format provider.</param>
         /// <param name="format">The format.</param>
         /// <param name="args">The arguments.</param>
-        public static void Warning(this ILogger logger, IFormatProvider formatProvider, string format, params object[] args)
+        public static void Warning(this ILogger logger, System.IFormatProvider formatProvider, string format, params object[] args)
         {
             logger.Log(new LogEntry(LoggingEventType.Warning, string.Format(formatProvider, format, args)));
         }
@@ -131,7 +130,8 @@ namespace Redmine.Net.Api.Logging
         /// <param name="args">The arguments.</param>
         public static void Warning(this ILogger logger, string format, params object[] args)
         {
-            logger.Log(new LogEntry(LoggingEventType.Warning, string.Format(CultureInfo.CurrentCulture, format, args)));
+            logger.Log(new LogEntry(LoggingEventType.Warning, string.Format(
+                System.Globalization.CultureInfo.CurrentCulture, format, args)));
         }
 
         /// <summary>
@@ -139,7 +139,7 @@ namespace Redmine.Net.Api.Logging
         /// </summary>
         /// <param name="logger">The logger.</param>
         /// <param name="exception">The exception.</param>
-        public static void Error(this ILogger logger, Exception exception)
+        public static void Error(this ILogger logger, System.Exception exception)
         {
             logger.Log(new LogEntry(LoggingEventType.Error, exception.Message, exception));
         }
@@ -150,7 +150,7 @@ namespace Redmine.Net.Api.Logging
         /// <param name="logger">The logger.</param>
         /// <param name="message">The message.</param>
         /// <param name="exception">The exception.</param>
-        public static void Error(this ILogger logger, string message, Exception exception)
+        public static void Error(this ILogger logger, string message, System.Exception exception)
         {
             logger.Log(new LogEntry(LoggingEventType.Error, message, exception));
         }
@@ -162,7 +162,7 @@ namespace Redmine.Net.Api.Logging
         /// <param name="formatProvider">The format provider.</param>
         /// <param name="format">The format.</param>
         /// <param name="args">The arguments.</param>
-        public static void Error(this ILogger logger, IFormatProvider formatProvider, string format, params object[] args)
+        public static void Error(this ILogger logger, System.IFormatProvider formatProvider, string format, params object[] args)
         {
             logger.Log(new LogEntry(LoggingEventType.Error, string.Format(formatProvider, format, args)));
         }
@@ -175,7 +175,8 @@ namespace Redmine.Net.Api.Logging
         /// <param name="args">The arguments.</param>
         public static void Error(this ILogger logger, string format, params object[] args)
         {
-            logger.Log(new LogEntry(LoggingEventType.Error, string.Format(CultureInfo.CurrentCulture, format, args)));
+            logger.Log(new LogEntry(LoggingEventType.Error, string.Format(
+                System.Globalization.CultureInfo.CurrentCulture, format, args)));
         }
 
         /// <summary>
@@ -183,7 +184,7 @@ namespace Redmine.Net.Api.Logging
         /// </summary>
         /// <param name="logger">The logger.</param>
         /// <param name="exception">The exception.</param>
-        public static void Fatal(this ILogger logger, Exception exception)
+        public static void Fatal(this ILogger logger, System.Exception exception)
         {
             logger.Log(new LogEntry(LoggingEventType.Fatal, exception.Message, exception));
         }
@@ -194,7 +195,7 @@ namespace Redmine.Net.Api.Logging
         /// <param name="logger">The logger.</param>
         /// <param name="message">The message.</param>
         /// <param name="exception">The exception.</param>
-        public static void Fatal(this ILogger logger, string message, Exception exception)
+        public static void Fatal(this ILogger logger, string message, System.Exception exception)
         {
             logger.Log(new LogEntry(LoggingEventType.Fatal, message, exception));
         }
@@ -206,7 +207,7 @@ namespace Redmine.Net.Api.Logging
         /// <param name="formatProvider">The format provider.</param>
         /// <param name="format">The format.</param>
         /// <param name="args">The arguments.</param>
-        public static void Fatal(this ILogger logger, IFormatProvider formatProvider, string format, params object[] args)
+        public static void Fatal(this ILogger logger, System.IFormatProvider formatProvider, string format, params object[] args)
         {
             logger.Log(new LogEntry(LoggingEventType.Fatal, string.Format(formatProvider, format, args)));
         }
@@ -219,7 +220,8 @@ namespace Redmine.Net.Api.Logging
         /// <param name="args">The arguments.</param>
         public static void Fatal(this ILogger logger, string format, params object[] args)
         {
-            logger.Log(new LogEntry(LoggingEventType.Fatal, string.Format(CultureInfo.CurrentCulture, format, args)));
+            logger.Log(new LogEntry(LoggingEventType.Fatal, string.Format(
+                System.Globalization.CultureInfo.CurrentCulture, format, args)));
         }
     }
 }

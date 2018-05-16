@@ -14,14 +14,12 @@
    limitations under the License.
 */
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Net;
+
 using Redmine.Net.Api.Exceptions;
 using Redmine.Net.Api.Internals;
 using Redmine.Net.Api.Logging;
 using Redmine.Net.Api.Types;
+
 
 namespace Redmine.Net.Api.Extensions
 {
@@ -31,11 +29,11 @@ namespace Redmine.Net.Api.Extensions
     {
 
 
-        private static string GetExceptionDetails(WebException exception)
+        private static string GetExceptionDetails(System.Net.WebException exception)
         {
             string details = null;
-            System.Net.HttpWebResponse response = (HttpWebResponse)exception.Response;
-            
+            System.Net.HttpWebResponse response = (System.Net.HttpWebResponse)exception.Response;
+
             using (System.IO.Stream strm = response.GetResponseStream())
             {
                 if (strm != null)
@@ -69,54 +67,54 @@ namespace Redmine.Net.Api.Extensions
         /// <exception cref="Redmine.Net.Api.Exceptions.RedmineException">
         /// </exception>
         /// <exception cref="Redmine.Net.Api.Exceptions.NotAcceptableException"></exception>
-        public static void HandleWebException(this WebException exception, string method, MimeFormat mimeFormat)
+        public static void HandleWebException(this System.Net.WebException exception, string method, MimeFormat mimeFormat)
         {
             if (exception == null) return;
 
             switch (exception.Status)
             {
-                case WebExceptionStatus.Timeout:
+                case System.Net.WebExceptionStatus.Timeout:
                     throw new RedmineTimeoutException("Timeout!", exception);
-                case WebExceptionStatus.NameResolutionFailure:
+                case System.Net.WebExceptionStatus.NameResolutionFailure:
                     throw new NameResolutionFailureException("Bad domain name!", exception);
-                case WebExceptionStatus.ProtocolError:
-                {
-                    var response = (HttpWebResponse) exception.Response;
-                    switch ((int) response.StatusCode)
+                case System.Net.WebExceptionStatus.ProtocolError:
                     {
-                        case (int) HttpStatusCode.NotFound:
-                            throw new NotFoundException(response.StatusDescription, exception);
+                        System.Net.HttpWebResponse response = (System.Net.HttpWebResponse)exception.Response;
+                        switch ((int)response.StatusCode)
+                        {
+                            case (int)System.Net.HttpStatusCode.NotFound:
+                                throw new NotFoundException(response.StatusDescription, exception);
 
-                        case (int) HttpStatusCode.InternalServerError:
-                            string details = GetExceptionDetails(exception);
-                            System.Diagnostics.Debug.WriteLine(details);
+                            case (int)System.Net.HttpStatusCode.InternalServerError:
+                                string details = GetExceptionDetails(exception);
+                                System.Diagnostics.Debug.WriteLine(details);
 
-                            throw new InternalServerErrorException(response.StatusDescription, exception);
+                                throw new InternalServerErrorException(response.StatusDescription, exception);
 
-                        case (int) HttpStatusCode.Unauthorized:
-                            throw new UnauthorizedException(response.StatusDescription, exception);
+                            case (int)System.Net.HttpStatusCode.Unauthorized:
+                                throw new UnauthorizedException(response.StatusDescription, exception);
 
-                        case (int) HttpStatusCode.Forbidden:
-                            throw new ForbiddenException(response.StatusDescription, exception);
+                            case (int)System.Net.HttpStatusCode.Forbidden:
+                                throw new ForbiddenException(response.StatusDescription, exception);
 
-                        case (int) HttpStatusCode.Conflict:
-                            throw new ConflictException("The page that you are trying to update is staled!", exception);
+                            case (int)System.Net.HttpStatusCode.Conflict:
+                                throw new ConflictException("The page that you are trying to update is staled!", exception);
 
-                        case 422:
-                            var errors = GetRedmineExceptions(exception.Response, mimeFormat);
-                            var message = string.Empty;
-                            if (errors != null)
-                            {
-                                foreach (var error in errors)
-                                    message = message + error.Info + "\n";
-                            }
-                            throw new RedmineException(
-                                method + " has invalid or missing attribute parameters: " + message, exception);
+                            case 422:
+                                System.Collections.Generic.List<Error> errors = GetRedmineExceptions(exception.Response, mimeFormat);
+                                string message = string.Empty;
+                                if (errors != null)
+                                {
+                                    foreach (Error error in errors)
+                                        message = message + error.Info + "\n";
+                                }
+                                throw new RedmineException(
+                                    method + " has invalid or missing attribute parameters: " + message, exception);
 
-                        case (int) HttpStatusCode.NotAcceptable:
-                            throw new NotAcceptableException(response.StatusDescription, exception);
+                            case (int)System.Net.HttpStatusCode.NotAcceptable:
+                                throw new NotAcceptableException(response.StatusDescription, exception);
+                        }
                     }
-                }
                     break;
 
                 default:
@@ -130,22 +128,29 @@ namespace Redmine.Net.Api.Extensions
         /// <param name="webResponse">The web response.</param>
         /// <param name="mimeFormat">The MIME format.</param>
         /// <returns></returns>
-        private static List<Error> GetRedmineExceptions(this WebResponse webResponse, MimeFormat mimeFormat)
+        private static System.Collections.Generic.List<Error> 
+            GetRedmineExceptions(this System.Net.WebResponse webResponse, MimeFormat mimeFormat)
         {
-            using (var dataStream = webResponse.GetResponseStream())
+            using (System.IO.Stream dataStream = webResponse.GetResponseStream())
             {
-                if (dataStream == null) return null;
-                using (var reader = new StreamReader(dataStream))
-                {
-                    var responseFromServer = reader.ReadToEnd();
+                if (dataStream == null)
+                    return null;
 
-                    if (string.IsNullOrEmpty(responseFromServer.Trim())) return null;
+                using (System.IO.StreamReader reader = new System.IO.StreamReader(dataStream))
+                {
+                    string responseFromServer = reader.ReadToEnd();
+
+                    if (string.IsNullOrEmpty(responseFromServer.Trim()))
+                        return null;
+
                     try
                     {
-                        var result = RedmineSerializer.DeserializeList<Error>(responseFromServer, mimeFormat);
+                        Redmine.Net.Api.Types.PaginatedObjects<Error> result = 
+                            RedmineSerializer.DeserializeList<Error>(responseFromServer, mimeFormat);
+
                         return result.Objects;
                     }
-                    catch (Exception ex)
+                    catch (System.Exception ex)
                     {
                         Logger.Current.Error(ex.Message);
                     }

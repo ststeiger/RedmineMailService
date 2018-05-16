@@ -14,17 +14,15 @@
    limitations under the License.
 */
 
-using System;
-using System.Diagnostics;
 
 namespace Redmine.Net.Api.Logging
 {
     /// <summary>
     /// 
     /// </summary>
-	public class RedmineConsoleTraceListener : TraceListener
+	public class RedmineConsoleTraceListener 
+        : System.Diagnostics.TraceListener
 	{
-		#region implemented abstract members of TraceListener
 
         /// <summary>
         /// When overridden in a derived class, writes the specified message to the listener you create in the derived class.
@@ -32,7 +30,7 @@ namespace Redmine.Net.Api.Logging
         /// <param name="message">A message to write.</param>
 		public override void Write (string message)
 		{
-			Console.Write(message);
+			System.Console.Write(message);
 		}
 
         /// <summary>
@@ -41,10 +39,9 @@ namespace Redmine.Net.Api.Logging
         /// <param name="message">A message to write.</param>
 		public override void WriteLine (string message)
 		{
-			Console.WriteLine(message);
+            System.Console.WriteLine(message);
 		}
 
-		#endregion
 
         /// <summary>
         /// Writes trace information, a message, and event information to the listener specific output.
@@ -58,8 +55,13 @@ namespace Redmine.Net.Api.Logging
         ///   <IPermission class="System.Security.Permissions.EnvironmentPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" />
         ///   <IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode" />
         /// </PermissionSet>
-		public override void TraceEvent(TraceEventCache eventCache, string source, TraceEventType eventType, int id,
-			string message)
+		public override void TraceEvent(
+            System.Diagnostics.TraceEventCache eventCache
+            , string source
+            , System.Diagnostics.TraceEventType eventType
+            , int id,
+			string message
+            )
 		{
 			WriteLine(message);
 		}
@@ -77,7 +79,9 @@ namespace Redmine.Net.Api.Logging
         ///   <IPermission class="System.Security.Permissions.EnvironmentPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" />
         ///   <IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode" />
         /// </PermissionSet>
-		public override void TraceEvent(TraceEventCache eventCache, string source, TraceEventType eventType, int id,
+		public override void TraceEvent(System.Diagnostics.TraceEventCache eventCache
+            , string source
+            , System.Diagnostics.TraceEventType eventType, int id,
 			string format, params object[] args)
 		{
 			WriteLine(string.Format(format, args));

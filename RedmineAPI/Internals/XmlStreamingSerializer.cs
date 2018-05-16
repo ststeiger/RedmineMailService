@@ -1,6 +1,3 @@
-using System.IO;
-using System.Xml;
-using System.Xml.Serialization;
 
 namespace Redmine.Net.Api
 {
@@ -11,28 +8,28 @@ namespace Redmine.Net.Api
     /// <remarks>http://florianreischl.blogspot.ro/search/label/c%23</remarks>
     public class XmlStreamingSerializer<T>
     {
-        static XmlSerializerNamespaces ns;
-        XmlSerializer serializer = new XmlSerializer(typeof(T));
-        XmlWriter writer;
+        static System.Xml.Serialization.XmlSerializerNamespaces ns;
+        System.Xml.Serialization.XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(typeof(T));
+        System.Xml.XmlWriter writer;
         bool finished;
 
         static XmlStreamingSerializer()
         {
-            ns = new XmlSerializerNamespaces();
+            ns = new System.Xml.Serialization.XmlSerializerNamespaces();
             ns.Add("", "");
         }
 
         private XmlStreamingSerializer()
         {
-            serializer = new XmlSerializer(typeof(T));
+            serializer = new System.Xml.Serialization.XmlSerializer(typeof(T));
         }
 
-        public XmlStreamingSerializer(TextWriter w)
-                : this(XmlWriter.Create(w))
+        public XmlStreamingSerializer(System.IO.TextWriter w)
+                : this(System.Xml.XmlWriter.Create(w))
         {
         }
 
-        public XmlStreamingSerializer(XmlWriter writer)
+        public XmlStreamingSerializer(System.Xml.XmlWriter writer)
                 : this()
         {
             this.writer = writer;

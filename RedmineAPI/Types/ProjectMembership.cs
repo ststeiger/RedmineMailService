@@ -14,13 +14,9 @@
    limitations under the License.
 */
 
-using System;
-using System.Collections.Generic;
-using System.Xml;
-using System.Xml.Schema;
-using System.Xml.Serialization;
 using Redmine.Net.Api.Extensions;
 using Redmine.Net.Api.Internals;
+
 
 namespace Redmine.Net.Api.Types
 {
@@ -31,14 +27,17 @@ namespace Redmine.Net.Api.Types
     /// PUT - Updates the membership of given :id. Only the roles can be updated, the project and the user of a membership are read-only.
     /// DELETE - Deletes a memberships. Memberships inherited from a group membership can not be deleted. You must delete the group membership.
     /// </summary>
-    [XmlRoot(RedmineKeys.MEMBERSHIP)]
-    public class ProjectMembership : Identifiable<ProjectMembership>, IEquatable<ProjectMembership>, IXmlSerializable
+    [System.Xml.Serialization.XmlRoot(RedmineKeys.MEMBERSHIP)]
+    public class ProjectMembership 
+        : Identifiable<ProjectMembership>
+        , System.IEquatable<ProjectMembership>
+        , System.Xml.Serialization.IXmlSerializable
     {
         /// <summary>
         /// Gets or sets the project.
         /// </summary>
         /// <value>The project.</value>
-        [XmlElement(RedmineKeys.PROJECT)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.PROJECT)]
         public IdentifiableName Project { get; set; }
 
         /// <summary>
@@ -47,7 +46,7 @@ namespace Redmine.Net.Api.Types
         /// <value>
         /// The user.
         /// </value>
-        [XmlElement(RedmineKeys.USER)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.USER)]
         public IdentifiableName User { get; set; }
 
         /// <summary>
@@ -56,16 +55,16 @@ namespace Redmine.Net.Api.Types
         /// <value>
         /// The group.
         /// </value>
-        [XmlElement(RedmineKeys.GROUP)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.GROUP)]
         public IdentifiableName Group { get; set; }
 
         /// <summary>
         /// Gets or sets the type.
         /// </summary>
         /// <value>The type.</value>
-        [XmlArray(RedmineKeys.ROLES)]
-        [XmlArrayItem(RedmineKeys.ROLE)]
-        public List<MembershipRole> Roles { get; set; }
+        [System.Xml.Serialization.XmlArray(RedmineKeys.ROLES)]
+        [System.Xml.Serialization.XmlArrayItem(RedmineKeys.ROLE)]
+        public System.Collections.Generic.List<MembershipRole> Roles { get; set; }
 
         /// <summary>
         /// 
@@ -86,13 +85,13 @@ namespace Redmine.Net.Api.Types
         /// 
         /// </summary>
         /// <returns></returns>
-        public XmlSchema GetSchema() { return null; }
+        public System.Xml.Schema.XmlSchema GetSchema() { return null; }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="reader"></param>
-        public void ReadXml(XmlReader reader)
+        public void ReadXml(System.Xml.XmlReader reader)
         {
             reader.Read();
             while (!reader.EOF)
@@ -124,7 +123,7 @@ namespace Redmine.Net.Api.Types
         /// 
         /// </summary>
         /// <param name="writer"></param>
-        public void WriteXml(XmlWriter writer)
+        public void WriteXml(System.Xml.XmlWriter writer)
         {
             writer.WriteIdIfNotNull(User, RedmineKeys.USER_ID);
             writer.WriteArray(Roles, RedmineKeys.ROLE_IDS, typeof(MembershipRole), RedmineKeys.ROLE_ID);
@@ -138,7 +137,7 @@ namespace Redmine.Net.Api.Types
         {
             unchecked
             {
-                var hashCode = base.GetHashCode();
+                int hashCode = base.GetHashCode();
                 hashCode = HashCodeHelper.GetHashCode(Project, hashCode);
                 hashCode = HashCodeHelper.GetHashCode(User, hashCode);
                 hashCode = HashCodeHelper.GetHashCode(Group, hashCode);

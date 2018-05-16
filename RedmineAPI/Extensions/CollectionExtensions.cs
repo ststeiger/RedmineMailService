@@ -14,11 +14,11 @@
    limitations under the License.
 */
 
-using System;
-using System.Collections.Generic;
 
 namespace Redmine.Net.Api.Extensions
 {
+
+
     /// <summary>
     /// 
     /// </summary>
@@ -30,12 +30,17 @@ namespace Redmine.Net.Api.Extensions
         /// <typeparam name="T"></typeparam>
         /// <param name="listToClone">The list to clone.</param>
         /// <returns></returns>
-        public static IList<T> Clone<T>(this IList<T> listToClone) where T : ICloneable
+        public static System.Collections.Generic.IList<T> Clone<T>(
+            this System.Collections.Generic.IList<T> listToClone) where T : System.ICloneable
         {
-            if (listToClone == null) return null;
-            IList<T> clonedList = new List<T>();
+            if (listToClone == null)
+                return null;
+
+            System.Collections.Generic.IList<T> clonedList = new System.Collections.Generic.List<T>();
+
             foreach (T item in listToClone)
                 clonedList.Add((T)item.Clone());
+
             return clonedList;
         }
 
@@ -46,15 +51,19 @@ namespace Redmine.Net.Api.Extensions
         /// <param name="list">The list.</param>
         /// <param name="listToCompare">The list to compare.</param>
         /// <returns></returns>
-        public static bool Equals<T>(this IList<T> list, IList<T> listToCompare) where T : class
+        public static bool Equals<T>(this System.Collections.Generic.IList<T> list
+            , System.Collections.Generic.IList<T> listToCompare) where T : class
         {
-            if (listToCompare == null) return false;
+            if (listToCompare == null)
+                return false;
 
-            if (list.Count != listToCompare.Count) return false;
+            if (list.Count != listToCompare.Count)
+                return false;
 
-            var index = 0;
-            while (index < list.Count &&  (list[index] as T).Equals(listToCompare[index] as T)) index++;
-            
+            int index = 0;
+            while (index < list.Count && (list[index] as T).Equals(listToCompare[index] as T))
+                index++;
+
             return index == list.Count;
         }
     }

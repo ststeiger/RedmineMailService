@@ -14,15 +14,14 @@
    limitations under the License.
 */
 
-using System;
-using System.Runtime.Serialization;
 
 namespace Redmine.Net.Api.Exceptions
 {
     /// <summary>
     /// </summary>
     /// <seealso cref="Redmine.Net.Api.Exceptions.RedmineException" />
-    public class InternalServerErrorException : RedmineException
+    public class InternalServerErrorException 
+        : RedmineException
     {
         /// <summary>
         ///     Initializes a new instance of the <see cref="InternalServerErrorException" /> class.
@@ -55,7 +54,7 @@ namespace Redmine.Net.Api.Exceptions
         /// </summary>
         /// <param name="message"></param>
         /// <param name="innerException"></param>
-        public InternalServerErrorException(string message, Exception innerException)
+        public InternalServerErrorException(string message, System.Exception innerException)
             : base(message, innerException)
         {
         }
@@ -66,7 +65,7 @@ namespace Redmine.Net.Api.Exceptions
         /// <param name="format"></param>
         /// <param name="innerException"></param>
         /// <param name="args"></param>
-        public InternalServerErrorException(string format, Exception innerException, params object[] args)
+        public InternalServerErrorException(string format, System.Exception innerException, params object[] args)
             : base(string.Format(format, args), innerException)
         {
         }
@@ -76,7 +75,9 @@ namespace Redmine.Net.Api.Exceptions
         /// </summary>
         /// <param name="info"></param>
         /// <param name="context"></param>
-        protected InternalServerErrorException(SerializationInfo info, StreamingContext context)
+        protected InternalServerErrorException(
+            System.Runtime.Serialization.SerializationInfo info
+            , System.Runtime.Serialization.StreamingContext context)
             : base(info, context)
         {
         }

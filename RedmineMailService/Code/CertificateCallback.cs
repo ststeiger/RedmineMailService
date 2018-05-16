@@ -2,7 +2,7 @@
 using System.Net;
 
 
-namespace RedmineClient
+namespace RedmineMailService
 {
 
 
@@ -54,6 +54,11 @@ namespace RedmineClient
                             // Self-signed certificates with an untrusted root are valid. 
                             continue;
                         }
+                        else if (status.Status == System.Security.Cryptography.X509Certificates.X509ChainStatusFlags.NotTimeValid)
+                        {
+                            // Ignore Expired certificates
+                            continue;
+                        }
                         else
                         {
                             if (status.Status != System.Security.Cryptography.X509Certificates.X509ChainStatusFlags.NoError)
@@ -63,19 +68,19 @@ namespace RedmineClient
                                 return false;
                             }
                         }
-                    }
+
+                    } // Next status 
+
                 } // End if (chain != null && chain.ChainStatus != null) 
 
                 // When processing reaches this line, the only errors in the certificate chain are 
-                // untrusted root errors for self-signed certificates. These certificates are valid
-                // for default Exchange server installations, so return true.
+                // untrusted root errors for self-signed certificates (, or expired certificates). 
+                // These certificates are valid for default Exchange server installations, so return true.
                 return true;
-            }
-            else
-            {
-                // In all other cases, return false.
-                return false;
-            }
+            } // End if ((sslPolicyErrors & System.Net.Security.SslPolicyErrors.RemoteCertificateChainErrors) != 0) 
+
+            // In all other cases, return false.
+            return false;
         } // End Function CertificateValidationCallBack 
 
 

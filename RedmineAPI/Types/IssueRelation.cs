@@ -14,60 +14,59 @@
    limitations under the License.
 */
 
-using System;
-using System.Xml;
-using System.Xml.Schema;
-using System.Xml.Serialization;
+
 using Redmine.Net.Api.Extensions;
 using Redmine.Net.Api.Internals;
+
 
 namespace Redmine.Net.Api.Types
 {
     /// <summary>
     /// Availability 1.3
     /// </summary>
-    [XmlRoot(RedmineKeys.RELATION)]
-    public class IssueRelation : Identifiable<IssueRelation>, IXmlSerializable, IEquatable<IssueRelation>
+    [System.Xml.Serialization.XmlRoot(RedmineKeys.RELATION)]
+    public class IssueRelation : Identifiable<IssueRelation>
+        , System.Xml.Serialization.IXmlSerializable, System.IEquatable<IssueRelation>
     {
         /// <summary>
         /// Gets or sets the issue id.
         /// </summary>
         /// <value>The issue id.</value>
-        [XmlElement(RedmineKeys.ISSUE_ID)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.ISSUE_ID)]
         public int IssueId { get; set; }
 
         /// <summary>
         /// Gets or sets the related issue id.
         /// </summary>
         /// <value>The issue to id.</value>
-        [XmlElement(RedmineKeys.ISSUE_TO_ID)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.ISSUE_TO_ID)]
         public int IssueToId { get; set; }
 
         /// <summary>
         /// Gets or sets the type of relation.
         /// </summary>
         /// <value>The type.</value>
-        [XmlElement(RedmineKeys.RELATION_TYPE)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.RELATION_TYPE)]
         public IssueRelationType Type { get; set; }
 
         /// <summary>
         /// Gets or sets the delay for a "precedes" or "follows" relation.
         /// </summary>
         /// <value>The delay.</value>
-        [XmlElement(RedmineKeys.DELAY, IsNullable = true)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.DELAY, IsNullable = true)]
         public int? Delay { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        public XmlSchema GetSchema() { return null; }
+        public System.Xml.Schema.XmlSchema GetSchema() { return null; }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="reader"></param>
-        public void ReadXml(XmlReader reader)
+        public void ReadXml(System.Xml.XmlReader reader)
         {
             if (!reader.IsEmptyElement) reader.Read();
             while (!reader.EOF)
@@ -82,17 +81,17 @@ namespace Redmine.Net.Api.Types
                 {
                     while (reader.MoveToNextAttribute())
                     {
-                        var attributeName = reader.Name;
+                        string attributeName = reader.Name;
                         switch (reader.Name)
                         {
                             case RedmineKeys.ID: Id = reader.ReadAttributeAsInt(attributeName); break;
                             case RedmineKeys.ISSUE_ID: IssueId = reader.ReadAttributeAsInt(attributeName); break;
                             case RedmineKeys.ISSUE_TO_ID: IssueToId = reader.ReadAttributeAsInt(attributeName); break;
                             case RedmineKeys.RELATION_TYPE:
-                                var rt = reader.GetAttribute(attributeName);
+                                string rt = reader.GetAttribute(attributeName);
                                 if (!string.IsNullOrEmpty(rt))
                                 {
-                                    Type = (IssueRelationType)Enum.Parse(typeof(IssueRelationType), rt, true);
+                                    Type = (IssueRelationType)System.Enum.Parse(typeof(IssueRelationType), rt, true);
                                 }
                                 break;
                             case RedmineKeys.DELAY: Delay = reader.ReadAttributeAsNullableInt(attributeName); break;
@@ -107,10 +106,10 @@ namespace Redmine.Net.Api.Types
                     case RedmineKeys.ISSUE_ID: IssueId = reader.ReadElementContentAsInt(); break;
                     case RedmineKeys.ISSUE_TO_ID: IssueToId = reader.ReadElementContentAsInt(); break;
                     case RedmineKeys.RELATION_TYPE:
-                        var rt = reader.ReadElementContentAsString();
+                        string rt = reader.ReadElementContentAsString();
                         if (!string.IsNullOrEmpty(rt))
                         {
-                            Type = (IssueRelationType)Enum.Parse(typeof(IssueRelationType), rt, true);
+                            Type = (IssueRelationType)System.Enum.Parse(typeof(IssueRelationType), rt, true);
                         }
                         break;
                     case RedmineKeys.DELAY: Delay = reader.ReadElementContentAsNullableInt(); break;
@@ -123,10 +122,11 @@ namespace Redmine.Net.Api.Types
         /// 
         /// </summary>
         /// <param name="writer"></param>
-        public void WriteXml(XmlWriter writer)
+        public void WriteXml(System.Xml.XmlWriter writer)
         {
             writer.WriteElementString(RedmineKeys.ISSUE_TO_ID, IssueToId.ToString());
             writer.WriteElementString(RedmineKeys.RELATION_TYPE, Type.ToString());
+
             if (Type == IssueRelationType.precedes || Type == IssueRelationType.follows)
                 writer.WriteValueOrEmpty(Delay, RedmineKeys.DELAY);
         }
@@ -138,7 +138,9 @@ namespace Redmine.Net.Api.Types
         /// <returns></returns>
         public bool Equals(IssueRelation other)
         {
-            if (other == null) return false;
+            if (other == null)
+                return false;
+
             return (Id == other.Id && IssueId == other.IssueId && IssueToId == other.IssueToId && Type == other.Type && Delay == other.Delay);
         }
 
@@ -150,7 +152,7 @@ namespace Redmine.Net.Api.Types
         {
             unchecked
             {
-                var hashCode = 13;
+                int hashCode = 13;
                 hashCode = HashCodeHelper.GetHashCode(Id, hashCode);
                 hashCode = HashCodeHelper.GetHashCode(IssueId, hashCode);
                 hashCode = HashCodeHelper.GetHashCode(IssueToId, hashCode);

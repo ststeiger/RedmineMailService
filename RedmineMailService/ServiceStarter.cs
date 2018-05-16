@@ -1,20 +1,17 @@
 ﻿
-using System;
-using System.Linq;
-
-
 namespace RedmineMailService
 {
 
 
     public static class ServiceStarter
     {
-        private const string RunAsServiceFlag = "--run-as-service";
-        private const string RegisterServiceFlag = "--register-service";
-        private const string UnregisterServiceFlag = "--unregister-service";
-        private const string InteractiveFlag = "--interactive";
-        private const string StopServiceFlag = "--stop-service";
-        private const string RestartServiceFlag = "--restart-service";
+        private const string RUN_AS_SERVICE = "--run-as-service"; // Append
+        private const string REGISTER_SERVICE = "--register-service"; // X_
+        private const string UNREGISTER_SERVICE = "--unregister-service"; // OK
+        private const string INTERACTIVE = "--interactive"; // OK
+
+        private const string STOP_SERVICE = "--stop-service";
+        private const string RESTART_SERVICE = "--restart-service";
         
         
         // systemctl status mssql-server
@@ -63,32 +60,34 @@ namespace RedmineMailService
         
         public static void Start(string[] args)
         {
-            // args = new string[] { "--interactive" };
-            args = new string[] { "--run-as-service" };
-            
+            // args = new string[] { INTERACTIVE };
+            // args = new string[] { REGISTER_SERVICE };
+            // args = new string[] { RUN_AS_SERVICE };
+            // args = new string[] { UNREGISTER_SERVICE };
+
             // Demo ASP.NET Core Service running on.NET Core
             // This demo application is intened to be run as windows service.Use one of the following options:
             //
             // --register-service       Registers and starts this program as a windows service named "Demo .NET Core Service"
             //                          All additional arguments will be passed to ASP.NET Core's WebHostBuilder.
             // --unregister-service     Removes the windows service creatd by --register - service.  
-            // --interactive            Runs the underlying asp.net core app.Useful to test arguments.
+            // --interactive            Runs the underlying asp.net core app. Useful to test arguments.
 
             try
             {
-                if (System.Linq.Enumerable.Contains(args, RunAsServiceFlag))
+                if(-1 != System.Array.FindIndex(args, x => string.Equals(x, RUN_AS_SERVICE, System.StringComparison.InvariantCultureIgnoreCase)))
                 {
                     RunAsService(args);
                 }
-                else if (System.Linq.Enumerable.Contains(args, RegisterServiceFlag))
+                else if (-1 != System.Array.FindIndex(args, x => string.Equals(x, REGISTER_SERVICE, System.StringComparison.InvariantCultureIgnoreCase)))
                 {
                     RegisterService();
                 }
-                else if (System.Linq.Enumerable.Contains(args, UnregisterServiceFlag))
+                else if (-1 != System.Array.FindIndex(args, x => string.Equals(x, UNREGISTER_SERVICE, System.StringComparison.InvariantCultureIgnoreCase)))
                 {
                     UnregisterService();
                 }
-                else if (System.Linq.Enumerable.Contains(args, InteractiveFlag))
+                else if (-1 != System.Array.FindIndex(args, x => string.Equals(x, INTERACTIVE, System.StringComparison.InvariantCultureIgnoreCase)))
                 {
                     RunInteractive(args);
                 }
@@ -107,25 +106,72 @@ namespace RedmineMailService
         private static void RunAsService(string[] args)
         {
             DasMulli.Win32.ServiceUtils.IWin32Service service = 
-                new TestWin32Service(args.Where(a => a != RunAsServiceFlag).ToArray());
+                new TestWin32Service(RemoveFlag(args, RUN_AS_SERVICE));
+
             
-            if (System.Environment.OSVersion.Platform == System.PlatformID.Unix)
-            {
-                service.Start(new string[0], () => { });
-            }
-            else
+            if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows))
             {
                 DasMulli.Win32.ServiceUtils.Win32ServiceHost serviceHost =
                     new DasMulli.Win32.ServiceUtils.Win32ServiceHost(service);
                 serviceHost.Run();
             }
+            else if (System.Environment.OSVersion.Platform == System.PlatformID.Unix) // includes Mac 
+            {
+                service.Start(new string[0], () => { });
+            }
+            else
+            {
+                System.Console.WriteLine("Unknown operating system.");
+                System.Console.WriteLine("Attempting to start service.");
+                service.Start(new string[0], () => { }); // ?
+            }
+
         }
+
+
+        private static T[] RemoveIndices<T>(T[] indicesArray, int removeAt)
+        {
+            if (indicesArray == null || indicesArray.Length == 0)
+                return indicesArray;
+
+            T[] newIndicesArray = new T[indicesArray.Length - 1];
+
+            int i = 0;
+            int j = 0;
+            while (i < indicesArray.Length)
+            {
+                if (i != removeAt)
+                {
+                    newIndicesArray[j] = indicesArray[i];
+                    j++;
+                } // End if (i != removeAt) 
+
+                i++;
+            } // Whend
+
+            return newIndicesArray;
+        } // End Function RemoveIndices 
+
+
+        private static string[] RemoveFlag(string[] args, string argument)
+        {
+            if (args == null)
+                return null;
+
+            int index = System.Array.FindIndex(args, x => string.Equals(x, argument, System.StringComparison.InvariantCultureIgnoreCase));
+            if (index != -1)
+            {
+                return RemoveIndices(args, index);
+            } // End if (index != -1) 
+
+            return args;
+        } // End Function RemoveFlag 
 
 
         private static void RunInteractive(string[] args)
         {
             DasMulli.Win32.ServiceUtils.IWin32Service service =
-                new TestWin32Service(args.Where(a => a != InteractiveFlag).ToArray());
+                new TestWin32Service(RemoveFlag(args, INTERACTIVE));
 
             service.Start(new string[0], () => { });
             System.Console.WriteLine("Running interactively, press enter to stop.");
@@ -136,22 +182,29 @@ namespace RedmineMailService
         
         private static void RegisterService()
         {
+
             // Environment.GetCommandLineArgs() includes the current DLL from a "dotnet my.dll --register-service" call, which is not passed to Main()
-            string[] remainingArgs = System.Environment.GetCommandLineArgs()
-                .Where(arg => arg != RegisterServiceFlag)
-                .Select(EscapeCommandLineArgument)
-                .Append(RunAsServiceFlag)
-                .ToArray();
+            string[] remainingArgs = RemoveFlag(System.Environment.GetCommandLineArgs(), REGISTER_SERVICE);
+
+            for (int i = 0; i < remainingArgs.Length; ++i)
+            {
+                remainingArgs[i] = EscapeCommandLineArgument(remainingArgs[i]);
+            }
+
+            string[] args = new string[remainingArgs.Length + 1];
+            System.Array.Copy(remainingArgs, args, remainingArgs.Length);
+            args[args.Length - 1] = RUN_AS_SERVICE;
+
 
             string host = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
 
             if (!host.EndsWith("dotnet.exe", System.StringComparison.OrdinalIgnoreCase))
             {
                 // For self-contained apps, skip the dll path
-                remainingArgs = remainingArgs.Skip(1).ToArray();
+                args = RemoveIndices(args, 0);
             }
 
-            string fullServiceCommand = host + " " + string.Join(" ", remainingArgs);
+            string fullServiceCommand = host + " " + string.Join(" ", args);
 
             // Do not use LocalSystem in production.. but this is good for demos as LocalSystem will have access to some random git-clone path
             // Note that when the service is already registered and running, it will be reconfigured but not restarted
@@ -164,16 +217,99 @@ namespace RedmineMailService
                 .WithAutoStart(true)
                 .Build();
 
-            new DasMulli.Win32.ServiceUtils.Win32ServiceManager().CreateOrUpdateService(serviceDefinition, startImmediately: true);
+            if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Linux))
+            {
+                string serviceFileContent = @"
+[Unit]
+Description=Redmine Mail Service - tickets from e-mail
 
+[Service]
+WorkingDirectory=/web/services/RedmineMailService
+ExecStart=/usr/bin/dotnet /web/services/RedmineMailService/RedmineMailService.dll
+Restart=always
+RestartSec=10  # Restart service after 10 seconds if dotnet service crashes
+SyslogIdentifier=RedmineMailService
+User=www-data
+Environment=ASPNETCORE_ENVIRONMENT=Production
+Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=false
+Environment=DOTNET_CLI_TELEMETRY_OPTOUT=1
+
+[Install]
+WantedBy=multi-user.target
+";
+
+                string serviceFile = @"/etc/systemd/system/RedmineMailService.service";
+                if (!System.IO.File.Exists(serviceFile))
+                    System.IO.File.WriteAllText(serviceFile, serviceFileContent, System.Text.Encoding.UTF8);
+
+                Mono.Unix.Native.Passwd pw = Mono.Unix.Native.Syscall.getpwnam("www-data");
+                Mono.Unix.Native.Syscall.chown(serviceFile, pw.pw_uid, pw.pw_gid);
+
+                using (System.Diagnostics.Process p = new System.Diagnostics.Process()
+                {
+                    StartInfo = new System.Diagnostics.ProcessStartInfo("sudo", "systemctl enable RedmineMailService")
+                })
+                {
+                    p.Start();
+                    p.WaitForExit();
+                }
+                
+                using (System.Diagnostics.Process p = new System.Diagnostics.Process()
+                {
+                    StartInfo = new System.Diagnostics.ProcessStartInfo("sudo", "systemctl restart RedmineMailService")
+                })
+                {
+                    p.Start();
+                    p.WaitForExit();
+                }
+
+            }
+            else if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows))
+            {
+                new DasMulli.Win32.ServiceUtils.Win32ServiceManager().CreateOrUpdateService(serviceDefinition, startImmediately: true);
+            }
+            else
+            {
+                throw new System.PlatformNotSupportedException("RegisterService does not support your OS.", new System.NotImplementedException("RegisterService for non-Linux and non-Windows platforms not implemented."));
+            }
+            
             System.Console.WriteLine($@"Successfully registered and started service ""{ServiceDisplayName}"" (""{ServiceDescription}"")");
         }
 
 
         private static void UnregisterService()
         {
-            new DasMulli.Win32.ServiceUtils.Win32ServiceManager()
+
+            if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Linux))
+            {
+
+                using (System.Diagnostics.Process p = new System.Diagnostics.Process()
+                {
+                    StartInfo = new System.Diagnostics.ProcessStartInfo("sudo", "systemctl stop RedmineMailService")
+                })
+                {
+                    p.Start();
+                    p.WaitForExit();
+                }
+
+                using (System.Diagnostics.Process p = new System.Diagnostics.Process()
+                {
+                    StartInfo = new System.Diagnostics.ProcessStartInfo("sudo", "systemctl disable RedmineMailService")
+                })
+                {
+                    p.Start();
+                    p.WaitForExit();
+                }
+            }
+            else if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows))
+            {
+                new DasMulli.Win32.ServiceUtils.Win32ServiceManager()
                 .DeleteService(ServiceName);
+            }
+            else
+            {
+                throw new System.PlatformNotSupportedException("UnregisterService does not support your OS.", new System.NotImplementedException("UnregisterService for non-Linux and non-Windows platforms not implemented."));
+            }
 
             System.Console.WriteLine($@"Successfully unregistered service ""{ServiceDisplayName}"" (""{ServiceDescription}"")");
         }

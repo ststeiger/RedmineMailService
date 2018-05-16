@@ -14,18 +14,17 @@
    limitations under the License.
 */
 
-using System;
-using System.Xml;
-using System.Xml.Serialization;
+
 using Redmine.Net.Api.Internals;
+
 
 namespace Redmine.Net.Api.Types
 {
     /// <summary>
     /// Availability 1.3
     /// </summary>
-    [XmlRoot(RedmineKeys.ISSUE_STATUS)]
-    public class IssueStatus : IdentifiableName, IEquatable<IssueStatus>
+    [System.Xml.Serialization.XmlRoot(RedmineKeys.ISSUE_STATUS)]
+    public class IssueStatus : IdentifiableName, System.IEquatable<IssueStatus>
     {
         /// <summary>
         /// Gets or sets a value indicating whether IssueStatus is default.
@@ -33,21 +32,21 @@ namespace Redmine.Net.Api.Types
         /// <value>
         /// 	<c>true</c> if IssueStatus is default; otherwise, <c>false</c>.
         /// </value>
-        [XmlElement(RedmineKeys.IS_DEFAULT)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.IS_DEFAULT)]
         public bool IsDefault { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether IssueStatus is closed.
         /// </summary>
         /// <value><c>true</c> if IssueStatus is closed; otherwise, <c>false</c>.</value>
-        [XmlElement(RedmineKeys.IS_CLOSED)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.IS_CLOSED)]
         public bool IsClosed { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="reader"></param>
-        public override void ReadXml(XmlReader reader)
+        public override void ReadXml(System.Xml.XmlReader reader)
         {
             reader.Read();
             while (!reader.EOF)
@@ -77,7 +76,7 @@ namespace Redmine.Net.Api.Types
         /// 
         /// </summary>
         /// <param name="writer"></param>
-        public override void WriteXml(XmlWriter writer) { }
+        public override void WriteXml(System.Xml.XmlWriter writer) { }
 
         /// <summary>
         /// 
@@ -86,7 +85,9 @@ namespace Redmine.Net.Api.Types
         /// <returns></returns>
         public bool Equals(IssueStatus other)
         {
-            if (other == null) return false;
+            if (other == null)
+                return false;
+
             return (Id == other.Id && Name == other.Name && IsClosed == other.IsClosed && IsDefault == other.IsDefault);
         }
 
@@ -98,7 +99,7 @@ namespace Redmine.Net.Api.Types
         {
             unchecked
             {
-                var hashCode = 13;
+                int hashCode = 13;
                 hashCode = HashCodeHelper.GetHashCode(Id, hashCode);
                 hashCode = HashCodeHelper.GetHashCode(Name, hashCode);
                 hashCode = HashCodeHelper.GetHashCode(IsClosed, hashCode);

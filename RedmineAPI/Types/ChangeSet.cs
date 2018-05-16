@@ -14,56 +14,53 @@
    limitations under the License.
 */
 
-using System;
-using System.Xml;
-using System.Xml.Schema;
-using System.Xml.Serialization;
-using Redmine.Net.Api.Extensions;
 using Redmine.Net.Api.Internals;
+using Redmine.Net.Api.Extensions;
+
 
 namespace Redmine.Net.Api.Types
 {
     /// <summary>
     /// 
     /// </summary>
-    [XmlRoot(RedmineKeys.CHANGESET)]
-    public class ChangeSet : IXmlSerializable, IEquatable<ChangeSet>
+    [System.Xml.Serialization.XmlRoot(RedmineKeys.CHANGESET)]
+    public class ChangeSet : System.Xml.Serialization.IXmlSerializable, System.IEquatable<ChangeSet>
     {
         /// <summary>
         /// 
         /// </summary>
-        [XmlAttribute(RedmineKeys.REVISION)]
+        [System.Xml.Serialization.XmlAttribute(RedmineKeys.REVISION)]
         public int Revision { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        [XmlElement(RedmineKeys.USER)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.USER)]
         public IdentifiableName User { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        [XmlElement(RedmineKeys.COMMENTS)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.COMMENTS)]
         public string Comments { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        [XmlElement(RedmineKeys.COMMITTED_ON, IsNullable = true)]
-        public DateTime? CommittedOn { get; set; }
+        [System.Xml.Serialization.XmlElement(RedmineKeys.COMMITTED_ON, IsNullable = true)]
+        public System.DateTime? CommittedOn { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        public XmlSchema GetSchema() { return null; }
+        public System.Xml.Schema.XmlSchema GetSchema() { return null; }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="reader"></param>
-        public void ReadXml(XmlReader reader)
+        public void ReadXml(System.Xml.XmlReader reader)
         {
             reader.Read();
             while (!reader.EOF)
@@ -93,7 +90,7 @@ namespace Redmine.Net.Api.Types
         /// 
         /// </summary>
         /// <param name="writer"></param>
-        public void WriteXml(XmlWriter writer) { }
+        public void WriteXml(System.Xml.XmlWriter writer) { }
 
         /// <summary>
         /// 
@@ -131,7 +128,7 @@ namespace Redmine.Net.Api.Types
         {
             unchecked
             {
-                var hashCode = 13;
+                int hashCode = 13;
                 hashCode = HashCodeHelper.GetHashCode(Revision, hashCode);
                 hashCode = HashCodeHelper.GetHashCode(User, hashCode);
                 hashCode = HashCodeHelper.GetHashCode(Comments, hashCode);

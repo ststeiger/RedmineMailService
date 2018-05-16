@@ -1,19 +1,19 @@
-﻿using System;
-using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
+﻿
 using System.Runtime.InteropServices;
-using JetBrains.Annotations;
+
 
 namespace DasMulli.Win32.ServiceUtils
 {
-    [UsedImplicitly(ImplicitUseKindFlags.InstantiatedNoFixedConstructorSignature)]
-    [SuppressMessage("ReSharper", "ClassWithVirtualMembersNeverInherited.Global", Justification = "Subclassed by test proxy")]
-    internal class ServiceHandle : SafeHandle
+    [JetBrains.Annotations.UsedImplicitly(JetBrains.Annotations.ImplicitUseKindFlags.InstantiatedNoFixedConstructorSignature)]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("ReSharper", "ClassWithVirtualMembersNeverInherited.Global", Justification = "Subclassed by test proxy")]
+    internal class ServiceHandle 
+        : System.Runtime.InteropServices.SafeHandle
     {
-        [SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Exposed for testing via InternalsVisibleTo.")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Exposed for testing via InternalsVisibleTo.")]
         internal INativeInterop NativeInterop { get; set; } = Win32Interop.Wrapper;
 
-        internal ServiceHandle() : base(IntPtr.Zero, ownsHandle: true)
+        internal ServiceHandle()
+            : base(System.IntPtr.Zero, ownsHandle: true)
         {
         }
 
@@ -27,18 +27,18 @@ namespace DasMulli.Win32.ServiceUtils
             [System.Security.SecurityCritical]
             get
             {
-                return handle == IntPtr.Zero;
+                return handle == System.IntPtr.Zero;
             }
         }
 
         public virtual void Start(bool throwIfAlreadyRunning = true)
         {
-            if (!NativeInterop.StartServiceW(this, 0, IntPtr.Zero))
+            if (!NativeInterop.StartServiceW(this, 0, System.IntPtr.Zero))
             {
-                var win32Error = Marshal.GetLastWin32Error();
+                System.Int32 win32Error = Marshal.GetLastWin32Error();
                 if (win32Error != KnownWin32ErrorCoes.ERROR_SERVICE_ALREADY_RUNNING || throwIfAlreadyRunning)
                 {
-                    throw new Win32Exception(win32Error);
+                    throw new System.ComponentModel.Win32Exception(win32Error);
                 }
             }
         }
@@ -47,14 +47,14 @@ namespace DasMulli.Win32.ServiceUtils
         {
             if (!NativeInterop.DeleteService(this))
             {
-                throw new Win32Exception(Marshal.GetLastWin32Error());
+                throw new System.ComponentModel.Win32Exception(Marshal.GetLastWin32Error());
             }
         }
 
         public virtual void SetDescription(string description)
         {
-            var descriptionInfo = new ServiceDescriptionInfo(description ?? string.Empty);
-            var lpDescriptionInfo = Marshal.AllocHGlobal(Marshal.SizeOf<ServiceDescriptionInfo>());
+            ServiceDescriptionInfo descriptionInfo = new ServiceDescriptionInfo(description ?? string.Empty);
+            System.IntPtr lpDescriptionInfo = Marshal.AllocHGlobal(Marshal.SizeOf<ServiceDescriptionInfo>());
             try
             {
                 Marshal.StructureToPtr(descriptionInfo, lpDescriptionInfo, fDeleteOld: false);
@@ -62,7 +62,7 @@ namespace DasMulli.Win32.ServiceUtils
                 {
                     if (!NativeInterop.ChangeServiceConfig2W(this, ServiceConfigInfoTypeLevel.ServiceDescription, lpDescriptionInfo))
                     {
-                        throw new Win32Exception(Marshal.GetLastWin32Error());
+                        throw new System.ComponentModel.Win32Exception(Marshal.GetLastWin32Error());
                     }
                 }
                 finally
@@ -78,8 +78,14 @@ namespace DasMulli.Win32.ServiceUtils
 
         public virtual void SetFailureActions(ServiceFailureActions serviceFailureActions)
         {
-            var failureActions = serviceFailureActions == null ? ServiceFailureActionsInfo.Default : new ServiceFailureActionsInfo(serviceFailureActions.ResetPeriod, serviceFailureActions.RebootMessage, serviceFailureActions.RestartCommand, serviceFailureActions.Actions);
-            var lpFailureActions = Marshal.AllocHGlobal(Marshal.SizeOf<ServiceFailureActionsInfo>());
+            ServiceFailureActionsInfo failureActions = serviceFailureActions == null ? ServiceFailureActionsInfo.Default 
+                : new ServiceFailureActionsInfo(serviceFailureActions.ResetPeriod
+                , serviceFailureActions.RebootMessage
+                , serviceFailureActions.RestartCommand
+                , serviceFailureActions.Actions
+            );
+
+            System.IntPtr lpFailureActions = Marshal.AllocHGlobal(Marshal.SizeOf<ServiceFailureActionsInfo>());
             try
             {
                 Marshal.StructureToPtr(failureActions, lpFailureActions, fDeleteOld: false);
@@ -87,7 +93,7 @@ namespace DasMulli.Win32.ServiceUtils
                 {
                     if (!NativeInterop.ChangeServiceConfig2W(this, ServiceConfigInfoTypeLevel.FailureActions, lpFailureActions))
                     {
-                        throw new Win32Exception(Marshal.GetLastWin32Error());
+                        throw new System.ComponentModel.Win32Exception(Marshal.GetLastWin32Error());
                     }
                 }
                 finally
@@ -103,8 +109,8 @@ namespace DasMulli.Win32.ServiceUtils
 
         public virtual void SetFailureActionFlag(bool enabled)
         {
-            var failureActionsFlag = new ServiceFailureActionsFlag(enabled);
-            var lpFailureActionsFlag = Marshal.AllocHGlobal(Marshal.SizeOf<ServiceFailureActionsFlag>());
+            ServiceFailureActionsFlag failureActionsFlag = new ServiceFailureActionsFlag(enabled);
+            System.IntPtr lpFailureActionsFlag = Marshal.AllocHGlobal(Marshal.SizeOf<ServiceFailureActionsFlag>());
             try
             {
                 Marshal.StructureToPtr(failureActionsFlag, lpFailureActionsFlag, fDeleteOld: false);
@@ -113,7 +119,7 @@ namespace DasMulli.Win32.ServiceUtils
                     bool result = NativeInterop.ChangeServiceConfig2W(this, ServiceConfigInfoTypeLevel.FailureActionsFlag, lpFailureActionsFlag);
                     if (!result)
                     {
-                        throw new Win32Exception(Marshal.GetLastWin32Error());
+                        throw new System.ComponentModel.Win32Exception(Marshal.GetLastWin32Error());
                     }
                 }
                 finally
@@ -126,22 +132,31 @@ namespace DasMulli.Win32.ServiceUtils
                 Marshal.FreeHGlobal(lpFailureActionsFlag);
             }
         }
-        
+
         public virtual void ChangeConfig(string displayName, string binaryPath, ServiceType serviceType, ServiceStartType startupType, ErrorSeverity errorSeverity, Win32ServiceCredentials credentials)
         {
-            var success = NativeInterop.ChangeServiceConfigW(this, serviceType, startupType, errorSeverity, binaryPath, null, IntPtr.Zero, null, credentials.UserName, credentials.Password, displayName);
-            if(!success) {
-                throw new Win32Exception(Marshal.GetLastWin32Error());
+            bool success = NativeInterop.ChangeServiceConfigW(this
+                , serviceType, startupType, errorSeverity
+                , binaryPath, null, System.IntPtr.Zero, null
+                , credentials.UserName, credentials.Password, displayName);
+
+            if (!success)
+            {
+                throw new System.ComponentModel.Win32Exception(Marshal.GetLastWin32Error());
             }
         }
 
         public virtual unsafe void SetDelayedAutoStartFlag(bool delayedAutoStart)
         {
             int value = delayedAutoStart ? 1 : 0;
-            var success = NativeInterop.ChangeServiceConfig2W(this, ServiceConfigInfoTypeLevel.DelayedAutoStartInfo, new IntPtr(&value));
+            bool success = NativeInterop.ChangeServiceConfig2W(this
+                , ServiceConfigInfoTypeLevel.DelayedAutoStartInfo
+                , new System.IntPtr(&value)
+            );
+
             if (!success)
             {
-                throw new Win32Exception(Marshal.GetLastWin32Error());
+                throw new System.ComponentModel.Win32Exception(Marshal.GetLastWin32Error());
             }
         }
     }

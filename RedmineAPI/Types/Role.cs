@@ -14,20 +14,20 @@
    limitations under the License.
 */
 
-using System;
-using System.Collections.Generic;
-using System.Xml;
-using System.Xml.Serialization;
+
 using Redmine.Net.Api.Extensions;
 using Redmine.Net.Api.Internals;
+
 
 namespace Redmine.Net.Api.Types
 {
     /// <summary>
     /// Availability 1.4
     /// </summary>
-    [XmlRoot(RedmineKeys.ROLE)]
-    public class Role : IdentifiableName, IEquatable<Role>
+    [System.Xml.Serialization.XmlRoot(RedmineKeys.ROLE)]
+    public class Role 
+        : IdentifiableName
+        , System.IEquatable<Role>
     {
         /// <summary>
         /// Gets or sets the permissions.
@@ -35,15 +35,15 @@ namespace Redmine.Net.Api.Types
         /// <value>
         /// The issue relations.
         /// </value>
-        [XmlArray(RedmineKeys.PERMISSIONS)]
-        [XmlArrayItem(RedmineKeys.PERMISSION)]
-        public IList<Permission> Permissions { get; set; }
+        [System.Xml.Serialization.XmlArray(RedmineKeys.PERMISSIONS)]
+        [System.Xml.Serialization.XmlArrayItem(RedmineKeys.PERMISSION)]
+        public System.Collections.Generic.IList<Permission> Permissions { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="reader"></param>
-        public override void ReadXml(XmlReader reader)
+        public override void ReadXml(System.Xml.XmlReader reader)
         {
             reader.Read();
             while (!reader.EOF)
@@ -71,7 +71,7 @@ namespace Redmine.Net.Api.Types
         /// 
         /// </summary>
         /// <param name="writer"></param>
-        public override void WriteXml(XmlWriter writer) { }
+        public override void WriteXml(System.Xml.XmlWriter writer) { }
 
         /// <summary>
         /// 
@@ -105,7 +105,7 @@ namespace Redmine.Net.Api.Types
         {
             unchecked
             {
-                var hashCode = 13;
+                int hashCode = 13;
                 hashCode = HashCodeHelper.GetHashCode(Id, hashCode);
                 hashCode = HashCodeHelper.GetHashCode(Name, hashCode);
                 hashCode = HashCodeHelper.GetHashCode(Permissions, hashCode);

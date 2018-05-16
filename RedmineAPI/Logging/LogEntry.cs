@@ -14,7 +14,6 @@
    limitations under the License.
 */
 
-using System;
 
 namespace Redmine.Net.Api.Logging
 {
@@ -29,7 +28,8 @@ namespace Redmine.Net.Api.Logging
         /// <param name="severity">The severity.</param>
         /// <param name="message">The message.</param>
         /// <param name="exception">The exception.</param>
-        public LogEntry(LoggingEventType severity, string message, Exception exception = null)
+        public LogEntry(LoggingEventType severity, string message
+            , System.Exception exception = null)
         {
             Severity = severity;
             Message = message;
@@ -56,6 +56,6 @@ namespace Redmine.Net.Api.Logging
         /// <value>
         /// The exception.
         /// </value>
-        public Exception Exception { get; private set; }
+        public System.Exception Exception { get; private set; }
     }
 }

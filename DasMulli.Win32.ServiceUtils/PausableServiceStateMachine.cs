@@ -1,5 +1,6 @@
-﻿using System;
+﻿
 using System.Diagnostics.CodeAnalysis;
+
 
 namespace DasMulli.Win32.ServiceUtils
 {
@@ -56,18 +57,30 @@ namespace DasMulli.Win32.ServiceUtils
             switch (command)
             {
                 case ServiceControlCommand.Stop:
-                    PerformAction(ServiceState.StopPending, ServiceState.Stopped, serviceImplementation.Stop, ServiceAcceptedControlCommandsFlags.None);
+                    PerformAction(ServiceState.StopPending
+                        , ServiceState.Stopped
+                        , serviceImplementation.Stop
+                        , ServiceAcceptedControlCommandsFlags.None);
                     break;
                 case ServiceControlCommand.Pause:
-                    PerformAction(ServiceState.PausePending, ServiceState.Paused, serviceImplementation.Pause, ServiceAcceptedControlCommandsFlags.PauseContinueStop);
+                    PerformAction(ServiceState.PausePending
+                        , ServiceState.Paused
+                        , serviceImplementation.Pause
+                        , ServiceAcceptedControlCommandsFlags.PauseContinueStop);
                     break;
                 case ServiceControlCommand.Continue:
-                    PerformAction(ServiceState.ContinuePending, ServiceState.Running, serviceImplementation.Continue, ServiceAcceptedControlCommandsFlags.PauseContinueStop);
+                    PerformAction(ServiceState.ContinuePending
+                        , ServiceState.Running
+                        , serviceImplementation.Continue
+                        , ServiceAcceptedControlCommandsFlags.PauseContinueStop);
                     break;
             }
         }
 
-        private void PerformAction(ServiceState pendingState, ServiceState completedState, Action serviceAction, ServiceAcceptedControlCommandsFlags allowedControlCommandsFlags)
+        private void PerformAction(ServiceState pendingState
+            , ServiceState completedState
+            , System.Action serviceAction
+            , ServiceAcceptedControlCommandsFlags allowedControlCommandsFlags)
         {
             statusReportCallback(pendingState, ServiceAcceptedControlCommandsFlags.None, win32ExitCode: 0, waitHint: 3000);
 

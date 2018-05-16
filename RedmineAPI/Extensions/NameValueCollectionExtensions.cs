@@ -14,7 +14,7 @@
    limitations under the License.
 */
 
-using System.Collections.Specialized;
+
 
 namespace Redmine.Net.Api.Extensions
 {
@@ -29,10 +29,13 @@ namespace Redmine.Net.Api.Extensions
         /// <param name="parameters">The parameters.</param>
         /// <param name="parameterName">Name of the parameter.</param>
         /// <returns></returns>
-        public static string GetParameterValue(this NameValueCollection parameters, string parameterName)
+        public static string GetParameterValue(this 
+            System.Collections.Specialized.NameValueCollection parameters, string parameterName)
         {
-            if (parameters == null) return null;
-            var value = parameters.Get(parameterName);
+            if (parameters == null)
+                return null;
+
+            string value = parameters.Get(parameterName);
             return string.IsNullOrEmpty(value) ? null : value;
         }
     }

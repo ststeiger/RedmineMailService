@@ -14,8 +14,6 @@
    limitations under the License.
 */
 
-using System;
-using System.Runtime.Serialization;
 
 namespace Redmine.Net.Api.Exceptions
 {
@@ -55,7 +53,7 @@ namespace Redmine.Net.Api.Exceptions
         /// </summary>
         /// <param name="message"></param>
         /// <param name="innerException"></param>
-        public ConflictException(string message, Exception innerException)
+        public ConflictException(string message, System.Exception innerException)
             : base(message, innerException)
         {
         }
@@ -66,7 +64,7 @@ namespace Redmine.Net.Api.Exceptions
         /// <param name="format"></param>
         /// <param name="innerException"></param>
         /// <param name="args"></param>
-        public ConflictException(string format, Exception innerException, params object[] args)
+        public ConflictException(string format, System.Exception innerException, params object[] args)
             : base(string.Format(format, args), innerException)
         {
         }
@@ -76,7 +74,8 @@ namespace Redmine.Net.Api.Exceptions
         /// </summary>
         /// <param name="info"></param>
         /// <param name="context"></param>
-        protected ConflictException(SerializationInfo info, StreamingContext context)
+        protected ConflictException(System.Runtime.Serialization.SerializationInfo info
+            , System.Runtime.Serialization.StreamingContext context)
             : base(info, context)
         {
         }

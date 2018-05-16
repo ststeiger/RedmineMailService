@@ -1,28 +1,25 @@
-using System;
-using System.Collections.Specialized;
-using System.Net;
-using System.Net.Cache;
 
 namespace Redmine.Net.Api.Types
 {
-     interface IRedmineWebClient{
-        Uri BaseAddress { get; set; }
-        NameValueCollection QueryString { get; set; }
+    interface IRedmineWebClient
+    {
+        System.Uri BaseAddress { get; set; }
+        System.Collections.Specialized.NameValueCollection QueryString { get; set; }
 
         bool UseDefaultCredentials { get; set; }
-        ICredentials Credentials { get; set; }
+        System.Net.ICredentials Credentials { get; set; }
 
         bool UseProxy { get; set; }
-        IWebProxy Proxy { get; set; }
+        System.Net.IWebProxy Proxy { get; set; }
 
-        TimeSpan Timeout { get; set; }
+        System.TimeSpan Timeout { get; set; }
 
         bool UseCookies { get; set; }
-        CookieContainer CookieContainer { get; set; }
-        
+        System.Net.CookieContainer CookieContainer { get; set; }
+
         bool PreAuthenticate { get; set; }
 
-        RequestCachePolicy CachePolicy { get; set; }
+        System.Net.Cache.RequestCachePolicy CachePolicy { get; set; }
 
         bool KeepAlive { get; set; }
     }

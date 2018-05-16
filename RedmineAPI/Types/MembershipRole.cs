@@ -14,19 +14,20 @@
    limitations under the License.
 */
 
-using System;
-using System.Xml;
-using System.Xml.Serialization;
+
 using Redmine.Net.Api.Extensions;
 using Redmine.Net.Api.Internals;
+
 
 namespace Redmine.Net.Api.Types
 {
     /// <summary>
     /// 
     /// </summary>
-    [XmlRoot(RedmineKeys.ROLE)]
-    public class MembershipRole : IdentifiableName, IEquatable<MembershipRole>
+    [System.Xml.Serialization.XmlRoot(RedmineKeys.ROLE)]
+    public class MembershipRole 
+        : IdentifiableName
+        , System.IEquatable<MembershipRole>
     {
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="MembershipRole"/> is inherited.
@@ -34,16 +35,16 @@ namespace Redmine.Net.Api.Types
         /// <value>
         ///   <c>true</c> if inherited; otherwise, <c>false</c>.
         /// </value>
-        [XmlAttribute(RedmineKeys.INHERITED)]
+        [System.Xml.Serialization.XmlAttribute(RedmineKeys.INHERITED)]
         public bool Inherited { get; set; }
 
         /// <summary>
         /// Reads the XML.
         /// </summary>
         /// <param name="reader">The reader.</param>
-        public override void ReadXml(XmlReader reader)
+        public override void ReadXml(System.Xml.XmlReader reader)
         {
-            Id = Convert.ToInt32(reader.GetAttribute(RedmineKeys.ID));
+            Id = System.Convert.ToInt32(reader.GetAttribute(RedmineKeys.ID));
             Name = reader.GetAttribute(RedmineKeys.NAME);
             Inherited = reader.ReadAttributeAsBoolean(RedmineKeys.INHERITED);
             reader.Read();
@@ -53,7 +54,7 @@ namespace Redmine.Net.Api.Types
         /// 
         /// </summary>
         /// <param name="writer"></param>
-        public override void WriteXml(XmlWriter writer)
+        public override void WriteXml(System.Xml.XmlWriter writer)
         {
             writer.WriteValue(Id);
         }
@@ -65,7 +66,9 @@ namespace Redmine.Net.Api.Types
         /// <returns></returns>
         public bool Equals(MembershipRole other)
         {
-            if (other == null) return false;
+            if (other == null)
+                return false;
+
             return Id == other.Id && Name == other.Name && Inherited == other.Inherited;
         }
 
@@ -77,7 +80,7 @@ namespace Redmine.Net.Api.Types
         {
             unchecked
             {
-                var hashCode = 13;
+                int hashCode = 13;
                 hashCode = HashCodeHelper.GetHashCode(Id, hashCode);
                 hashCode = HashCodeHelper.GetHashCode(Name, hashCode);
                 hashCode = HashCodeHelper.GetHashCode(Inherited, hashCode);

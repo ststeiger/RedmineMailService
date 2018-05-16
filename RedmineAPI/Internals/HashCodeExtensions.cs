@@ -14,7 +14,6 @@
    limitations under the License.
 */
 
-using System.Collections.Generic;
 
 namespace Redmine.Net.Api.Internals
 {
@@ -32,24 +31,26 @@ namespace Redmine.Net.Api.Internals
         /// <returns>
         /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
         /// </returns>
-        public static int GetHashCode<T>(IList<T> list, int hash)
+        public static int GetHashCode<T>(System.Collections.Generic.IList<T> list, int hash)
         {
             unchecked
             {
-                var hashCode = hash;
+                int hashCode = hash;
                 if (list != null)
                 {
                     hashCode = (hashCode * 13) + list.Count;
                     foreach (T t in list)
                     {
                         hashCode *= 13;
-                        if (t != null) hashCode = hashCode + t.GetHashCode();
-                    }
-                }
+                        if (t != null)
+                            hashCode = hashCode + t.GetHashCode();
+                    } // Next t
+                } // End if (list != null) 
 
                 return hashCode;
-            }
-        }
+            } // End unchecked 
+
+        } // End Function GetHashCode 
 
         /// <summary>
         /// Returns a hash code for this instance.
@@ -64,12 +65,11 @@ namespace Redmine.Net.Api.Internals
         {
             unchecked
             {
-                var hashCode = hash;
-
+                int hashCode = hash;
                 hashCode = (hashCode * 397) ^ (entity == null ? 0 : entity.GetHashCode());
 
                 return hashCode;
-            }
-        }
+            } // End unchecked
+        } // End Function GetHashCode 
     }
 }

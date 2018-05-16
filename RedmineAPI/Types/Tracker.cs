@@ -14,29 +14,30 @@
    limitations under the License.
 */
 
-using System;
-using System.Xml;
-using System.Xml.Serialization;
+
 using Redmine.Net.Api.Internals;
+
 
 namespace Redmine.Net.Api.Types
 {
     /// <summary>
     /// Availability 1.3
     /// </summary>
-    [XmlRoot(RedmineKeys.TRACKER)]
-    public class Tracker : IdentifiableName, IEquatable<Tracker>
+    [System.Xml.Serialization.XmlRoot(RedmineKeys.TRACKER)]
+    public class Tracker 
+        : IdentifiableName
+        , System.IEquatable<Tracker>
     {
         /// <summary>
         /// </summary>
         /// <param name="writer"></param>
-        public override void WriteXml(XmlWriter writer) { }
+        public override void WriteXml(System.Xml.XmlWriter writer) { }
 
         /// <summary>
         /// Generates an object from its XML representation.
         /// </summary>
         /// <param name="reader">The <see cref="T:System.Xml.XmlReader"/> stream from which the object is deserialized.</param>
-        public override void ReadXml(XmlReader reader)
+        public override void ReadXml(System.Xml.XmlReader reader)
         {
             reader.Read();
             while (!reader.EOF)
@@ -93,7 +94,7 @@ namespace Redmine.Net.Api.Types
         {
             unchecked
             {
-                var hashCode = 13;
+                int hashCode = 13;
                 hashCode = HashCodeHelper.GetHashCode(Id, hashCode);
                 hashCode = HashCodeHelper.GetHashCode(Name, hashCode);
                 return hashCode;
@@ -108,5 +109,9 @@ namespace Redmine.Net.Api.Types
         {
             return string.Format("[Tracker: Id={0}, Name={1}]", Id, Name);
         }
+
+
     }
+
+
 }

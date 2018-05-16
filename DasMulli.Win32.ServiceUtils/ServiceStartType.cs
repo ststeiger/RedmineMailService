@@ -1,4 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿
+using System.Diagnostics.CodeAnalysis;
+
 
 namespace DasMulli.Win32.ServiceUtils
 {
@@ -11,4 +13,5 @@ namespace DasMulli.Win32.ServiceUtils
         StartOnDemand = 3,
         Disabled = 4
     }
+
 }

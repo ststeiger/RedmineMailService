@@ -14,39 +14,40 @@
    limitations under the License.
 */
 
-using System;
-using System.Xml;
-using System.Xml.Serialization;
+
 using Redmine.Net.Api.Extensions;
 using Redmine.Net.Api.Internals;
+
 
 namespace Redmine.Net.Api.Types
 {
     /// <summary>
     /// Availability 1.3
     /// </summary>
-    [XmlRoot(RedmineKeys.QUERY)]
-    public class Query : IdentifiableName, IEquatable<Query>
+    [System.Xml.Serialization.XmlRoot(RedmineKeys.QUERY)]
+    public class Query 
+        : IdentifiableName
+        , System.IEquatable<Query>
     {
         /// <summary>
         /// Gets or sets a value indicating whether this instance is public.
         /// </summary>
         /// <value><c>true</c> if this instance is public; otherwise, <c>false</c>.</value>
-        [XmlElement(RedmineKeys.IS_PUBLIC)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.IS_PUBLIC)]
         public bool IsPublic { get; set; }
 
         /// <summary>
         /// Gets or sets the project id.
         /// </summary>
         /// <value>The project id.</value>
-        [XmlElement(RedmineKeys.PROJECT_ID)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.PROJECT_ID)]
         public int? ProjectId { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="reader"></param>
-        public override void ReadXml(XmlReader reader)
+        public override void ReadXml(System.Xml.XmlReader reader)
         {
             reader.Read();
             while (!reader.EOF)
@@ -76,7 +77,7 @@ namespace Redmine.Net.Api.Types
         /// 
         /// </summary>
         /// <param name="writer"></param>
-        public override void WriteXml(XmlWriter writer) { }
+        public override void WriteXml(System.Xml.XmlWriter writer) { }
 
         /// <summary>
         /// 
@@ -98,7 +99,7 @@ namespace Redmine.Net.Api.Types
         {
             unchecked
             {
-                var hashCode = 13;
+                int hashCode = 13;
                 hashCode = HashCodeHelper.GetHashCode(Id, hashCode);
                 hashCode = HashCodeHelper.GetHashCode(Name, hashCode);
                 hashCode = HashCodeHelper.GetHashCode(IsPublic, hashCode);

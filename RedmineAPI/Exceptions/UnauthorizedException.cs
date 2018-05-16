@@ -14,16 +14,14 @@
    limitations under the License.
 */
 
-using System;
-using System.Runtime.Serialization;
-
 namespace Redmine.Net.Api.Exceptions
 {
     /// <summary>
     /// Thrown in case something went wrong while trying to login.
     /// </summary>
     /// <seealso cref="Redmine.Net.Api.Exceptions.RedmineException" />
-    public class UnauthorizedException : RedmineException
+    public class UnauthorizedException 
+        : RedmineException
     {
         /// <summary>
         ///     Initializes a new instance of the <see cref="UnauthorizedException" /> class.
@@ -59,7 +57,7 @@ namespace Redmine.Net.Api.Exceptions
         ///     The exception that is the cause of the current exception, or a null reference (Nothing in
         ///     Visual Basic) if no inner exception is specified.
         /// </param>
-        public UnauthorizedException(string message, Exception innerException)
+        public UnauthorizedException(string message, System.Exception innerException)
             : base(message, innerException)
         {
         }
@@ -70,7 +68,7 @@ namespace Redmine.Net.Api.Exceptions
         /// <param name="format">The format.</param>
         /// <param name="innerException">The inner exception.</param>
         /// <param name="args">The arguments.</param>
-        public UnauthorizedException(string format, Exception innerException, params object[] args)
+        public UnauthorizedException(string format, System.Exception innerException, params object[] args)
             : base(string.Format(format, args), innerException)
         {
         }
@@ -86,7 +84,8 @@ namespace Redmine.Net.Api.Exceptions
         ///     The <see cref="T:System.Runtime.Serialization.StreamingContext" /> that contains contextual
         ///     information about the source or destination.
         /// </param>
-        protected UnauthorizedException(SerializationInfo info, StreamingContext context)
+        protected UnauthorizedException(System.Runtime.Serialization.SerializationInfo info
+            , System.Runtime.Serialization.StreamingContext context)
             : base(info, context)
         {
         }

@@ -1,7 +1,11 @@
-﻿using JetBrains.Annotations;
+﻿
+using JetBrains.Annotations;
+
 
 namespace DasMulli.Win32.ServiceUtils
 {
+
+
     /// <summary>
     /// Contains settings for a windows service registration.
     /// </summary>
@@ -115,5 +119,9 @@ namespace DasMulli.Win32.ServiceUtils
             DisplayName = serviceName;
             BinaryPath = binPath;
         }
+
+
     }
+
+
 }

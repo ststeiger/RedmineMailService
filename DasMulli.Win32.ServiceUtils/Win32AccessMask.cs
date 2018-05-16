@@ -1,9 +1,12 @@
-﻿using System;
+﻿
 using System.Diagnostics.CodeAnalysis;
+
 
 namespace DasMulli.Win32.ServiceUtils
 {
-    [Flags]
+
+
+    [System.Flags]
     [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "External API")]
     internal enum Win32AccessMask : uint
     {
@@ -54,4 +57,5 @@ namespace DasMulli.Win32.ServiceUtils
 
         WinstaAllAccess = 0x0000037F
     }
+
 }

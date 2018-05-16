@@ -14,12 +14,10 @@
    limitations under the License.
 */
 
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Globalization;
+using Redmine.Net.Api.Types;
 using Redmine.Net.Api.Exceptions;
 using Redmine.Net.Api.Extensions;
-using Redmine.Net.Api.Types;
+
 
 namespace Redmine.Net.Api.Internals
 {
@@ -71,9 +69,10 @@ namespace Redmine.Net.Api.Internals
         public static string GetUploadUrl<T>(RedmineManager redmineManager, string id, T obj, string projectId = null)
             where T : class, new()
         {
-            var type = typeof(T);
+            System.Type type = typeof(T);
 
-            if (!RedmineManager.Sufixes.ContainsKey(type)) throw new KeyNotFoundException(type.Name);
+            if (!RedmineManager.Sufixes.ContainsKey(type))
+                throw new System.Collections.Generic.KeyNotFoundException(type.Name);
 
             return string.Format(REQUEST_FORMAT, redmineManager.Host, RedmineManager.Sufixes[type], id,
                 redmineManager.MimeFormat.ToString().ToLower());
@@ -94,19 +93,24 @@ namespace Redmine.Net.Api.Internals
         /// </exception>
         public static string GetCreateUrl<T>(RedmineManager redmineManager, string ownerId) where T : class, new()
         {
-            var type = typeof(T);
+            System.Type type = typeof(T);
 
-            if (!RedmineManager.Sufixes.ContainsKey(type)) throw new KeyNotFoundException(type.Name);
+            if (!RedmineManager.Sufixes.ContainsKey(type))
+                throw new System.Collections.Generic.KeyNotFoundException(type.Name);
 
             if (type == typeof(Version) || type == typeof(IssueCategory) || type == typeof(ProjectMembership))
             {
-                if (string.IsNullOrEmpty(ownerId)) throw new RedmineException("The owner id(project id) is mandatory!");
+                if (string.IsNullOrEmpty(ownerId))
+                    throw new RedmineException("The owner id(project id) is mandatory!");
+
                 return string.Format(ENTITY_WITH_PARENT_FORMAT, redmineManager.Host, RedmineKeys.PROJECTS,
                     ownerId, RedmineManager.Sufixes[type], redmineManager.MimeFormat.ToString().ToLower());
             }
             if (type == typeof(IssueRelation))
             {
-                if (string.IsNullOrEmpty(ownerId)) throw new RedmineException("The owner id(issue id) is mandatory!");
+                if (string.IsNullOrEmpty(ownerId))
+                    throw new RedmineException("The owner id(issue id) is mandatory!");
+
                 return string.Format(ENTITY_WITH_PARENT_FORMAT, redmineManager.Host, RedmineKeys.ISSUES,
                     ownerId, RedmineManager.Sufixes[type], redmineManager.MimeFormat.ToString().ToLower());
             }
@@ -126,9 +130,10 @@ namespace Redmine.Net.Api.Internals
         /// <exception cref="System.Collections.Generic.KeyNotFoundException"></exception>
         public static string GetDeleteUrl<T>(RedmineManager redmineManager, string id) where T : class, new()
         {
-            var type = typeof(T);
+            System.Type type = typeof(T);
 
-            if (!RedmineManager.Sufixes.ContainsKey(type)) throw new KeyNotFoundException(type.Name);
+            if (!RedmineManager.Sufixes.ContainsKey(type))
+                throw new System.Collections.Generic.KeyNotFoundException(type.Name);
 
             return string.Format(REQUEST_FORMAT, redmineManager.Host, RedmineManager.Sufixes[type], id,
                 redmineManager.MimeFormat.ToString().ToLower());
@@ -144,9 +149,10 @@ namespace Redmine.Net.Api.Internals
         /// <exception cref="System.Collections.Generic.KeyNotFoundException"></exception>
         public static string GetGetUrl<T>(RedmineManager redmineManager, string id) where T : class, new()
         {
-            var type = typeof(T);
+            System.Type type = typeof(T);
 
-            if (!RedmineManager.Sufixes.ContainsKey(type)) throw new KeyNotFoundException(type.Name);
+            if (!RedmineManager.Sufixes.ContainsKey(type))
+                throw new System.Collections.Generic.KeyNotFoundException(type.Name);
 
             return string.Format(REQUEST_FORMAT, redmineManager.Host, RedmineManager.Sufixes[type], id,
                 redmineManager.MimeFormat.ToString().ToLower());
@@ -165,16 +171,18 @@ namespace Redmine.Net.Api.Internals
         /// or
         /// The issue id is mandatory! \nCheck if you have included the parameter issue_id to parameters
         /// </exception>
-        public static string GetListUrl<T>(RedmineManager redmineManager, NameValueCollection parameters)
+        public static string GetListUrl<T>(RedmineManager redmineManager
+            , System.Collections.Specialized.NameValueCollection parameters)
             where T : class, new()
         {
-            var type = typeof(T);
+            System.Type type = typeof(T);
 
-            if (!RedmineManager.Sufixes.ContainsKey(type)) throw new KeyNotFoundException(type.Name);
+            if (!RedmineManager.Sufixes.ContainsKey(type))
+                throw new System.Collections.Generic.KeyNotFoundException(type.Name);
 
             if (type == typeof(Version) || type == typeof(IssueCategory) || type == typeof(ProjectMembership))
             {
-                var projectId = parameters.GetParameterValue(RedmineKeys.PROJECT_ID);
+                string projectId = parameters.GetParameterValue(RedmineKeys.PROJECT_ID);
                 if (string.IsNullOrEmpty(projectId))
                     throw new RedmineException("The project id is mandatory! \nCheck if you have included the parameter project_id to parameters.");
 
@@ -183,7 +191,7 @@ namespace Redmine.Net.Api.Internals
             }
             if (type == typeof(IssueRelation))
             {
-                var issueId = parameters.GetParameterValue(RedmineKeys.ISSUE_ID);
+                string issueId = parameters.GetParameterValue(RedmineKeys.ISSUE_ID);
                 if (string.IsNullOrEmpty(issueId))
                     throw new RedmineException("The issue id is mandatory! \nCheck if you have included the parameter issue_id to parameters");
 
@@ -216,13 +224,14 @@ namespace Redmine.Net.Api.Internals
         /// <param name="version">The version.</param>
         /// <returns></returns>
         public static string GetWikiPageUrl(RedmineManager redmineManager, string projectId,
-            NameValueCollection parameters, string pageName, uint version = 0)
+            System.Collections.Specialized.NameValueCollection parameters, string pageName, uint version = 0)
         {
-            var uri = version == 0
+            string uri = version == 0
                 ? string.Format(WIKI_PAGE_FORMAT, redmineManager.Host, projectId, pageName,
                     redmineManager.MimeFormat.ToString().ToLower())
                 : string.Format(WIKI_VERSION_FORMAT, redmineManager.Host, projectId, pageName, version,
                     redmineManager.MimeFormat.ToString().ToLower());
+
             return uri;
         }
 

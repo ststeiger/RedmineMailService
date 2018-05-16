@@ -1,9 +1,10 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Runtime.InteropServices;
+﻿
+using System.Diagnostics.CodeAnalysis;
+
 
 namespace DasMulli.Win32.ServiceUtils
 {
-    [StructLayout(LayoutKind.Sequential)]
+    [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)]
     [SuppressMessage("ReSharper", "ConvertToAutoProperty", Justification = "Keep fields to preserve explicit struct layout for marshalling.")]
     [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "External API")]
     internal struct ServiceStatus
@@ -68,5 +69,7 @@ namespace DasMulli.Win32.ServiceUtils
             this.checkPoint = checkPoint;
             this.waitHint = waitHint;
         }
+
     }
+
 }

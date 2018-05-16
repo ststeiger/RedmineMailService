@@ -19,16 +19,16 @@ namespace RedmineMailService
         {
             // RedmineMailService.Trash.Exchange.TestSend();
             // RedmineMailService.Trash.Exchange.Test();
-            // TestPop3("firstName.lastName@provider.com", "TOP_SECRET");
-            // TestImap("firstName.lastName@provider.com", "TOP_SECRET");
-            // TestSMTP("firstName.lastName@provider.com", "TOP_SECRET");
+
+            TestPop3(Trash.UserData.RSN, Trash.UserData.RSNA);
+            TestImap(Trash.UserData.RSN, Trash.UserData.RSNA);
+            TestSMTP(Trash.UserData.RSN, Trash.UserData.RSNA);
+
             // ExchangeShared();
             // RedmineMailService.Trash.Exchange.FindUnreadEmail();
             // RedmineMailService.Trash.Exchange.DelaySendEmail();
             // RedmineMailService.Trash.Exchange.PlayEmailOnPhone();
             
-
-
         }
 
 
@@ -38,15 +38,15 @@ namespace RedmineMailService
         // https://stackoverflow.com/questions/38747822/accessing-exchange-shared-folders-using-mailkit
         public static void ExchangeShared()
         {
-            var userName = "main@user.com"; // The email address that has permissions to the shared mailbox
-            var sharedMailboxAlias = "aliasName"; // This is the alias name as setup in Exchange
-            var password = "";
-            using (var client = new MailKit.Net.Imap.ImapClient())
+            string userName = "main@user.com"; // The email address that has permissions to the shared mailbox
+            string sharedMailboxAlias = "aliasName"; // This is the alias name as setup in Exchange
+            string password = "";
+            using (MailKit.MailStore client = new MailKit.Net.Imap.ImapClient())
             {
                 client.Connect("outlook.office365.com", 993, true);
                 client.AuthenticationMechanisms.Remove("XOAUTH2");
                 client.Authenticate(userName + @"\" + sharedMailboxAlias, password);
-                var inbox = client.Inbox;
+                MailKit.IMailFolder inbox = client.Inbox;
                 inbox.Open(MailKit.FolderAccess.ReadOnly);
                 System.Console.WriteLine("Total messages: {0}", inbox.Count);
                 System.Console.WriteLine("Recent messages: {0}", inbox.Recent);

@@ -1,7 +1,8 @@
-﻿using System;
-
+﻿
 namespace DasMulli.Win32.ServiceUtils
 {
+
+
     /// <summary>
     /// Allows managing registered windows services on a machine
     /// </summary>
@@ -21,7 +22,7 @@ namespace DasMulli.Win32.ServiceUtils
             : this(machineName, databaseName, Win32Interop.Wrapper)
         {
         }
-        
+
         internal Win32ServiceManager(string machineName, string databaseName, INativeInterop nativeInterop)
         {
             this.machineName = machineName;
@@ -47,7 +48,7 @@ namespace DasMulli.Win32.ServiceUtils
         /// <paramref name="serviceName"/> is null or empty
         /// </exception>
         /// <exception cref="PlatformNotSupportedException">Thrown when run on a non-windows platform.</exception>
-        [Obsolete("Use the CreateService() overload taking a ServiceDefinition argument instead. This method only exists for backwards compatibility.")]
+        [System.Obsolete("Use the CreateService() overload taking a ServiceDefinition argument instead. This method only exists for backwards compatibility.")]
         public void CreateService(string serviceName, string displayName, string description, string binaryPath, Win32ServiceCredentials credentials,
             bool autoStart = false, bool startImmediately = false, ErrorSeverity errorSeverity = ErrorSeverity.Normal)
         {
@@ -80,44 +81,48 @@ namespace DasMulli.Win32.ServiceUtils
         {
             if (string.IsNullOrEmpty(serviceDefinition.BinaryPath))
             {
-                throw new ArgumentException($"Invalid service definition. {nameof(ServiceDefinition.BinaryPath)} must not be null or empty.", nameof(serviceDefinition));
+                throw new System.ArgumentException($"Invalid service definition. {nameof(ServiceDefinition.BinaryPath)} must not be null or empty.", nameof(serviceDefinition));
             }
             if (string.IsNullOrEmpty(serviceDefinition.ServiceName))
             {
-                throw new ArgumentException($"Invalid service definition. {nameof(ServiceDefinition.ServiceName)} must not be null or empty.", nameof(serviceDefinition));
+                throw new System.ArgumentException($"Invalid service definition. {nameof(ServiceDefinition.ServiceName)} must not be null or empty.", nameof(serviceDefinition));
             }
 
             try
             {
-                using (var mgr = ServiceControlManager.Connect(nativeInterop, machineName, databaseName, ServiceControlManagerAccessRights.All))
+                using (ServiceControlManager mgr = ServiceControlManager.Connect(nativeInterop, machineName
+                    , databaseName, ServiceControlManagerAccessRights.All))
                 {
                     DoCreateService(mgr, serviceDefinition, startImmediately);
                 }
             }
-            catch (DllNotFoundException dllException)
+            catch (System.DllNotFoundException dllException)
             {
-                throw new PlatformNotSupportedException(nameof(Win32ServiceHost) + " is only supported on Windows with service management API set.", dllException);
+                throw new System.PlatformNotSupportedException(
+                    nameof(Win32ServiceHost) 
+                    + " is only supported on Windows with service management API set.", dllException
+                );
             }
         }
 
         private void DoCreateService(ServiceControlManager serviceControlManager, ServiceDefinition serviceDefinition, bool startImmediately)
         {
-            using (var svc = serviceControlManager.CreateService(serviceDefinition.ServiceName, serviceDefinition.DisplayName, serviceDefinition.BinaryPath, ServiceType.Win32OwnProcess,
+            using (ServiceHandle svc = serviceControlManager.CreateService(serviceDefinition.ServiceName, serviceDefinition.DisplayName, serviceDefinition.BinaryPath, ServiceType.Win32OwnProcess,
                     serviceDefinition.AutoStart ? ServiceStartType.AutoStart : ServiceStartType.StartOnDemand, serviceDefinition.ErrorSeverity, serviceDefinition.Credentials))
             {
-                var description = serviceDefinition.Description;
+                string description = serviceDefinition.Description;
                 if (!string.IsNullOrEmpty(description))
                 {
                     svc.SetDescription(description);
                 }
 
-                var serviceFailureActions = serviceDefinition.FailureActions;
+                ServiceFailureActions serviceFailureActions = serviceDefinition.FailureActions;
                 if (serviceFailureActions != null)
                 {
                     svc.SetFailureActions(serviceFailureActions);
                     svc.SetFailureActionFlag(serviceDefinition.FailureActionsOnNonCrashFailures);
                 }
-                
+
                 if (serviceDefinition.AutoStart && serviceDefinition.DelayedAutoStart)
                 {
                     svc.SetDelayedAutoStartFlag(true);
@@ -147,42 +152,58 @@ namespace DasMulli.Win32.ServiceUtils
         {
             if (string.IsNullOrEmpty(serviceDefinition.BinaryPath))
             {
-                throw new ArgumentException($"Invalid service definition. {nameof(ServiceDefinition.BinaryPath)} must not be null or empty.", nameof(serviceDefinition));
+                throw new System.ArgumentException($"Invalid service definition. {nameof(ServiceDefinition.BinaryPath)} must not be null or empty.", nameof(serviceDefinition));
             }
             if (string.IsNullOrEmpty(serviceDefinition.ServiceName))
             {
-                throw new ArgumentException($"Invalid service definition. {nameof(ServiceDefinition.ServiceName)} must not be null or empty.", nameof(serviceDefinition));
+                throw new System.ArgumentException($"Invalid service definition. {nameof(ServiceDefinition.ServiceName)} must not be null or empty.", nameof(serviceDefinition));
             }
 
             try
             {
-                using (var mgr = ServiceControlManager.Connect(nativeInterop, machineName, databaseName, ServiceControlManagerAccessRights.All))
+                using (ServiceControlManager mgr = ServiceControlManager.Connect(nativeInterop, machineName
+                    , databaseName, ServiceControlManagerAccessRights.All))
                 {
-                    if (mgr.TryOpenService(serviceDefinition.ServiceName, ServiceControlAccessRights.All, out var existingService, out var errorException)) {
-                        using(existingService)
+                    if (mgr.TryOpenService(serviceDefinition.ServiceName
+                        , ServiceControlAccessRights.All
+                        , out ServiceHandle existingService
+                        , out System.ComponentModel.Win32Exception errorException)
+                        )
+                    {
+                        using (existingService)
                         {
                             DoUpdateService(existingService, serviceDefinition, startImmediately);
                         }
-                    } else {
-                        if (errorException.NativeErrorCode == KnownWin32ErrorCoes.ERROR_SERVICE_DOES_NOT_EXIST) {
+                    }
+                    else
+                    {
+                        if (errorException.NativeErrorCode == KnownWin32ErrorCoes.ERROR_SERVICE_DOES_NOT_EXIST)
+                        {
                             DoCreateService(mgr, serviceDefinition, startImmediately);
-                        } else {
+                        }
+                        else
+                        {
                             throw errorException;
                         }
                     }
                 }
             }
-            catch (DllNotFoundException dllException)
+            catch (System.DllNotFoundException dllException)
             {
-                throw new PlatformNotSupportedException(nameof(Win32ServiceHost) + " is only supported on Windows with service management API set.", dllException);
+                throw new System.PlatformNotSupportedException(nameof(Win32ServiceHost) + " is only supported on Windows with service management API set.", dllException);
             }
         }
 
         private static void DoUpdateService(ServiceHandle existingService, ServiceDefinition serviceDefinition, bool startIfNotRunning)
         {
-            existingService.ChangeConfig(serviceDefinition.DisplayName, serviceDefinition.BinaryPath, ServiceType.Win32OwnProcess,
-                serviceDefinition.AutoStart ? ServiceStartType.AutoStart : ServiceStartType.StartOnDemand, serviceDefinition.ErrorSeverity,
-                serviceDefinition.Credentials);
+            existingService.ChangeConfig(serviceDefinition.DisplayName
+                , serviceDefinition.BinaryPath
+                , ServiceType.Win32OwnProcess
+                , serviceDefinition.AutoStart ? ServiceStartType.AutoStart : ServiceStartType.StartOnDemand
+                , serviceDefinition.ErrorSeverity
+                , serviceDefinition.Credentials
+            );
+
             existingService.SetDescription(serviceDefinition.Description);
             existingService.SetFailureActions(serviceDefinition.FailureActions);
             existingService.SetFailureActionFlag(serviceDefinition.FailureActionsOnNonCrashFailures);
@@ -203,22 +224,23 @@ namespace DasMulli.Win32.ServiceUtils
         {
             if (string.IsNullOrEmpty(serviceName))
             {
-                throw new ArgumentException("Value cannot be null or empty.", nameof(serviceName));
+                throw new System.ArgumentException("Value cannot be null or empty.", nameof(serviceName));
             }
 
             try
             {
-                using (var mgr = ServiceControlManager.Connect(nativeInterop, machineName, databaseName, ServiceControlManagerAccessRights.All))
+                using (ServiceControlManager mgr = ServiceControlManager.Connect(nativeInterop, machineName
+                    , databaseName, ServiceControlManagerAccessRights.All))
                 {
-                    using (var svc = mgr.OpenService(serviceName, ServiceControlAccessRights.All))
+                    using (ServiceHandle svc = mgr.OpenService(serviceName, ServiceControlAccessRights.All))
                     {
                         svc.Delete();
                     }
                 }
             }
-            catch (DllNotFoundException dllException)
+            catch (System.DllNotFoundException dllException)
             {
-                throw new PlatformNotSupportedException(nameof(Win32ServiceHost) + " is only supported on Windows with service management API set.", dllException);
+                throw new System.PlatformNotSupportedException(nameof(Win32ServiceHost) + " is only supported on Windows with service management API set.", dllException);
             }
         }
     }

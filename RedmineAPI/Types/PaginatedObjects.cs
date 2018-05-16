@@ -14,7 +14,6 @@
    limitations under the License.
 */
 
-using System.Collections.Generic;
 
 namespace Redmine.Net.Api.Types
 {
@@ -27,7 +26,7 @@ namespace Redmine.Net.Api.Types
         /// <summary>
         /// 
         /// </summary>
-        public List<T> Objects { get; set; }
+        public System.Collections.Generic.List<T> Objects { get; set; }
         /// <summary>
         /// 
         /// </summary>
@@ -37,4 +36,5 @@ namespace Redmine.Net.Api.Types
         /// </summary>
         public int Offset { get; set; }
     }
+
 }

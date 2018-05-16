@@ -1,5 +1,8 @@
-﻿namespace Redmine.Net.Api.Types
+﻿
+namespace Redmine.Net.Api.Types
 {
+
+
     /// <summary>
     /// 
     /// </summary>
@@ -42,4 +45,5 @@
         /// </summary>
         copied_from
     }
+
 }

@@ -14,8 +14,6 @@
    limitations under the License.
 */
 
-using System;
-using System.Runtime.Serialization;
 
 namespace Redmine.Net.Api.Exceptions
 {
@@ -23,7 +21,8 @@ namespace Redmine.Net.Api.Exceptions
     /// Thrown in case the objects requested for could not be found.
     /// </summary>
     /// <seealso cref="Redmine.Net.Api.Exceptions.RedmineException" />
-    public class NotFoundException : RedmineException
+    public class NotFoundException 
+        : RedmineException
     {
         /// <summary>
         ///     Initializes a new instance of the <see cref="NotFoundException" /> class.
@@ -56,7 +55,7 @@ namespace Redmine.Net.Api.Exceptions
         /// </summary>
         /// <param name="message"></param>
         /// <param name="innerException"></param>
-        public NotFoundException(string message, Exception innerException)
+        public NotFoundException(string message, System.Exception innerException)
             : base(message, innerException)
         {
         }
@@ -67,7 +66,7 @@ namespace Redmine.Net.Api.Exceptions
         /// <param name="format"></param>
         /// <param name="innerException"></param>
         /// <param name="args"></param>
-        public NotFoundException(string format, Exception innerException, params object[] args)
+        public NotFoundException(string format, System.Exception innerException, params object[] args)
             : base(string.Format(format, args), innerException)
         {
         }
@@ -77,7 +76,8 @@ namespace Redmine.Net.Api.Exceptions
         /// </summary>
         /// <param name="info"></param>
         /// <param name="context"></param>
-        protected NotFoundException(SerializationInfo info, StreamingContext context)
+        protected NotFoundException(System.Runtime.Serialization.SerializationInfo info
+            , System.Runtime.Serialization.StreamingContext context)
             : base(info, context)
         {
         }

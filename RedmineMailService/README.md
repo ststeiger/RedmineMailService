@@ -36,10 +36,10 @@ production:
 
 
 
-wrong url: http://localhost:3000//uploads.xml
+wrong url: http://localhost:3000/uploads.xml
 <errors type="array"><error>Attachment Erweiterung  ist nicht zugelassen</error></errors>
 
-actual: http://localhost:3000//uploads.xml?filename=<filename>
+actual: http://localhost:3000/uploads.xml?filename=<filename>
 
 
 
@@ -49,7 +49,7 @@ webClient.PreAuthenticate = true;
 private readonly CredentialCache cache;
 cache = new CredentialCache { { new Uri(host), "Basic", new NetworkCredential(login, password) } };
 
-var token = Convert.ToBase64String(Encoding.UTF8.GetBytes(string.Format("{0}:{1}", login, password)));
+string token = Convert.ToBase64String(Encoding.UTF8.GetBytes(string.Format("{0}:{1}", login, password)));
 basicAuthorization = string.Format("Basic {0}", token);
 
 

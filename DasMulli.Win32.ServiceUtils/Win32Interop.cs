@@ -1,8 +1,11 @@
-﻿using System;
+﻿
 using System.Runtime.InteropServices;
+
 
 namespace DasMulli.Win32.ServiceUtils
 {
+
+
     internal static class Win32Interop
     {
         internal static readonly INativeInterop Wrapper = new InteropWrapper();
@@ -28,13 +31,15 @@ namespace DasMulli.Win32.ServiceUtils
 #endif
 
         [DllImport(DllServiceManagement_L1_1_0, ExactSpelling = true, SetLastError = true)]
-        private static extern bool CloseServiceHandle(IntPtr handle);
+        private static extern bool CloseServiceHandle(System.IntPtr handle);
 
         [DllImport(DllServiceCore_L1_1_0, ExactSpelling = true, SetLastError = true, CharSet = CharSet.Unicode)]
         private static extern bool StartServiceCtrlDispatcherW([MarshalAs(UnmanagedType.LPArray)] ServiceTableEntry[] serviceTable);
 
         [DllImport(DllServiceCore_L1_1_0, ExactSpelling = true, SetLastError = true, CharSet = CharSet.Unicode)]
-        private static extern ServiceStatusHandle RegisterServiceCtrlHandlerExW(string serviceName, ServiceControlHandler serviceControlHandler, IntPtr context);
+        private static extern ServiceStatusHandle RegisterServiceCtrlHandlerExW(string serviceName
+            , ServiceControlHandler serviceControlHandler
+            , System.IntPtr context);
 
         [DllImport(DllServiceCore_L1_1_0, ExactSpelling = true, SetLastError = true)]
         private static extern bool SetServiceStatus(ServiceStatusHandle statusHandle, ref ServiceStatus pServiceStatus);
@@ -53,7 +58,7 @@ namespace DasMulli.Win32.ServiceUtils
             ErrorSeverity errorSeverity,
             string binaryPath,
             string loadOrderGroup,
-            IntPtr outUIntTagId,
+            System.IntPtr outUIntTagId,
             string dependencies,
             string serviceUserName,
             string servicePassword);
@@ -66,7 +71,7 @@ namespace DasMulli.Win32.ServiceUtils
             ErrorSeverity errorSeverity,
             string binaryPath,
             string loadOrderGroup,
-            IntPtr outUIntTagId,
+            System.IntPtr outUIntTagId,
             string dependencies,
             string serviceUserName,
             string servicePassword,
@@ -77,17 +82,20 @@ namespace DasMulli.Win32.ServiceUtils
             ServiceControlAccessRights desiredControlAccess);
 
         [DllImport(DllServiceManagement_L1_1_0, ExactSpelling = true, SetLastError = true)]
-        private static extern bool StartServiceW(ServiceHandle service, uint argc, IntPtr wargv);
+        private static extern bool StartServiceW(ServiceHandle service, uint argc, System.IntPtr wargv);
 
         [DllImport(DllServiceManagement_L1_1_0, ExactSpelling = true, SetLastError = true)]
         private static extern bool DeleteService(ServiceHandle service);
 
         [DllImport(DllServiceManagement_L2_1_0, ExactSpelling = true, SetLastError = true, CharSet = CharSet.Unicode)]
-        private static extern bool ChangeServiceConfig2W(ServiceHandle service, ServiceConfigInfoTypeLevel infoTypeLevel, IntPtr info);
+        private static extern bool ChangeServiceConfig2W(ServiceHandle service
+            , ServiceConfigInfoTypeLevel infoTypeLevel
+            , System.IntPtr info);
 
-        private class InteropWrapper : INativeInterop
+        private class InteropWrapper 
+            : INativeInterop
         {
-            bool INativeInterop.CloseServiceHandle(IntPtr handle)
+            bool INativeInterop.CloseServiceHandle(System.IntPtr handle)
             {
                 return CloseServiceHandle(handle);
             }
@@ -97,7 +105,10 @@ namespace DasMulli.Win32.ServiceUtils
                 return StartServiceCtrlDispatcherW(serviceTable);
             }
 
-            ServiceStatusHandle INativeInterop.RegisterServiceCtrlHandlerExW(string serviceName, ServiceControlHandler serviceControlHandler, IntPtr context)
+            ServiceStatusHandle INativeInterop.RegisterServiceCtrlHandlerExW(
+                string serviceName
+                , ServiceControlHandler serviceControlHandler
+                , System.IntPtr context)
             {
                 return RegisterServiceCtrlHandlerExW(serviceName, serviceControlHandler, context);
             }
@@ -112,26 +123,41 @@ namespace DasMulli.Win32.ServiceUtils
                 return OpenSCManagerW(machineName, databaseName, dwAccess);
             }
 
-            ServiceHandle INativeInterop.CreateServiceW(ServiceControlManager serviceControlManager, string serviceName, string displayName,
-                ServiceControlAccessRights desiredControlAccess, ServiceType serviceType, ServiceStartType startType, ErrorSeverity errorSeverity,
-                string binaryPath,
-                string loadOrderGroup, IntPtr outUIntTagId, string dependencies, string serviceUserName, string servicePassword)
+            ServiceHandle INativeInterop.CreateServiceW(ServiceControlManager serviceControlManager
+                , string serviceName
+                , string displayName
+                , ServiceControlAccessRights desiredControlAccess
+                , ServiceType serviceType
+                , ServiceStartType startType
+                , ErrorSeverity errorSeverity
+                , string binaryPath
+                , string loadOrderGroup
+                , System.IntPtr outUIntTagId
+                , string dependencies
+                , string serviceUserName
+                , string servicePassword)
             {
                 return CreateServiceW(serviceControlManager, serviceName, displayName, desiredControlAccess, serviceType, startType, errorSeverity,
                     binaryPath, loadOrderGroup, outUIntTagId, dependencies, serviceUserName, servicePassword);
             }
 
-            bool INativeInterop.ChangeServiceConfigW(ServiceHandle service, ServiceType serviceType, ServiceStartType startType, ErrorSeverity errorSeverity, string binaryPath, string loadOrderGroup, IntPtr outUIntTagId, string dependencies, string serviceUserName, string servicePassword, string displayName)
+            bool INativeInterop.ChangeServiceConfigW(ServiceHandle service, ServiceType serviceType
+                , ServiceStartType startType, ErrorSeverity errorSeverity, string binaryPath
+                , string loadOrderGroup, System.IntPtr outUIntTagId
+                , string dependencies, string serviceUserName
+                , string servicePassword, string displayName)
             {
-                return ChangeServiceConfigW(service, serviceType, startType, errorSeverity, binaryPath, loadOrderGroup, outUIntTagId, dependencies, serviceUserName, servicePassword, displayName);
+                return ChangeServiceConfigW(service, serviceType, startType, errorSeverity, binaryPath
+                    , loadOrderGroup, outUIntTagId, dependencies, serviceUserName, servicePassword, displayName);
             }
 
-            ServiceHandle INativeInterop.OpenServiceW(ServiceControlManager serviceControlManager, string serviceName, ServiceControlAccessRights desiredControlAccess)
+            ServiceHandle INativeInterop.OpenServiceW(ServiceControlManager serviceControlManager
+                , string serviceName, ServiceControlAccessRights desiredControlAccess)
             {
                 return OpenServiceW(serviceControlManager, serviceName, desiredControlAccess);
             }
 
-            bool INativeInterop.StartServiceW(ServiceHandle service, uint argc, IntPtr wargv)
+            bool INativeInterop.StartServiceW(ServiceHandle service, uint argc, System.IntPtr wargv)
             {
                 return StartServiceW(service, argc, wargv);
             }
@@ -141,7 +167,9 @@ namespace DasMulli.Win32.ServiceUtils
                 return DeleteService(service);
             }
 
-            bool INativeInterop.ChangeServiceConfig2W(ServiceHandle service, ServiceConfigInfoTypeLevel infoTypeLevel, IntPtr info)
+            bool INativeInterop.ChangeServiceConfig2W(ServiceHandle service
+                , ServiceConfigInfoTypeLevel infoTypeLevel
+                , System.IntPtr info)
             {
                 return ChangeServiceConfig2W(service, infoTypeLevel, info);
             }

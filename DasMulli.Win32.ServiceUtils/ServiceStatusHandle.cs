@@ -1,17 +1,19 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Runtime.InteropServices;
+﻿
 using JetBrains.Annotations;
+
 
 namespace DasMulli.Win32.ServiceUtils
 {
     [UsedImplicitly(ImplicitUseKindFlags.InstantiatedNoFixedConstructorSignature)]
-    internal class ServiceStatusHandle : SafeHandle
+    internal class ServiceStatusHandle 
+        : System.Runtime.InteropServices.SafeHandle
     {
-        [SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Exposed for testing via InternalsVisibleTo.")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("ReSharper", "MemberCanBePrivate.Global"
+            , Justification = "Exposed for testing via InternalsVisibleTo.")]
         internal INativeInterop NativeInterop { get; set; } = Win32Interop.Wrapper;
 
-        internal ServiceStatusHandle() : base(IntPtr.Zero, ownsHandle: true)
+        internal ServiceStatusHandle()
+            : base(System.IntPtr.Zero, ownsHandle: true)
         {
         }
 
@@ -25,7 +27,7 @@ namespace DasMulli.Win32.ServiceUtils
             [System.Security.SecurityCritical]
             get
             {
-                return handle == IntPtr.Zero;
+                return handle == System.IntPtr.Zero;
             }
         }
     }

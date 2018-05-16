@@ -1,5 +1,5 @@
 ﻿
-namespace RedmineMailService.Trash
+namespace RedmineMailService
 {
     
 

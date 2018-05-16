@@ -14,62 +14,62 @@
    limitations under the License.
 */
 
-using System;
-using System.Collections.Generic;
-using System.Xml;
-using System.Xml.Serialization;
+
 using Redmine.Net.Api.Extensions;
 using Redmine.Net.Api.Internals;
+
 
 namespace Redmine.Net.Api.Types
 {
     /// <summary>
     /// Availability 1.0
     /// </summary>
-    [XmlRoot(RedmineKeys.PROJECT)]
-    public class Project : IdentifiableName, IEquatable<Project>
+    [System.Xml.Serialization.XmlRoot(RedmineKeys.PROJECT)]
+    public class Project
+        : IdentifiableName
+        , System.IEquatable<Project>
     {
         /// <summary>
         /// Gets or sets the identifier (Required).
         /// </summary>
         /// <value>The identifier.</value>
-        [XmlElement(RedmineKeys.IDENTIFIER)]
-        public String Identifier { get; set; }
+        [System.Xml.Serialization.XmlElement(RedmineKeys.IDENTIFIER)]
+        public string Identifier { get; set; }
 
         /// <summary>
         /// Gets or sets the description.
         /// </summary>
         /// <value>The description.</value>
-        [XmlElement(RedmineKeys.DESCRIPTION)]
-        public String Description { get; set; }
+        [System.Xml.Serialization.XmlElement(RedmineKeys.DESCRIPTION)]
+        public string Description { get; set; }
 
         /// <summary>
         /// Gets or sets the parent.
         /// </summary>
         /// <value>The parent.</value>
-        [XmlElement(RedmineKeys.PARENT)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.PARENT)]
         public IdentifiableName Parent { get; set; }
 
         /// <summary>
         /// Gets or sets the home page.
         /// </summary>
         /// <value>The home page.</value>
-        [XmlElement(RedmineKeys.HOMEPAGE)]
-        public String HomePage { get; set; }
+        [System.Xml.Serialization.XmlElement(RedmineKeys.HOMEPAGE)]
+        public string HomePage { get; set; }
 
         /// <summary>
         /// Gets or sets the created on.
         /// </summary>
         /// <value>The created on.</value>
-        [XmlElement(RedmineKeys.CREATED_ON, IsNullable = true)]
-        public DateTime? CreatedOn { get; set; }
+        [System.Xml.Serialization.XmlElement(RedmineKeys.CREATED_ON, IsNullable = true)]
+        public System.DateTime? CreatedOn { get; set; }
 
         /// <summary>
         /// Gets or sets the updated on.
         /// </summary>
         /// <value>The updated on.</value>
-        [XmlElement(RedmineKeys.UPDATED_ON, IsNullable = true)]
-        public DateTime? UpdatedOn { get; set; }
+        [System.Xml.Serialization.XmlElement(RedmineKeys.UPDATED_ON, IsNullable = true)]
+        public System.DateTime? UpdatedOn { get; set; }
 
         /// <summary>
         /// Gets or sets the status.
@@ -77,7 +77,7 @@ namespace Redmine.Net.Api.Types
         /// <value>
         /// The status.
         /// </value>
-        [XmlElement(RedmineKeys.STATUS)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.STATUS)]
         public ProjectStatus Status { get; set; }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace Redmine.Net.Api.Types
         ///   <c>true</c> if this project is public; otherwise, <c>false</c>.
         /// </value>
         /// <remarks> is exposed since 2.6.0</remarks>
-        [XmlElement(RedmineKeys.IS_PUBLIC)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.IS_PUBLIC)]
         public bool IsPublic { get; set; }
 
         /// <summary>
@@ -96,7 +96,7 @@ namespace Redmine.Net.Api.Types
         /// <value>
         ///   <c>true</c> if [inherit members]; otherwise, <c>false</c>.
         /// </value>
-        [XmlElement(RedmineKeys.INHERIT_MEMBERS)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.INHERIT_MEMBERS)]
         public bool InheritMembers { get; set; }
 
         /// <summary>
@@ -105,9 +105,9 @@ namespace Redmine.Net.Api.Types
         /// <value>
         /// The trackers.
         /// </value>
-        [XmlArray(RedmineKeys.TRACKERS)]
-        [XmlArrayItem(RedmineKeys.TRACKER)]
-        public IList<ProjectTracker> Trackers { get; set; }
+        [System.Xml.Serialization.XmlArray(RedmineKeys.TRACKERS)]
+        [System.Xml.Serialization.XmlArrayItem(RedmineKeys.TRACKER)]
+        public System.Collections.Generic.IList<ProjectTracker> Trackers { get; set; }
 
         /// <summary>
         /// Gets or sets the custom fields.
@@ -115,9 +115,9 @@ namespace Redmine.Net.Api.Types
         /// <value>
         /// The custom fields.
         /// </value>
-        [XmlArray(RedmineKeys.CUSTOM_FIELDS)]
-        [XmlArrayItem(RedmineKeys.CUSTOM_FIELD)]
-        public IList<IssueCustomField> CustomFields { get; set; }
+        [System.Xml.Serialization.XmlArray(RedmineKeys.CUSTOM_FIELDS)]
+        [System.Xml.Serialization.XmlArrayItem(RedmineKeys.CUSTOM_FIELD)]
+        public System.Collections.Generic.IList<IssueCustomField> CustomFields { get; set; }
 
         /// <summary>
         /// Gets or sets the issue categories.
@@ -125,9 +125,9 @@ namespace Redmine.Net.Api.Types
         /// <value>
         /// The issue categories.
         /// </value>
-        [XmlArray(RedmineKeys.ISSUE_CATEGORIES)]
-        [XmlArrayItem(RedmineKeys.ISSUE_CATEGORY)]
-        public IList<ProjectIssueCategory> IssueCategories { get; set; }
+        [System.Xml.Serialization.XmlArray(RedmineKeys.ISSUE_CATEGORIES)]
+        [System.Xml.Serialization.XmlArrayItem(RedmineKeys.ISSUE_CATEGORY)]
+        public System.Collections.Generic.IList<ProjectIssueCategory> IssueCategories { get; set; }
 
         /// <summary>
         /// since 2.6.0
@@ -135,15 +135,15 @@ namespace Redmine.Net.Api.Types
         /// <value>
         /// The enabled modules.
         /// </value>
-        [XmlArray(RedmineKeys.ENABLED_MODULES)]
-        [XmlArrayItem(RedmineKeys.ENABLED_MODULE)]
-        public IList<ProjectEnabledModule> EnabledModules { get; set; }
+        [System.Xml.Serialization.XmlArray(RedmineKeys.ENABLED_MODULES)]
+        [System.Xml.Serialization.XmlArrayItem(RedmineKeys.ENABLED_MODULE)]
+        public System.Collections.Generic.IList<ProjectEnabledModule> EnabledModules { get; set; }
 
         /// <summary>
         /// Generates an object from its XML representation.
         /// </summary>
         /// <param name="reader">The <see cref="T:System.Xml.XmlReader"/> stream from which the object is deserialized.</param>
-        public override void ReadXml(XmlReader reader)
+        public override void ReadXml(System.Xml.XmlReader reader)
         {
             reader.Read();
             while (!reader.EOF)
@@ -194,7 +194,7 @@ namespace Redmine.Net.Api.Types
         /// <summary>
         /// </summary>
         /// <param name="writer"></param>
-        public override void WriteXml(XmlWriter writer)
+        public override void WriteXml(System.Xml.XmlWriter writer)
         {
             writer.WriteElementString(RedmineKeys.NAME, Name);
             writer.WriteElementString(RedmineKeys.IDENTIFIER, Identifier);
@@ -204,8 +204,8 @@ namespace Redmine.Net.Api.Types
             writer.WriteIdOrEmpty(Parent, RedmineKeys.PARENT_ID);
             writer.WriteElementString(RedmineKeys.HOMEPAGE, HomePage);
 
-            writer.WriteListElements(Trackers as List<IValue>, RedmineKeys.TRACKER_IDS);
-            writer.WriteListElements(EnabledModules as List<IValue>, RedmineKeys.ENABLED_MODULE_NAMES);
+            writer.WriteListElements(Trackers as System.Collections.Generic.List<IValue>, RedmineKeys.TRACKER_IDS);
+            writer.WriteListElements(EnabledModules as System.Collections.Generic.List<IValue>, RedmineKeys.ENABLED_MODULE_NAMES);
 
             if (Id == 0) return;
 
@@ -225,7 +225,7 @@ namespace Redmine.Net.Api.Types
                 && Identifier.Equals(other.Identifier)
                 && Description.Equals(other.Description)
                 && (Parent != null ? Parent.Equals(other.Parent) : other.Parent == null)
-				&& (HomePage != null ? HomePage.Equals(other.HomePage) : other.HomePage == null)
+                && (HomePage != null ? HomePage.Equals(other.HomePage) : other.HomePage == null)
                 && CreatedOn == other.CreatedOn
                 && UpdatedOn == other.UpdatedOn
                 && Status == other.Status
@@ -244,25 +244,25 @@ namespace Redmine.Net.Api.Types
         /// <returns></returns>
         public override int GetHashCode()
         {
-	        unchecked
-	        {
-		        var hashCode = base.GetHashCode();
-		        hashCode = HashCodeHelper.GetHashCode(Identifier, hashCode);
-		        hashCode = HashCodeHelper.GetHashCode(Description, hashCode);
-		        hashCode = HashCodeHelper.GetHashCode(Parent, hashCode);
-		        hashCode = HashCodeHelper.GetHashCode(HomePage, hashCode);
-		        hashCode = HashCodeHelper.GetHashCode(CreatedOn, hashCode);
-		        hashCode = HashCodeHelper.GetHashCode(UpdatedOn, hashCode);
-		        hashCode = HashCodeHelper.GetHashCode(Status, hashCode);
-		        hashCode = HashCodeHelper.GetHashCode(IsPublic, hashCode);
-		        hashCode = HashCodeHelper.GetHashCode(InheritMembers, hashCode);
-		        hashCode = HashCodeHelper.GetHashCode(Trackers, hashCode);
-		        hashCode = HashCodeHelper.GetHashCode(CustomFields, hashCode);
-		        hashCode = HashCodeHelper.GetHashCode(IssueCategories, hashCode);
-		        hashCode = HashCodeHelper.GetHashCode(EnabledModules, hashCode);
+            unchecked
+            {
+                int hashCode = base.GetHashCode();
+                hashCode = HashCodeHelper.GetHashCode(Identifier, hashCode);
+                hashCode = HashCodeHelper.GetHashCode(Description, hashCode);
+                hashCode = HashCodeHelper.GetHashCode(Parent, hashCode);
+                hashCode = HashCodeHelper.GetHashCode(HomePage, hashCode);
+                hashCode = HashCodeHelper.GetHashCode(CreatedOn, hashCode);
+                hashCode = HashCodeHelper.GetHashCode(UpdatedOn, hashCode);
+                hashCode = HashCodeHelper.GetHashCode(Status, hashCode);
+                hashCode = HashCodeHelper.GetHashCode(IsPublic, hashCode);
+                hashCode = HashCodeHelper.GetHashCode(InheritMembers, hashCode);
+                hashCode = HashCodeHelper.GetHashCode(Trackers, hashCode);
+                hashCode = HashCodeHelper.GetHashCode(CustomFields, hashCode);
+                hashCode = HashCodeHelper.GetHashCode(IssueCategories, hashCode);
+                hashCode = HashCodeHelper.GetHashCode(EnabledModules, hashCode);
 
-		        return hashCode;
-	        }
+                return hashCode;
+            }
         }
 
         /// <summary>

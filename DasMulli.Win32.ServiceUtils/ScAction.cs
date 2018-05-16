@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Runtime.InteropServices;
+﻿
 using JetBrains.Annotations;
 
 namespace DasMulli.Win32.ServiceUtils
@@ -9,10 +7,12 @@ namespace DasMulli.Win32.ServiceUtils
     /// Service control actions used to specify what to do in case of service failures.
     /// </summary>
     /// <seealso cref="System.IEquatable{ScAction}" />
-    [StructLayout(LayoutKind.Sequential)]
-    [SuppressMessage("ReSharper", "ConvertToAutoProperty", Justification = "Keep fields to preserve explicit struct layout for marshalling.")]
+    [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("ReSharper", "ConvertToAutoProperty"
+        , Justification = "Keep fields to preserve explicit struct layout for marshalling.")]
     [PublicAPI]
-    public struct ScAction:IEquatable<ScAction>
+    public struct ScAction
+        : System.IEquatable<ScAction>
     {
         private ScActionType _Type;
         private uint _Delay;
@@ -35,10 +35,10 @@ namespace DasMulli.Win32.ServiceUtils
         /// <value>
         /// The amount of time the action is to be delayed when a failure occurs.
         /// </value>
-        public TimeSpan Delay
+        public System.TimeSpan Delay
         {
-            get => TimeSpan.FromMilliseconds(_Delay);
-            set => _Delay = (uint)Math.Round(value.TotalMilliseconds);
+            get => System.TimeSpan.FromMilliseconds(_Delay);
+            set => _Delay = (uint)System.Math.Round(value.TotalMilliseconds);
         }
 
         /// <summary>

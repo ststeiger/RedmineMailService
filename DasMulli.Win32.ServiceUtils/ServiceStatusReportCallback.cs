@@ -1,4 +1,5 @@
-﻿namespace DasMulli.Win32.ServiceUtils
+﻿
+namespace DasMulli.Win32.ServiceUtils
 {
     /// <summary>
     /// This is a callback type passed to custom implementaton of windows service state machines.

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
+﻿
 namespace DasMulli.Win32.ServiceUtils
 {
     /// <inheritdoc />
@@ -9,7 +7,8 @@ namespace DasMulli.Win32.ServiceUtils
     /// 
     /// A managed class that holds data referring to a <see cref="T:DasMulli.Win32.ServiceUtils.ServiceFailureActionsInfo" /> class which has unmanaged resources
     /// </summary>
-    public class ServiceFailureActions : IEquatable<ServiceFailureActions>
+    public class ServiceFailureActions 
+        : System.IEquatable<ServiceFailureActions>
     {
         /// <summary>
         /// Gets the reset period in seconds after which previous failures are cleared.
@@ -21,7 +20,7 @@ namespace DasMulli.Win32.ServiceUtils
         /// For example: When a service fails two times and then doesn't fail for this amount of time, then an
         /// additional failure is considered a first failure and not a third.
         /// </value>
-        public TimeSpan ResetPeriod { get; }
+        public System.TimeSpan ResetPeriod { get; }
 
         /// <summary>
         /// Gets the reboot message used in case a reboot failure action is configured.
@@ -45,7 +44,7 @@ namespace DasMulli.Win32.ServiceUtils
         /// <value>
         /// The collections of configured failure actions for each successive time the service failes.
         /// </value>
-        public IReadOnlyCollection<ScAction> Actions { get; }
+        public System.Collections.Generic.IReadOnlyCollection<ScAction> Actions { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ServiceFailureActions" /> class.
@@ -54,7 +53,10 @@ namespace DasMulli.Win32.ServiceUtils
         /// <param name="rebootMessage">The reboot message used in case a reboot failure action is contaiend in <paramref name="actions"/>.</param>
         /// <param name="restartCommand">The command run in case a "run command" failure action is contained in <paramref name="actions"/>.</param>
         /// <param name="actions">The failure actions.</param>
-        public ServiceFailureActions(TimeSpan resetPeriod, string rebootMessage, string restartCommand, IReadOnlyCollection<ScAction> actions)
+        public ServiceFailureActions(System.TimeSpan resetPeriod
+            , string rebootMessage
+            , string restartCommand
+            , System.Collections.Generic.IReadOnlyCollection<ScAction> actions)
         {
             ResetPeriod = resetPeriod;
             RebootMessage = rebootMessage;

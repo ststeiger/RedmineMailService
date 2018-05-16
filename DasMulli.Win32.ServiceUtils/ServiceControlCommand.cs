@@ -1,4 +1,6 @@
-﻿using JetBrains.Annotations;
+﻿
+using JetBrains.Annotations;
+
 
 namespace DasMulli.Win32.ServiceUtils
 {
@@ -98,4 +100,5 @@ namespace DasMulli.Win32.ServiceUtils
         /// </summary>
         UserModeReboot = 0x00000040
     }
+
 }

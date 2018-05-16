@@ -1,12 +1,13 @@
-﻿using System;
+﻿
 using JetBrains.Annotations;
+
 
 namespace DasMulli.Win32.ServiceUtils
 {
     /// <summary>
     /// Values used to indicate which service control commands are accepted by a service.
     /// </summary>
-    [Flags]
+    [System.Flags]
     [PublicAPI]
     public enum ServiceAcceptedControlCommandsFlags : uint
     {

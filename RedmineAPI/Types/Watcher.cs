@@ -14,18 +14,19 @@
    limitations under the License.
 */
 
-using System;
-using System.Xml.Serialization;
 
 namespace Redmine.Net.Api.Types
 {
     /// <summary>
     /// 
     /// </summary>
-    [XmlRoot(RedmineKeys.USER)]
-    public class Watcher : IdentifiableName, IValue, ICloneable
+    [System.Xml.Serialization.XmlRoot(RedmineKeys.USER)]
+    public class Watcher 
+        : IdentifiableName
+        , IValue
+        , System.ICloneable
     {
-        #region IValue implementation
+
         /// <summary>
         /// 
         /// </summary>
@@ -36,8 +37,7 @@ namespace Redmine.Net.Api.Types
                 return Id.ToString();
             }
         }
-
-        #endregion
+        
 
         /// <summary>
         /// 
@@ -54,7 +54,7 @@ namespace Redmine.Net.Api.Types
         /// <returns></returns>
         public object Clone()
         {
-            var watcher = new Watcher { Id = Id, Name = Name };
+            Watcher watcher = new Watcher { Id = Id, Name = Name };
             return watcher;
         }
     }

@@ -1,14 +1,14 @@
-﻿using System;
-using System.Runtime.InteropServices;
-
+﻿
 namespace DasMulli.Win32.ServiceUtils
 {
-    [StructLayout(LayoutKind.Sequential)]
+
+    [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)]
     internal struct ServiceTableEntry
     {
-        [MarshalAs(UnmanagedType.LPWStr)]
+        [System.Runtime.InteropServices.MarshalAs(System.Runtime.InteropServices.UnmanagedType.LPWStr)]
         internal string serviceName;
 
-        internal IntPtr serviceMainFunction;
+        internal System.IntPtr serviceMainFunction;
     }
+
 }

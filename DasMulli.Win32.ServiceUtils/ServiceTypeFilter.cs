@@ -1,9 +1,11 @@
-﻿using System;
+﻿
 using System.Diagnostics.CodeAnalysis;
+
 
 namespace DasMulli.Win32.ServiceUtils
 {
-    [Flags]
+
+    [System.Flags]
     [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "External API")]
     internal enum ServiceTypeFilter : uint
     {
@@ -16,4 +18,5 @@ namespace DasMulli.Win32.ServiceUtils
         Win32 = Win32OwnProcess | Win32ShareProcess,
         Driver = FileSystemDriver | KernelDriver
     }
+
 }

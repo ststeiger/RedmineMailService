@@ -1,8 +1,11 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
+
 
 namespace DasMulli.Win32.ServiceUtils
 {
+
     [StructLayout(LayoutKind.Sequential)]
     [SuppressMessage("ReSharper", "ConvertToAutoProperty", Justification = "Keep fields to preserve explicit struct layout for marshalling.")]
     [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "External API")]
@@ -21,5 +24,8 @@ namespace DasMulli.Win32.ServiceUtils
             get { return serviceDescription; }
             set { serviceDescription = value; }
         }
+
     }
+
+
 }

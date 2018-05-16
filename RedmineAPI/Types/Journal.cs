@@ -14,21 +14,21 @@
    limitations under the License.
 */
 
-using System;
-using System.Collections.Generic;
-using System.Xml;
-using System.Xml.Schema;
-using System.Xml.Serialization;
+
 using Redmine.Net.Api.Extensions;
 using Redmine.Net.Api.Internals;
+
 
 namespace Redmine.Net.Api.Types
 {
     /// <summary>
     /// 
     /// </summary>
-    [XmlRoot(RedmineKeys.JOURNAL)]
-    public class Journal : Identifiable<Journal>, IEquatable<Journal>, IXmlSerializable
+    [System.Xml.Serialization.XmlRoot(RedmineKeys.JOURNAL)]
+    public class Journal 
+        : Identifiable<Journal>
+        , System.IEquatable<Journal>
+        , System.Xml.Serialization.IXmlSerializable
     {
         /// <summary>
         /// Gets or sets the user.
@@ -36,7 +36,7 @@ namespace Redmine.Net.Api.Types
         /// <value>
         /// The user.
         /// </value>
-        [XmlElement(RedmineKeys.USER)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.USER)]
         public IdentifiableName User { get; set; }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace Redmine.Net.Api.Types
         /// <value>
         /// The notes.
         /// </value>
-        [XmlElement(RedmineKeys.NOTES)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.NOTES)]
         public string Notes { get; set; }
 
         /// <summary>
@@ -54,8 +54,8 @@ namespace Redmine.Net.Api.Types
         /// <value>
         /// The created on.
         /// </value>
-        [XmlElement(RedmineKeys.CREATED_ON, IsNullable = true)]
-        public DateTime? CreatedOn { get; set; }
+        [System.Xml.Serialization.XmlElement(RedmineKeys.CREATED_ON, IsNullable = true)]
+        public System.DateTime? CreatedOn { get; set; }
 
         /// <summary>
         /// Gets or sets the details.
@@ -63,21 +63,21 @@ namespace Redmine.Net.Api.Types
         /// <value>
         /// The details.
         /// </value>
-        [XmlArray(RedmineKeys.DETAILS)]
-        [XmlArrayItem(RedmineKeys.DETAIL)]
-        public IList<Detail> Details { get; set; }
+        [System.Xml.Serialization.XmlArray(RedmineKeys.DETAILS)]
+        [System.Xml.Serialization.XmlArrayItem(RedmineKeys.DETAIL)]
+        public System.Collections.Generic.IList<Detail> Details { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        public XmlSchema GetSchema() { return null; }
+        public System.Xml.Schema.XmlSchema GetSchema() { return null; }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="reader"></param>
-        public void ReadXml(XmlReader reader)
+        public void ReadXml(System.Xml.XmlReader reader)
         {
             Id = reader.ReadAttributeAsInt(RedmineKeys.ID);
             reader.Read();
@@ -109,7 +109,7 @@ namespace Redmine.Net.Api.Types
         /// 
         /// </summary>
         /// <param name="writer"></param>
-        public void WriteXml(XmlWriter writer) { }
+        public void WriteXml(System.Xml.XmlWriter writer) { }
 
         /// <summary>
         /// 
@@ -118,7 +118,9 @@ namespace Redmine.Net.Api.Types
         /// <returns></returns>
         public bool Equals(Journal other)
         {
-            if (other == null) return false;
+            if (other == null)
+                return false;
+
             return Id == other.Id
                 && User == other.User
                 && Notes == other.Notes
@@ -133,9 +135,15 @@ namespace Redmine.Net.Api.Types
         /// <returns></returns>
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != GetType()) return false;
+            if (ReferenceEquals(null, obj))
+                return false;
+
+            if (ReferenceEquals(this, obj))
+                return true;
+
+            if (obj.GetType() != GetType())
+                return false;
+
             return Equals(obj as Journal);
         }
 
@@ -147,7 +155,7 @@ namespace Redmine.Net.Api.Types
         {
             unchecked
             {
-                var hashCode = 13;
+                int hashCode = 13;
                 hashCode = HashCodeHelper.GetHashCode(Id, hashCode);
                 hashCode = HashCodeHelper.GetHashCode(User, hashCode);
                 hashCode = HashCodeHelper.GetHashCode(Notes, hashCode);

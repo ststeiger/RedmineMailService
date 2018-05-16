@@ -14,15 +14,14 @@
    limitations under the License.
 */
 
-using System;
-using System.Runtime.Serialization;
 
 namespace Redmine.Net.Api.Exceptions
 {
     /// <summary>
     /// </summary>
     /// <seealso cref="Redmine.Net.Api.Exceptions.RedmineException" />
-    public class RedmineTimeoutException : RedmineException
+    public class RedmineTimeoutException 
+        : RedmineException
     {
         /// <summary>
         ///     Initializes a new instance of the <see cref="RedmineTimeoutException" /> class.
@@ -58,7 +57,7 @@ namespace Redmine.Net.Api.Exceptions
         ///     The exception that is the cause of the current exception, or a null reference (Nothing in
         ///     Visual Basic) if no inner exception is specified.
         /// </param>
-        public RedmineTimeoutException(string message, Exception innerException)
+        public RedmineTimeoutException(string message, System.Exception innerException)
             : base(message, innerException)
         {
         }
@@ -69,7 +68,7 @@ namespace Redmine.Net.Api.Exceptions
         /// <param name="format">The format.</param>
         /// <param name="innerException">The inner exception.</param>
         /// <param name="args">The arguments.</param>
-        public RedmineTimeoutException(string format, Exception innerException, params object[] args)
+        public RedmineTimeoutException(string format, System.Exception innerException, params object[] args)
             : base(string.Format(format, args), innerException)
         {
         }
@@ -85,7 +84,8 @@ namespace Redmine.Net.Api.Exceptions
         ///     The <see cref="T:System.Runtime.Serialization.StreamingContext" /> that contains contextual
         ///     information about the source or destination.
         /// </param>
-        protected RedmineTimeoutException(SerializationInfo info, StreamingContext context)
+        protected RedmineTimeoutException(System.Runtime.Serialization.SerializationInfo info
+            , System.Runtime.Serialization.StreamingContext context)
             : base(info, context)
         {
         }

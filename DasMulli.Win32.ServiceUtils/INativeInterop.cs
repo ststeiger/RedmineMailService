@@ -1,17 +1,22 @@
-﻿using System;
+﻿
 using System.Diagnostics.CodeAnalysis;
+
 
 namespace DasMulli.Win32.ServiceUtils
 {
+
+
     [SuppressMessage("ReSharper", "InconsistentNaming", Justification = "Keep native entry point name.")]
     internal interface INativeInterop
     {
-        bool CloseServiceHandle(IntPtr handle);
+        bool CloseServiceHandle(System.IntPtr handle);
 
         bool StartServiceCtrlDispatcherW(ServiceTableEntry[] serviceTable);
 
-        ServiceStatusHandle RegisterServiceCtrlHandlerExW(string serviceName, ServiceControlHandler serviceControlHandler, IntPtr context);
-        
+        ServiceStatusHandle RegisterServiceCtrlHandlerExW(string serviceName
+            , ServiceControlHandler serviceControlHandler
+            , System.IntPtr context);
+
         [SuppressMessage("ReSharper", "UnusedMethodReturnValue.Global", Justification = "Matches native signature.")]
         bool SetServiceStatus(ServiceStatusHandle statusHandle, ref ServiceStatus pServiceStatus);
 
@@ -27,7 +32,7 @@ namespace DasMulli.Win32.ServiceUtils
             ErrorSeverity errorSeverity,
             string binaryPath,
             string loadOrderGroup,
-            IntPtr outUIntTagId,
+            System.IntPtr outUIntTagId,
             string dependencies,
             string serviceUserName,
             string servicePassword);
@@ -39,18 +44,19 @@ namespace DasMulli.Win32.ServiceUtils
             ErrorSeverity errorSeverity,
             string binaryPath,
             string loadOrderGroup,
-            IntPtr outUIntTagId,
+            System.IntPtr outUIntTagId,
             string dependencies,
             string serviceUserName,
             string servicePassword,
             string displayName);
 
-        ServiceHandle OpenServiceW(ServiceControlManager serviceControlManager, string serviceName, ServiceControlAccessRights desiredControlAccess);
+        ServiceHandle OpenServiceW(ServiceControlManager serviceControlManager, string serviceName
+            , ServiceControlAccessRights desiredControlAccess);
 
-        bool StartServiceW(ServiceHandle service, uint argc, IntPtr wargv);
+        bool StartServiceW(ServiceHandle service, uint argc, System.IntPtr wargv);
 
         bool DeleteService(ServiceHandle service);
 
-        bool ChangeServiceConfig2W(ServiceHandle service, ServiceConfigInfoTypeLevel infoTypeLevel, IntPtr info);
+        bool ChangeServiceConfig2W(ServiceHandle service, ServiceConfigInfoTypeLevel infoTypeLevel, System.IntPtr info);
     }
 }

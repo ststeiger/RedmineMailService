@@ -1,6 +1,3 @@
-using System.IO;
-using System.Xml;
-using System.Xml.Serialization;
 
 namespace Redmine.Net.Api
 {
@@ -11,27 +8,27 @@ namespace Redmine.Net.Api
     /// <remarks>http://florianreischl.blogspot.ro/search/label/c%23</remarks>
     public class XmlStreamingDeserializer<T>
     {
-        static XmlSerializerNamespaces ns;
-        XmlSerializer serializer;
-        XmlReader reader;
+        static System.Xml.Serialization.XmlSerializerNamespaces ns;
+        System.Xml.Serialization.XmlSerializer serializer;
+        System.Xml.XmlReader reader;
 
         static XmlStreamingDeserializer()
         {
-            ns = new XmlSerializerNamespaces();
+            ns = new System.Xml.Serialization.XmlSerializerNamespaces();
             ns.Add("", "");
         }
 
         private XmlStreamingDeserializer()
         {
-            serializer = new XmlSerializer(typeof(T));
+            serializer = new System.Xml.Serialization.XmlSerializer(typeof(T));
         }
 
-        public XmlStreamingDeserializer(TextReader reader)
-                : this(XmlReader.Create(reader))
+        public XmlStreamingDeserializer(System.IO.TextReader reader)
+                : this(System.Xml.XmlReader.Create(reader))
         {
         }
 
-        public XmlStreamingDeserializer(XmlReader reader)
+        public XmlStreamingDeserializer(System.Xml.XmlReader reader)
                 : this()
         {
             this.reader = reader;
@@ -46,9 +43,9 @@ namespace Redmine.Net.Api
         {
             while (reader.Read())
             {
-                if (reader.NodeType == XmlNodeType.Element && reader.Depth == 1 && reader.Name == typeof(T).Name)
+                if (reader.NodeType == System.Xml.XmlNodeType.Element && reader.Depth == 1 && reader.Name == typeof(T).Name)
                 {
-                    XmlReader xmlReader = reader.ReadSubtree();
+                    System.Xml.XmlReader xmlReader = reader.ReadSubtree();
                     return (T)serializer.Deserialize(xmlReader);
                 }
             }

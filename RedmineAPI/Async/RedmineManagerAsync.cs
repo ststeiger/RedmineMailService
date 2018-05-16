@@ -1,6 +1,6 @@
-using System.Collections.Generic;
-using System.Collections.Specialized;
+
 using Redmine.Net.Api.Types;
+
 
 namespace Redmine.Net.Api.Async
 {
@@ -28,7 +28,7 @@ namespace Redmine.Net.Api.Async
         /// <param name="parameters">The parameters.</param>
         /// <returns></returns>
         public static Task<User> GetCurrentUserAsync(this RedmineManager redmineManager,
-            NameValueCollection parameters = null)
+            System.Collections.Specialized.NameValueCollection parameters = null)
         {
             return delegate { return redmineManager.GetCurrentUser(parameters); };
         }
@@ -68,8 +68,11 @@ namespace Redmine.Net.Api.Async
         /// <param name="pageName">Name of the page.</param>
         /// <param name="version">The version.</param>
         /// <returns></returns>
-        public static Task<WikiPage> GetWikiPageAsync(this RedmineManager redmineManager, string projectId,
-            NameValueCollection parameters, string pageName, uint version = 0)
+        public static Task<WikiPage> GetWikiPageAsync(this RedmineManager redmineManager
+            , string projectId,
+            System.Collections.Specialized.NameValueCollection parameters
+            , string pageName
+            , uint version = 0)
         {
             return delegate { return redmineManager.GetWikiPage(projectId, parameters, pageName, version); };
         }
@@ -81,8 +84,10 @@ namespace Redmine.Net.Api.Async
         /// <param name="parameters">The parameters.</param>
         /// <param name="projectId">The project identifier.</param>
         /// <returns></returns>
-        public static Task<IList<WikiPage>> GetAllWikiPagesAsync(this RedmineManager redmineManager,
-            NameValueCollection parameters, string projectId)
+        public static Task<System.Collections.Generic.IList<WikiPage>> 
+            GetAllWikiPagesAsync(this RedmineManager redmineManager,
+            System.Collections.Specialized.NameValueCollection parameters
+            , string projectId)
         {
             return delegate { return redmineManager.GetAllWikiPages(projectId); };
         }
@@ -143,8 +148,9 @@ namespace Redmine.Net.Api.Async
         /// <param name="id">The identifier.</param>
         /// <param name="parameters">The parameters.</param>
         /// <returns></returns>
-        public static Task<T> GetObjectAsync<T>(this RedmineManager redmineManager, string id,
-            NameValueCollection parameters) where T : class, new()
+        public static Task<T> GetObjectAsync<T>(this RedmineManager redmineManager
+            , string id
+            , System.Collections.Specialized.NameValueCollection parameters) where T : class, new()
         {
             return delegate { return redmineManager.GetObject<T>(id, parameters); };
         }
@@ -183,7 +189,8 @@ namespace Redmine.Net.Api.Async
         /// <param name="parameters">The parameters.</param>
         /// <returns></returns>
         public static Task<PaginatedObjects<T>> GetPaginatedObjectsAsync<T>(this RedmineManager redmineManager,
-            NameValueCollection parameters) where T : class, new()
+            System.Collections.Specialized.NameValueCollection parameters) 
+            where T : class, new()
         {
             return delegate { return redmineManager.GetPaginatedObjects<T>(parameters); };
         }
@@ -195,8 +202,10 @@ namespace Redmine.Net.Api.Async
         /// <param name="redmineManager">The redmine manager.</param>
         /// <param name="parameters">The parameters.</param>
         /// <returns></returns>
-        public static Task<List<T>> GetObjectsAsync<T>(this RedmineManager redmineManager,
-            NameValueCollection parameters) where T : class, new()
+        public static Task<System.Collections.Generic.List<T>> 
+            GetObjectsAsync<T>(this RedmineManager redmineManager,
+            System.Collections.Specialized.NameValueCollection parameters) 
+            where T : class, new()
         {
             return delegate { return redmineManager.GetObjects<T>(parameters); };
         }
@@ -225,7 +234,8 @@ namespace Redmine.Net.Api.Async
         /// <param name="parameters">The parameters.</param>
         /// <returns></returns>
         public static Task DeleteObjectAsync<T>(this RedmineManager redmineManager, string id,
-            NameValueCollection parameters) where T : class, new()
+            System.Collections.Specialized.NameValueCollection parameters) 
+            where T : class, new()
         {
             return delegate { redmineManager.DeleteObject<T>(id); };
         }

@@ -14,48 +14,50 @@
    limitations under the License.
 */
 
-using System;
-using System.Collections.Generic;
-using System.Xml;
-using System.Xml.Schema;
-using System.Xml.Serialization;
+
 using Redmine.Net.Api.Extensions;
 using Redmine.Net.Api.Internals;
 
+
 namespace Redmine.Net.Api.Types
 {
+
+
     /// <summary>
     /// Only the roles can be updated, the project and the user of a membership are read-only.
     /// </summary>
-    [XmlRoot(RedmineKeys.MEMBERSHIP)]
-    public class Membership : Identifiable<Membership>, IEquatable<Membership>, IXmlSerializable
+    [System.Xml.Serialization.XmlRoot(RedmineKeys.MEMBERSHIP)]
+    public class Membership 
+        : Identifiable<Membership>
+        , System.IEquatable<Membership>
+        , System.Xml.Serialization.IXmlSerializable
     {
         /// <summary>
         /// Gets or sets the project.
         /// </summary>
         /// <value>The project.</value>
-        [XmlElement(RedmineKeys.PROJECT)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.PROJECT)]
         public IdentifiableName Project { get; set; }
 
         /// <summary>
         /// Gets or sets the type.
         /// </summary>
         /// <value>The type.</value>
-        [XmlArray(RedmineKeys.ROLES)]
-        [XmlArrayItem(RedmineKeys.ROLE)]
-        public List<MembershipRole> Roles { get; set; }
+        [System.Xml.Serialization.XmlArray(RedmineKeys.ROLES)]
+        [System.Xml.Serialization.XmlArrayItem(RedmineKeys.ROLE)]
+        public System.Collections.Generic.List<MembershipRole> Roles { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        public XmlSchema GetSchema() { return null; }
+        public System.Xml.Schema.XmlSchema GetSchema() { return null; }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="reader"></param>
-        public void ReadXml(XmlReader reader)
+        public void ReadXml(System.Xml.XmlReader reader)
         {
             reader.Read();
             while (!reader.EOF)
@@ -83,7 +85,7 @@ namespace Redmine.Net.Api.Types
         /// 
         /// </summary>
         /// <param name="writer"></param>
-        public void WriteXml(XmlWriter writer) { }
+        public void WriteXml(System.Xml.XmlWriter writer) { }
 
         /// <summary>
         /// 
@@ -92,7 +94,9 @@ namespace Redmine.Net.Api.Types
         /// <returns></returns>
         public bool Equals(Membership other)
         {
-            if (other == null) return false;
+            if (other == null)
+                return false;
+
             return (Id == other.Id && 
                 (Project != null ? Project.Equals(other.Project) : other.Project == null) && 
                     (Roles != null ? Roles.Equals<MembershipRole>(other.Roles) : other.Roles == null));
@@ -106,7 +110,7 @@ namespace Redmine.Net.Api.Types
         {
             unchecked
             {
-                var hashCode = 13;
+                int hashCode = 13;
                 hashCode = HashCodeHelper.GetHashCode(Id, hashCode);
                 hashCode = HashCodeHelper.GetHashCode(Project, hashCode);
                 //hashCode = Utils.GetHashCode(Roles, hashCode);

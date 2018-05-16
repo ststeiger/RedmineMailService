@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Exchange.WebServices.Data;
 
 
-namespace RedmineMailService.Trash
+namespace RedmineMailService
 {
 
 

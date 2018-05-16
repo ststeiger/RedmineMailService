@@ -14,83 +14,83 @@
    limitations under the License.
 */
 
-using System;
-using System.Collections.Generic;
-using System.Xml;
-using System.Xml.Serialization;
+
 using Redmine.Net.Api.Extensions;
 using Redmine.Net.Api.Internals;
+
 
 namespace Redmine.Net.Api.Types
 {
     /// <summary>
     /// Availability 1.3
     /// </summary>
-    [XmlRoot(RedmineKeys.VERSION)]
-    public class Version : IdentifiableName, IEquatable<Version>
+    [System.Xml.Serialization.XmlRoot(RedmineKeys.VERSION)]
+    public class Version 
+        : IdentifiableName
+        , System.IEquatable<Version>
     {
         /// <summary>
         /// Gets or sets the project.
         /// </summary>
         /// <value>The project.</value>
-        [XmlElement(RedmineKeys.PROJECT)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.PROJECT)]
         public IdentifiableName Project { get; set; }
 
         /// <summary>
         /// Gets or sets the description.
         /// </summary>
         /// <value>The description.</value>
-        [XmlElement(RedmineKeys.DESCRIPTION)]
-        public String Description { get; set; }
+        [System.Xml.Serialization.XmlElement(RedmineKeys.DESCRIPTION)]
+        public string Description { get; set; }
 
         /// <summary>
         /// Gets or sets the status.
         /// </summary>
         /// <value>The status.</value>
-        [XmlElement(RedmineKeys.STATUS)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.STATUS)]
         public VersionStatus Status { get; set; }
 
         /// <summary>
         /// Gets or sets the due date.
         /// </summary>
         /// <value>The due date.</value>
-        [XmlElement(RedmineKeys.DUE_DATE, IsNullable = true)]
-        public DateTime? DueDate { get; set; }
+        [System.Xml.Serialization.XmlElement(RedmineKeys.DUE_DATE, IsNullable = true)]
+        public System.DateTime? DueDate { get; set; }
 
         /// <summary>
         /// Gets or sets the sharing.
         /// </summary>
         /// <value>The sharing.</value>
-        [XmlElement(RedmineKeys.SHARING)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.SHARING)]
         public VersionSharing Sharing { get; set; }
 
         /// <summary>
         /// Gets or sets the created on.
         /// </summary>
         /// <value>The created on.</value>
-        [XmlElement(RedmineKeys.CREATED_ON, IsNullable = true)]
-        public DateTime? CreatedOn { get; set; }
+        [System.Xml.Serialization.XmlElement(RedmineKeys.CREATED_ON, IsNullable = true)]
+        public System.DateTime? CreatedOn { get; set; }
 
         /// <summary>
         /// Gets or sets the updated on.
         /// </summary>
         /// <value>The updated on.</value>
-        [XmlElement(RedmineKeys.UPDATED_ON, IsNullable = true)]
-        public DateTime? UpdatedOn { get; set; }
+        [System.Xml.Serialization.XmlElement(RedmineKeys.UPDATED_ON, IsNullable = true)]
+        public System.DateTime? UpdatedOn { get; set; }
 
         /// <summary>
         /// Gets or sets the custom fields.
         /// </summary>
         /// <value>The custom fields.</value>
-        [XmlArray(RedmineKeys.CUSTOM_FIELDS)]
-        [XmlArrayItem(RedmineKeys.CUSTOM_FIELD)]
-        public IList<IssueCustomField> CustomFields { get; set; }
+        [System.Xml.Serialization.XmlArray(RedmineKeys.CUSTOM_FIELDS)]
+        [System.Xml.Serialization.XmlArrayItem(RedmineKeys.CUSTOM_FIELD)]
+        public System.Collections.Generic.IList<IssueCustomField> CustomFields { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="reader"></param>
-        public override void ReadXml(XmlReader reader)
+        public override void ReadXml(System.Xml.XmlReader reader)
         {
             reader.Read();
             while (!reader.EOF)
@@ -111,11 +111,11 @@ namespace Redmine.Net.Api.Types
 
                     case RedmineKeys.DESCRIPTION: Description = reader.ReadElementContentAsString(); break;
 
-                    case RedmineKeys.STATUS: Status = (VersionStatus)Enum.Parse(typeof(VersionStatus), reader.ReadElementContentAsString(), true); break;
+                    case RedmineKeys.STATUS: Status = (VersionStatus)System.Enum.Parse(typeof(VersionStatus), reader.ReadElementContentAsString(), true); break;
 
                     case RedmineKeys.DUE_DATE: DueDate = reader.ReadElementContentAsNullableDateTime(); break;
 
-                    case RedmineKeys.SHARING: Sharing = (VersionSharing)Enum.Parse(typeof(VersionSharing), reader.ReadElementContentAsString(), true); break;
+                    case RedmineKeys.SHARING: Sharing = (VersionSharing)System.Enum.Parse(typeof(VersionSharing), reader.ReadElementContentAsString(), true); break;
 
                     case RedmineKeys.CREATED_ON: CreatedOn = reader.ReadElementContentAsNullableDateTime(); break;
 
@@ -132,7 +132,7 @@ namespace Redmine.Net.Api.Types
         /// 
         /// </summary>
         /// <param name="writer"></param>
-        public override void WriteXml(XmlWriter writer)
+        public override void WriteXml(System.Xml.XmlWriter writer)
         {
             writer.WriteElementString(RedmineKeys.NAME, Name);
             writer.WriteElementString(RedmineKeys.STATUS, Status.ToString().ToLowerInvariant());
@@ -169,7 +169,7 @@ namespace Redmine.Net.Api.Types
         {
             unchecked
             {
-                var hashCode = base.GetHashCode();
+                int hashCode = base.GetHashCode();
                 hashCode = HashCodeHelper.GetHashCode(Project, hashCode);
                 hashCode = HashCodeHelper.GetHashCode(Description, hashCode);
                 hashCode = HashCodeHelper.GetHashCode(Status, hashCode);

@@ -14,7 +14,6 @@
    limitations under the License.
 */
 
-using System;
 
 namespace Redmine.Net.Api.Logging
 {
@@ -25,7 +24,7 @@ namespace Redmine.Net.Api.Logging
     public class ColorConsoleLogger : ILogger
     {
         private static readonly object locker = new object();
-        private readonly ConsoleColor? defaultConsoleColor = null;
+        private readonly System.ConsoleColor? defaultConsoleColor = null;
 
         /// <summary>
         /// </summary>
@@ -34,23 +33,23 @@ namespace Redmine.Net.Api.Logging
         {
             lock (locker)
             {
-                var colors = GetLogLevelConsoleColors(entry.Severity);
+                ConsoleColors colors = GetLogLevelConsoleColors(entry.Severity);
                 switch (entry.Severity)
                 {
                     case LoggingEventType.Debug:
-                        Console.WriteLine(entry.Message, colors.Background, colors.Foreground);
+                        System.Console.WriteLine(entry.Message, colors.Background, colors.Foreground);
                         break;
                     case LoggingEventType.Information:
-                        Console.WriteLine(entry.Message, colors.Background, colors.Foreground);
+                        System.Console.WriteLine(entry.Message, colors.Background, colors.Foreground);
                         break;
                     case LoggingEventType.Warning:
-                        Console.WriteLine(entry.Message, colors.Background, colors.Foreground);
+                        System.Console.WriteLine(entry.Message, colors.Background, colors.Foreground);
                         break;
                     case LoggingEventType.Error:
-                        Console.WriteLine(entry.Message, colors.Background, colors.Foreground);
+                        System.Console.WriteLine(entry.Message, colors.Background, colors.Foreground);
                         break;
                     case LoggingEventType.Fatal:
-                        Console.WriteLine(entry.Message, colors.Background, colors.Foreground);
+                        System.Console.WriteLine(entry.Message, colors.Background, colors.Foreground);
                         break;
                 }
             }
@@ -67,15 +66,15 @@ namespace Redmine.Net.Api.Logging
             switch (logLevel)
             {
                 case LoggingEventType.Fatal:
-                    return new ConsoleColors(ConsoleColor.White, ConsoleColor.Red);
+                    return new ConsoleColors(System.ConsoleColor.White, System.ConsoleColor.Red);
                 case LoggingEventType.Error:
-                    return new ConsoleColors(ConsoleColor.Red, defaultConsoleColor);
+                    return new ConsoleColors(System.ConsoleColor.Red, defaultConsoleColor);
                 case LoggingEventType.Warning:
-                    return new ConsoleColors(ConsoleColor.DarkYellow, defaultConsoleColor);
+                    return new ConsoleColors(System.ConsoleColor.DarkYellow, defaultConsoleColor);
                 case LoggingEventType.Information:
-                    return new ConsoleColors(ConsoleColor.DarkGreen, defaultConsoleColor);
+                    return new ConsoleColors(System.ConsoleColor.DarkGreen, defaultConsoleColor);
                 default:
-                    return new ConsoleColors(ConsoleColor.Gray, defaultConsoleColor);
+                    return new ConsoleColors(System.ConsoleColor.Gray, defaultConsoleColor);
             }
         }
 
@@ -84,7 +83,7 @@ namespace Redmine.Net.Api.Logging
         /// </summary>
         private struct ConsoleColors
         {
-            public ConsoleColors(ConsoleColor? foreground, ConsoleColor? background): this()
+            public ConsoleColors(System.ConsoleColor? foreground, System.ConsoleColor? background): this()
             {
                 Foreground = foreground;
                 Background = background;
@@ -96,7 +95,7 @@ namespace Redmine.Net.Api.Logging
             /// <value>
             /// The foreground.
             /// </value>
-            public ConsoleColor? Foreground { get; private set; }
+            public System.ConsoleColor? Foreground { get; private set; }
 
             /// <summary>
             /// Gets or sets the background.
@@ -104,7 +103,7 @@ namespace Redmine.Net.Api.Logging
             /// <value>
             /// The background.
             /// </value>
-            public ConsoleColor? Background { get; private set; }
+            public System.ConsoleColor? Background { get; private set; }
         }
     }
 }

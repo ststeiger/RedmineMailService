@@ -1,8 +1,9 @@
-﻿using System.Runtime.InteropServices;
-
+﻿
 namespace DasMulli.Win32.ServiceUtils
 {
-    [StructLayout(LayoutKind.Sequential)]
+
+
+    [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)]
     internal struct ServiceFailureActionsFlag
     {
         private bool _fFailureActionsOnNonCrashFailures;
@@ -20,5 +21,8 @@ namespace DasMulli.Win32.ServiceUtils
             get => _fFailureActionsOnNonCrashFailures;
             set => _fFailureActionsOnNonCrashFailures = value;
         }
+
     }
+
+
 }

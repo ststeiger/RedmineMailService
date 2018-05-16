@@ -14,43 +14,43 @@
    limitations under the License.
 */
 
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Xml;
-using System.Xml.Serialization;
+
 using Redmine.Net.Api.Extensions;
 using Redmine.Net.Api.Internals;
+
 
 namespace Redmine.Net.Api.Types
 {
     /// <summary>
     /// 
     /// </summary>
-    [XmlRoot(RedmineKeys.CUSTOM_FIELD)]
-    public class IssueCustomField : IdentifiableName, IEquatable<IssueCustomField>, ICloneable
+    [System.Xml.Serialization.XmlRoot(RedmineKeys.CUSTOM_FIELD)]
+    public class IssueCustomField 
+        : IdentifiableName
+        , System.IEquatable<IssueCustomField>
+        , System.ICloneable
     {
         /// <summary>
         /// Gets or sets the value.
         /// </summary>
         /// <value>The value.</value>
-        [XmlArray(RedmineKeys.VALUE)]
-        [XmlArrayItem(RedmineKeys.VALUE)]
-        public IList<CustomFieldValue> Values { get; set; }
+        [System.Xml.Serialization.XmlArray(RedmineKeys.VALUE)]
+        [System.Xml.Serialization.XmlArrayItem(RedmineKeys.VALUE)]
+        public System.Collections.Generic.IList<CustomFieldValue> Values { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        [XmlAttribute(RedmineKeys.MULTIPLE)]
+        [System.Xml.Serialization.XmlAttribute(RedmineKeys.MULTIPLE)]
         public bool Multiple { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="reader"></param>
-        public override void ReadXml(XmlReader reader)
+        public override void ReadXml(System.Xml.XmlReader reader)
         {
-            Id = Convert.ToInt32(reader.GetAttribute(RedmineKeys.ID));
+            Id = System.Convert.ToInt32(reader.GetAttribute(RedmineKeys.ID));
             Name = reader.GetAttribute(RedmineKeys.NAME);
 
             Multiple = reader.ReadAttributeAsBoolean(RedmineKeys.MULTIPLE);
@@ -58,11 +58,17 @@ namespace Redmine.Net.Api.Types
 
             if (string.IsNullOrEmpty(reader.GetAttribute("type")))
             {
-                Values = new List<CustomFieldValue> { new CustomFieldValue { Info = reader.ReadElementContentAsString() } };
+                Values = new System.Collections.Generic.List<CustomFieldValue>
+                {
+                    new CustomFieldValue
+                    {
+                        Info = reader.ReadElementContentAsString()
+                    }
+                };
             }
             else
             {
-                var result = reader.ReadElementContentAsCollection<CustomFieldValue>();
+                System.Collections.Generic.List<CustomFieldValue> result = reader.ReadElementContentAsCollection<CustomFieldValue>();
                 Values = result;
             }
         }
@@ -71,12 +77,14 @@ namespace Redmine.Net.Api.Types
         /// 
         /// </summary>
         /// <param name="writer"></param>
-        public override void WriteXml(XmlWriter writer)
+        public override void WriteXml(System.Xml.XmlWriter writer)
         {
-            if (Values == null) return;
-            var itemsCount = Values.Count;
+            if (Values == null)
+                return;
 
-            writer.WriteAttributeString(RedmineKeys.ID, Id.ToString(CultureInfo.InvariantCulture));
+            int itemsCount = Values.Count;
+
+            writer.WriteAttributeString(RedmineKeys.ID, Id.ToString(System.Globalization.CultureInfo.InvariantCulture));
             if (itemsCount > 1)
             {
                 writer.WriteArrayStringElement(Values, RedmineKeys.VALUE, GetValue);
@@ -104,7 +112,7 @@ namespace Redmine.Net.Api.Types
         /// <returns></returns>
         public object Clone()
         {
-            var issueCustomField = new IssueCustomField { Multiple = Multiple, Values = Values.Clone<CustomFieldValue>() };
+            IssueCustomField issueCustomField = new IssueCustomField { Multiple = Multiple, Values = Values.Clone<CustomFieldValue>() };
             return issueCustomField;
         }
 
@@ -125,7 +133,7 @@ namespace Redmine.Net.Api.Types
         {
             unchecked
             {
-                var hashCode = 13;
+                int hashCode = 13;
                 hashCode = HashCodeHelper.GetHashCode(Id, hashCode);
                 hashCode = HashCodeHelper.GetHashCode(Name, hashCode);
                 hashCode = HashCodeHelper.GetHashCode(Values, hashCode);

@@ -14,20 +14,21 @@
    limitations under the License.
 */
 
-using System;
-using System.Xml;
-using System.Xml.Schema;
-using System.Xml.Serialization;
+
 using Redmine.Net.Api.Extensions;
 using Redmine.Net.Api.Internals;
+
 
 namespace Redmine.Net.Api.Types
 {
     /// <summary>
     /// Availability 1.3
     /// </summary>
-    [XmlRoot(RedmineKeys.ISSUE_CATEGORY)]
-    public class IssueCategory : Identifiable<IssueCategory>, IEquatable<IssueCategory>, IXmlSerializable
+    [System.Xml.Serialization.XmlRoot(RedmineKeys.ISSUE_CATEGORY)]
+    public class IssueCategory 
+        : Identifiable<IssueCategory>
+        , System.IEquatable<IssueCategory>
+        , System.Xml.Serialization.IXmlSerializable
     {
         /// <summary>
         /// Gets or sets the project.
@@ -35,7 +36,7 @@ namespace Redmine.Net.Api.Types
         /// <value>
         /// The project.
         /// </value>
-        [XmlElement(RedmineKeys.PROJECT)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.PROJECT)]
         public IdentifiableName Project { get; set; }
 
         /// <summary>
@@ -44,7 +45,7 @@ namespace Redmine.Net.Api.Types
         /// <value>
         /// The asign to.
         /// </value>
-        [XmlElement(RedmineKeys.ASSIGNED_TO)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.ASSIGNED_TO)]
         public IdentifiableName AsignTo { get; set; }
 
         /// <summary>
@@ -53,7 +54,7 @@ namespace Redmine.Net.Api.Types
         /// <value>
         /// The name.
         /// </value>
-        [XmlElement(RedmineKeys.NAME)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.NAME)]
         public string Name { get; set; }
 
         /// <summary>
@@ -71,13 +72,13 @@ namespace Redmine.Net.Api.Types
         /// 
         /// </summary>
         /// <returns></returns>
-        public XmlSchema GetSchema() { return null; }
+        public System.Xml.Schema.XmlSchema GetSchema() { return null; }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="reader"></param>
-        public void ReadXml(XmlReader reader)
+        public void ReadXml(System.Xml.XmlReader reader)
         {
             reader.Read();
             while (!reader.EOF)
@@ -107,7 +108,7 @@ namespace Redmine.Net.Api.Types
         /// 
         /// </summary>
         /// <param name="writer"></param>
-        public void WriteXml(XmlWriter writer)
+        public void WriteXml(System.Xml.XmlWriter writer)
         {
             writer.WriteIdIfNotNull(Project, RedmineKeys.PROJECT_ID);
             writer.WriteElementString(RedmineKeys.NAME, Name);
@@ -122,7 +123,7 @@ namespace Redmine.Net.Api.Types
         {
             unchecked
             {
-                var hashCode = 13;
+                int hashCode = 13;
                 hashCode = HashCodeHelper.GetHashCode(Id, hashCode);
                 hashCode = HashCodeHelper.GetHashCode(Project, hashCode);
                 hashCode = HashCodeHelper.GetHashCode(AsignTo, hashCode);

@@ -14,16 +14,14 @@
    limitations under the License.
 */
 
-using System;
-using System.Net;
-
 
 namespace Redmine.Net.Api
 {
     /// <summary>
     /// </summary>
     /// <seealso cref="System.Net.WebClient" />
-    public class RedmineWebClient : WebClient
+    public class RedmineWebClient 
+        : System.Net.WebClient
     {
         private const string UA = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:8.0) Gecko/20100101 Firefox/8.0";
 
@@ -49,7 +47,7 @@ namespace Redmine.Net.Api
         /// <value>
         ///     The timeout.
         /// </value>
-        public TimeSpan? Timeout { get; set; }
+        public System.TimeSpan? Timeout { get; set; }
 
         /// <summary>
         ///     Gets or sets the cookie container.
@@ -57,7 +55,7 @@ namespace Redmine.Net.Api
         /// <value>
         ///     The cookie container.
         /// </value>
-        public CookieContainer CookieContainer { get; set; }
+        public System.Net.CookieContainer CookieContainer { get; set; }
 
         /// <summary>
         ///     Gets or sets a value indicating whether [pre authenticate].
@@ -82,20 +80,21 @@ namespace Redmine.Net.Api
         /// <returns>
         ///     A new <see cref="T:System.Net.WebRequest" /> object for the specified resource.
         /// </returns>
-        protected override WebRequest GetWebRequest(Uri address)
+        protected override System.Net.WebRequest GetWebRequest(System.Uri address)
         {
-            var wr = base.GetWebRequest(address);
-            var httpWebRequest = wr as HttpWebRequest;
+            System.Net.WebRequest wr = base.GetWebRequest(address);
+            System.Net.HttpWebRequest httpWebRequest = wr as System.Net.HttpWebRequest;
 
             if (httpWebRequest != null)
             {
                 if (UseCookies)
                 {
-                    httpWebRequest.Headers.Add(HttpRequestHeader.Cookie, "redmineCookie");
+                    httpWebRequest.Headers.Add(System.Net.HttpRequestHeader.Cookie, "redmineCookie");
                     httpWebRequest.CookieContainer = CookieContainer;
                 }
-                httpWebRequest.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate |
-                                                        DecompressionMethods.None;
+                httpWebRequest.AutomaticDecompression = System.Net.DecompressionMethods.GZip | 
+                                                        System.Net.DecompressionMethods.Deflate |
+                                                        System.Net.DecompressionMethods.None;
                 httpWebRequest.PreAuthenticate = PreAuthenticate;
                 httpWebRequest.KeepAlive = KeepAlive;
                 httpWebRequest.UseDefaultCredentials = UseDefaultCredentials;

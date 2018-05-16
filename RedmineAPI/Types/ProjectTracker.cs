@@ -14,14 +14,15 @@
    limitations under the License.
 */
 
-using System.Xml.Serialization;
 
 namespace Redmine.Net.Api.Types
 {
+
+
     /// <summary>
     /// 
     /// </summary>
-    [XmlRoot(RedmineKeys.TRACKER)]
+    [System.Xml.Serialization.XmlRoot(RedmineKeys.TRACKER)]
 	public class ProjectTracker : IdentifiableName,  IValue
     {
         /// <summary>
@@ -37,5 +38,8 @@ namespace Redmine.Net.Api.Types
 		{
 			return string.Format ("[ProjectTracker: {0}]", base.ToString());
 		}
+
     }
+
+
 }

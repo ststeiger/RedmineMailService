@@ -1,5 +1,6 @@
-﻿using System;
+﻿
 using JetBrains.Annotations;
+
 
 namespace DasMulli.Win32.ServiceUtils
 {
@@ -8,7 +9,8 @@ namespace DasMulli.Win32.ServiceUtils
     /// </summary>
     /// <seealso cref="System.IEquatable{Win32ServiceCredentials}" />
     [PublicAPI]
-    public struct Win32ServiceCredentials : IEquatable<Win32ServiceCredentials>
+    public struct Win32ServiceCredentials 
+        : System.IEquatable<Win32ServiceCredentials>
     {
         /// <summary>
         /// Gets the name of the user.
@@ -125,4 +127,5 @@ namespace DasMulli.Win32.ServiceUtils
             return !left.Equals(right);
         }
     }
+
 }

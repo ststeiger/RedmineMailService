@@ -1,23 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
+﻿
 using System.Diagnostics.CodeAnalysis;
-using System.Runtime.InteropServices;
+
 
 namespace DasMulli.Win32.ServiceUtils
 {
 
-    [StructLayout(LayoutKind.Sequential)]
+    [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)]
     [SuppressMessage("ReSharper", "ConvertToAutoProperty", Justification = "Keep fields to preserve explicit struct layout for marshalling.")]
     [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "External API")]
     internal struct ServiceFailureActionsInfo
     {
-        [MarshalAs(UnmanagedType.U4)] private uint dwResetPeriod;
-        [MarshalAs(UnmanagedType.LPStr)] private string lpRebootMsg;
-        [MarshalAs(UnmanagedType.LPStr)] private string lpCommand;
-        [MarshalAs(UnmanagedType.U4)] private int cActions;
-        private IntPtr lpsaActions;
+        [System.Runtime.InteropServices.MarshalAs(System.Runtime.InteropServices.UnmanagedType.U4)] private uint dwResetPeriod;
+        [System.Runtime.InteropServices.MarshalAs(System.Runtime.InteropServices.UnmanagedType.LPStr)] private string lpRebootMsg;
+        [System.Runtime.InteropServices.MarshalAs(System.Runtime.InteropServices.UnmanagedType.LPStr)] private string lpCommand;
+        [System.Runtime.InteropServices.MarshalAs(System.Runtime.InteropServices.UnmanagedType.U4)] private int cActions;
+        private System.IntPtr lpsaActions;
 
-        public TimeSpan ResetPeriod => TimeSpan.FromSeconds(dwResetPeriod);
+        public System.TimeSpan ResetPeriod => System.TimeSpan.FromSeconds(dwResetPeriod);
 
         public string RebootMsg => lpRebootMsg;
 
@@ -31,38 +30,43 @@ namespace DasMulli.Win32.ServiceUtils
         /// This is the default, as reported by Windows.
         /// </summary>
         internal static ServiceFailureActionsInfo Default =
-            new ServiceFailureActionsInfo {dwResetPeriod = 0, lpRebootMsg = null, lpCommand = null, cActions = 0, lpsaActions = IntPtr.Zero};
+            new ServiceFailureActionsInfo {dwResetPeriod = 0, lpRebootMsg = null, lpCommand = null, cActions = 0, lpsaActions = System.IntPtr.Zero};
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ServiceFailureActionsInfo"/> class.
         /// </summary>
-        internal ServiceFailureActionsInfo(TimeSpan resetPeriod, string rebootMessage, string restartCommand, IReadOnlyCollection<ScAction> actions)
+        internal ServiceFailureActionsInfo(System.TimeSpan resetPeriod, string rebootMessage, string restartCommand
+            , System.Collections.Generic.IReadOnlyCollection<ScAction> actions)
         {
-            dwResetPeriod = resetPeriod == TimeSpan.MaxValue ? uint.MaxValue : (uint) Math.Round(resetPeriod.TotalSeconds);
+            dwResetPeriod = resetPeriod == System.TimeSpan.MaxValue ? uint.MaxValue : (uint)System.Math.Round(resetPeriod.TotalSeconds);
             lpRebootMsg = rebootMessage;
             lpCommand = restartCommand;
             cActions = actions?.Count ?? 0;
 
             if (null != actions)
             {
-                lpsaActions = Marshal.AllocHGlobal(Marshal.SizeOf<ScAction>() * cActions);
+                lpsaActions = System.Runtime.InteropServices.Marshal.AllocHGlobal(
+                    System.Runtime.InteropServices.Marshal.SizeOf<ScAction>() * cActions
+                );
 
-                if (lpsaActions == IntPtr.Zero)
+                if (lpsaActions == System.IntPtr.Zero)
                 {
-                    throw new Exception(string.Format("Unable to allocate memory for service action, error was: 0x{0:X}", Marshal.GetLastWin32Error()));
+                    throw new System.Exception(
+                        string.Format("Unable to allocate memory for service action, error was: 0x{0:X}"
+                        , System.Runtime.InteropServices.Marshal.GetLastWin32Error()));
                 }
                 
-                var nextAction = lpsaActions;
+                System.IntPtr nextAction = lpsaActions;
 
-                foreach (var action in actions)
+                foreach (ScAction action in actions)
                 {
-                    Marshal.StructureToPtr(action, nextAction, fDeleteOld: false);
-                    nextAction = (IntPtr) (nextAction.ToInt64() + Marshal.SizeOf<ScAction>());
+                    System.Runtime.InteropServices.Marshal.StructureToPtr(action, nextAction, fDeleteOld: false);
+                    nextAction = (System.IntPtr) (nextAction.ToInt64() + System.Runtime.InteropServices.Marshal.SizeOf<ScAction>());
                 }
             }
             else
             {
-                lpsaActions = IntPtr.Zero;
+                lpsaActions = System.IntPtr.Zero;
             }
         }
     }

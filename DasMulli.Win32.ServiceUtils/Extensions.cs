@@ -1,19 +1,17 @@
-﻿using System;
-using System.Runtime.InteropServices;
-
+﻿
 namespace DasMulli.Win32.ServiceUtils
 {
     internal static class Extensions
     {
-        internal static T[] MarshalUnmananagedArrayToStruct<T>(this IntPtr unmanagedArray, int length)
+        internal static T[] MarshalUnmananagedArrayToStruct<T>(this System.IntPtr unmanagedArray, int length)
         {
-            var size = Marshal.SizeOf<T>();
-            var mangagedArray = new T[length];
+            int size = System.Runtime.InteropServices.Marshal.SizeOf<T>();
+            T[] mangagedArray = new T[length];
 
-            for (var i = 0; i < length; i++)
+            for (int i = 0; i < length; i++)
             {
-                var ins = new IntPtr(unmanagedArray.ToInt64() + i * size);
-                mangagedArray[i] = Marshal.PtrToStructure<T>(ins);
+                System.IntPtr ins = new System.IntPtr(unmanagedArray.ToInt64() + i * size);
+                mangagedArray[i] = System.Runtime.InteropServices.Marshal.PtrToStructure<T>(ins);
             }
 
             return mangagedArray;

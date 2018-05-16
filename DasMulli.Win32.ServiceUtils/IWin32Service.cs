@@ -1,4 +1,5 @@
-﻿namespace DasMulli.Win32.ServiceUtils
+﻿
+namespace DasMulli.Win32.ServiceUtils
 {
     /// <summary>
     /// Callback type that is used to allow implementations of <see cref="IWin32Service"/> to notify

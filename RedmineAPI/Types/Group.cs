@@ -14,51 +14,48 @@
    limitations under the License.
 */
 
-using System;
-using System.Collections.Generic;
-using System.Xml;
-using System.Xml.Serialization;
-using Redmine.Net.Api.Extensions;
 using Redmine.Net.Api.Internals;
+using Redmine.Net.Api.Extensions;
+
 
 namespace Redmine.Net.Api.Types
 {
     /// <summary>
     /// Availability 2.1
     /// </summary>
-    [XmlRoot(RedmineKeys.GROUP)]
-    public class Group : IdentifiableName, IEquatable<Group>
+    [System.Xml.Serialization.XmlRoot(RedmineKeys.GROUP)]
+    public class Group 
+        : IdentifiableName, System.IEquatable<Group>
     {
         /// <summary>
         /// Represents the group's users.
         /// </summary>
-        [XmlArray(RedmineKeys.USERS)]
-        [XmlArrayItem(RedmineKeys.USER)]
-        public List<GroupUser> Users { get; set; }
+        [System.Xml.Serialization.XmlArray(RedmineKeys.USERS)]
+        [System.Xml.Serialization.XmlArrayItem(RedmineKeys.USER)]
+        public System.Collections.Generic.List<GroupUser> Users { get; set; }
 
         /// <summary>
         /// Gets or sets the custom fields.
         /// </summary>
         /// <value>The custom fields.</value>
-        [XmlArray(RedmineKeys.CUSTOM_FIELDS)]
-        [XmlArrayItem(RedmineKeys.CUSTOM_FIELD)]
-        public IList<IssueCustomField> CustomFields { get; set; }
+        [System.Xml.Serialization.XmlArray(RedmineKeys.CUSTOM_FIELDS)]
+        [System.Xml.Serialization.XmlArrayItem(RedmineKeys.CUSTOM_FIELD)]
+        public System.Collections.Generic.IList<IssueCustomField> CustomFields { get; set; }
 
         /// <summary>
         /// Gets or sets the custom fields.
         /// </summary>
         /// <value>The custom fields.</value>
-        [XmlArray(RedmineKeys.MEMBERSHIPS)]
-        [XmlArrayItem(RedmineKeys.MEMBERSHIP)]
-        public IList<Membership> Memberships { get; set; }
+        [System.Xml.Serialization.XmlArray(RedmineKeys.MEMBERSHIPS)]
+        [System.Xml.Serialization.XmlArrayItem(RedmineKeys.MEMBERSHIP)]
+        public System.Collections.Generic.IList<Membership> Memberships { get; set; }
 
-        #region Implementation of IXmlSerializable
 
         /// <summary>
         /// Generates an object from its XML representation.
         /// </summary>
         /// <param name="reader">The <see cref="T:System.Xml.XmlReader"/> stream from which the object is deserialized. </param>
-        public override void ReadXml(XmlReader reader)
+        public override void ReadXml(System.Xml.XmlReader reader)
         {
             reader.Read();
             while (!reader.EOF)
@@ -90,13 +87,12 @@ namespace Redmine.Net.Api.Types
         /// Converts an object into its XML representation.
         /// </summary>
         /// <param name="writer">The <see cref="T:System.Xml.XmlWriter"/> stream to which the object is serialized. </param>
-        public override void WriteXml(XmlWriter writer)
+        public override void WriteXml(System.Xml.XmlWriter writer)
         {
             writer.WriteElementString(RedmineKeys.NAME, Name);
             writer.WriteArrayIds(Users, RedmineKeys.USER_IDS, typeof(int), GetGroupUserId);
         }
 
-        #endregion
 
         #region Implementation of IEquatable<Group>
 
@@ -109,7 +105,9 @@ namespace Redmine.Net.Api.Types
         /// <param name="other">An object to compare with this object.</param>
         public bool Equals(Group other)
         {
-            if (other == null) return false;
+            if (other == null)
+                return false;
+
             return Id == other.Id
                 && Name == other.Name
                 && (Users != null ? Users.Equals<GroupUser>(other.Users) : other.Users == null)
@@ -124,9 +122,15 @@ namespace Redmine.Net.Api.Types
         /// <returns></returns>
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != GetType()) return false;
+            if (ReferenceEquals(null, obj))
+                return false;
+
+            if (ReferenceEquals(this, obj))
+                return true;
+
+            if (obj.GetType() != GetType())
+                return false;
+
             return Equals(obj as Group);
         }
 
@@ -138,7 +142,7 @@ namespace Redmine.Net.Api.Types
         {
             unchecked
             {
-                var hashCode = 13;
+                int hashCode = 13;
                 hashCode = HashCodeHelper.GetHashCode(Id, hashCode);
                 hashCode = HashCodeHelper.GetHashCode(Name, hashCode);
                 hashCode = HashCodeHelper.GetHashCode(Users, hashCode);

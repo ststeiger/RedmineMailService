@@ -14,8 +14,7 @@
    limitations under the License.
 */
 
-using System.Xml;
-using System.Xml.Serialization;
+
 using Redmine.Net.Api.Extensions;
 
 namespace Redmine.Net.Api.Types
@@ -23,14 +22,14 @@ namespace Redmine.Net.Api.Types
     /// <summary>
     /// 
     /// </summary>
-    [XmlRoot(RedmineKeys.TRACKER)]
+    [System.Xml.Serialization.XmlRoot(RedmineKeys.TRACKER)]
     public class TrackerCustomField : Tracker
     {
         /// <summary>
         /// 
         /// </summary>
         /// <param name="reader"></param>
-        public override void ReadXml(XmlReader reader)
+        public override void ReadXml(System.Xml.XmlReader reader)
         {
             Id = reader.ReadAttributeAsInt(RedmineKeys.ID);
             Name = reader.GetAttribute(RedmineKeys.NAME);
@@ -45,5 +44,9 @@ namespace Redmine.Net.Api.Types
 		{
 			return string.Format ("[TrackerCustomField: {0}]", base.ToString());
 		}
+        
+
     }
+
+
 }

@@ -1,12 +1,11 @@
-﻿using System;
-using System.Runtime.Serialization;
-
+﻿
 namespace Redmine.Net.Api.Exceptions
 {
     /// <summary>
     /// </summary>
     /// <seealso cref="Redmine.Net.Api.Exceptions.RedmineException" />
-    public class ForbiddenException : RedmineException
+    public class ForbiddenException 
+        : RedmineException
     {
         /// <summary>
         ///     Initializes a new instance of the <see cref="ForbiddenException" /> class.
@@ -39,7 +38,7 @@ namespace Redmine.Net.Api.Exceptions
         /// </summary>
         /// <param name="message"></param>
         /// <param name="innerException"></param>
-        public ForbiddenException(string message, Exception innerException)
+        public ForbiddenException(string message, System.Exception innerException)
             : base(message, innerException)
         {
         }
@@ -50,7 +49,7 @@ namespace Redmine.Net.Api.Exceptions
         /// <param name="format"></param>
         /// <param name="innerException"></param>
         /// <param name="args"></param>
-        public ForbiddenException(string format, Exception innerException, params object[] args)
+        public ForbiddenException(string format, System.Exception innerException, params object[] args)
             : base(string.Format(format, args), innerException)
         {
         }
@@ -60,7 +59,8 @@ namespace Redmine.Net.Api.Exceptions
         /// </summary>
         /// <param name="info"></param>
         /// <param name="context"></param>
-        protected ForbiddenException(SerializationInfo info, StreamingContext context)
+        protected ForbiddenException(System.Runtime.Serialization.SerializationInfo info
+            , System.Runtime.Serialization.StreamingContext context)
             : base(info, context)
         {
         }

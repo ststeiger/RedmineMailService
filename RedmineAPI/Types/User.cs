@@ -245,7 +245,7 @@ namespace Redmine.Net.Api.Types
         {
             unchecked
             {
-                var hashCode = base.GetHashCode();
+                int hashCode = base.GetHashCode();
                 hashCode = HashCodeHelper.GetHashCode(Login, hashCode);
                 hashCode = HashCodeHelper.GetHashCode(Password, hashCode);
                 hashCode = HashCodeHelper.GetHashCode(FirstName, hashCode);

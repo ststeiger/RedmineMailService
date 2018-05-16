@@ -14,47 +14,49 @@
    limitations under the License.
 */
 
-using System;
-using System.Xml;
-using System.Xml.Schema;
-using System.Xml.Serialization;
+
 using Redmine.Net.Api.Internals;
+
 
 namespace Redmine.Net.Api.Types
 {
     /// <summary>
     /// 
     /// </summary>
-    [XmlRoot(RedmineKeys.ISSUE)]
-    public class IssueChild : Identifiable<IssueChild>, IXmlSerializable, IEquatable<IssueChild>, ICloneable
+    [System.Xml.Serialization.XmlRoot(RedmineKeys.ISSUE)]
+    public class IssueChild 
+        : Identifiable<IssueChild>
+        , System.Xml.Serialization.IXmlSerializable
+        , System.IEquatable<IssueChild>
+        , System.ICloneable
     {
         /// <summary>
         /// Gets or sets the tracker.
         /// </summary>
         /// <value>The tracker.</value>
-        [XmlElement(RedmineKeys.TRACKER)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.TRACKER)]
         public IdentifiableName Tracker { get; set; }
 
         /// <summary>
         /// Gets or sets the subject.
         /// </summary>
         /// <value>The subject.</value>
-        [XmlElement(RedmineKeys.SUBJECT)]
-        public String Subject { get; set; }
+        [System.Xml.Serialization.XmlElement(RedmineKeys.SUBJECT)]
+        public string Subject { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        public XmlSchema GetSchema() { return null; }
+        public System.Xml.Schema.XmlSchema GetSchema() { return null; }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="reader"></param>
-        public void ReadXml(XmlReader reader)
+        public void ReadXml(System.Xml.XmlReader reader)
         {
-            Id = Convert.ToInt32(reader.GetAttribute(RedmineKeys.ID));
+            Id = System.Convert.ToInt32(reader.GetAttribute(RedmineKeys.ID));
             reader.Read();
 
             while (!reader.EOF)
@@ -80,7 +82,7 @@ namespace Redmine.Net.Api.Types
         /// 
         /// </summary>
         /// <param name="writer"></param>
-        public void WriteXml(XmlWriter writer) { }
+        public void WriteXml(System.Xml.XmlWriter writer) { }
 
         /// <summary>
         /// 
@@ -88,7 +90,7 @@ namespace Redmine.Net.Api.Types
         /// <returns></returns>
         public object Clone()
         {
-            var issueChild = new IssueChild { Subject = Subject, Tracker = Tracker };
+            IssueChild issueChild = new IssueChild { Subject = Subject, Tracker = Tracker };
             return issueChild;
         }
 
@@ -111,7 +113,7 @@ namespace Redmine.Net.Api.Types
         {
             unchecked
             {
-                var hashCode = 13;
+                int hashCode = 13;
                 hashCode = HashCodeHelper.GetHashCode(Id, hashCode);
                 hashCode = HashCodeHelper.GetHashCode(Tracker, hashCode);
                 hashCode = HashCodeHelper.GetHashCode(Subject, hashCode);

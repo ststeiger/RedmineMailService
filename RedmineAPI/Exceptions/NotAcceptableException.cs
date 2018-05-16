@@ -14,15 +14,13 @@
    limitations under the License.
 */
 
-using System;
-using System.Runtime.Serialization;
-
 namespace Redmine.Net.Api.Exceptions
 {
     /// <summary>
     /// </summary>
     /// <seealso cref="Redmine.Net.Api.Exceptions.RedmineException" />
-    public class NotAcceptableException : RedmineException
+    public class NotAcceptableException 
+        : RedmineException
     {
         /// <summary>
         ///     Initializes a new instance of the <see cref="NotAcceptableException" /> class.
@@ -55,7 +53,7 @@ namespace Redmine.Net.Api.Exceptions
         /// </summary>
         /// <param name="message"></param>
         /// <param name="innerException"></param>
-        public NotAcceptableException(string message, Exception innerException)
+        public NotAcceptableException(string message, System.Exception innerException)
             : base(message, innerException)
         {
         }
@@ -66,7 +64,7 @@ namespace Redmine.Net.Api.Exceptions
         /// <param name="format"></param>
         /// <param name="innerException"></param>
         /// <param name="args"></param>
-        public NotAcceptableException(string format, Exception innerException, params object[] args)
+        public NotAcceptableException(string format, System.Exception innerException, params object[] args)
             : base(string.Format(format, args), innerException)
         {
         }
@@ -76,7 +74,8 @@ namespace Redmine.Net.Api.Exceptions
         /// </summary>
         /// <param name="info"></param>
         /// <param name="context"></param>
-        protected NotAcceptableException(SerializationInfo info, StreamingContext context)
+        protected NotAcceptableException(System.Runtime.Serialization.SerializationInfo info
+            , System.Runtime.Serialization.StreamingContext context)
             : base(info, context)
         {
         }

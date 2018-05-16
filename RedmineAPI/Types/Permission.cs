@@ -14,22 +14,23 @@
    limitations under the License.
 */
 
-using System;
-using System.Xml.Serialization;
+
 using Redmine.Net.Api.Internals;
+
 
 namespace Redmine.Net.Api.Types
 {
     /// <summary>
     /// 
     /// </summary>
-    [XmlRoot(RedmineKeys.PERMISSION)]
-    public class Permission : IEquatable<Permission>
+    [System.Xml.Serialization.XmlRoot(RedmineKeys.PERMISSION)]
+    public class Permission 
+        : System.IEquatable<Permission>
     {
         /// <summary>
         /// 
         /// </summary>
-        [XmlText]
+        [System.Xml.Serialization.XmlText]
         public string Info { get; set; }
 
         /// <summary>
@@ -63,7 +64,7 @@ namespace Redmine.Net.Api.Types
         {
             unchecked
             {
-                var hashCode = 13;
+                int hashCode = 13;
                 hashCode = HashCodeHelper.GetHashCode(Info, hashCode);
                 return hashCode;
             }

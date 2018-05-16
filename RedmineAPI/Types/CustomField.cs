@@ -14,113 +14,110 @@
    limitations under the License.
 */
 
-using System;
-using System.Collections.Generic;
-using System.Xml;
-using System.Xml.Serialization;
-using Redmine.Net.Api.Extensions;
 using Redmine.Net.Api.Internals;
+using Redmine.Net.Api.Extensions;
+
 
 namespace Redmine.Net.Api.Types
 {
     /// <summary>
     /// 
     /// </summary>
-    [XmlRoot(RedmineKeys.CUSTOM_FIELD)]
-    public class CustomField : IdentifiableName, IEquatable<CustomField>
+    [System.Xml.Serialization.XmlRoot(RedmineKeys.CUSTOM_FIELD)]
+    public class CustomField : IdentifiableName, System.IEquatable<CustomField>
     {
         /// <summary>
         /// 
         /// </summary>
-        [XmlElement(RedmineKeys.CUSTOMIZED_TYPE)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.CUSTOMIZED_TYPE)]
         public string CustomizedType { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        [XmlElement(RedmineKeys.FIELD_FORMAT)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.FIELD_FORMAT)]
         public string FieldFormat { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        [XmlElement(RedmineKeys.REGEXP)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.REGEXP)]
         public string Regexp { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        [XmlElement(RedmineKeys.MIN_LENGTH)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.MIN_LENGTH)]
         public int? MinLength { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        [XmlElement(RedmineKeys.MAX_LENGTH)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.MAX_LENGTH)]
         public int? MaxLength { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        [XmlElement(RedmineKeys.IS_REQUIRED)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.IS_REQUIRED)]
         public bool IsRequired { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        [XmlElement(RedmineKeys.IS_FILTER)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.IS_FILTER)]
         public bool IsFilter { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        [XmlElement(RedmineKeys.SEARCHABLE)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.SEARCHABLE)]
         public bool Searchable { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        [XmlElement(RedmineKeys.MULTIPLE)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.MULTIPLE)]
         public bool Multiple { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        [XmlElement(RedmineKeys.DEFAULT_VALUE)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.DEFAULT_VALUE)]
         public string DefaultValue { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        [XmlElement(RedmineKeys.VISIBLE)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.VISIBLE)]
         public bool Visible { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        [XmlArray(RedmineKeys.POSSIBLE_VALUES)]
-        [XmlArrayItem(RedmineKeys.POSSIBLE_VALUE)]
-        public IList<CustomFieldPossibleValue> PossibleValues { get; set; }
+        [System.Xml.Serialization.XmlArray(RedmineKeys.POSSIBLE_VALUES)]
+        [System.Xml.Serialization.XmlArrayItem(RedmineKeys.POSSIBLE_VALUE)]
+        public System.Collections.Generic.IList<CustomFieldPossibleValue> PossibleValues { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        [XmlArray(RedmineKeys.TRACKERS)]
-        [XmlArrayItem(RedmineKeys.TRACKER)]
-        public IList<TrackerCustomField> Trackers { get; set; }
+        [System.Xml.Serialization.XmlArray(RedmineKeys.TRACKERS)]
+        [System.Xml.Serialization.XmlArrayItem(RedmineKeys.TRACKER)]
+        public System.Collections.Generic.IList<TrackerCustomField> Trackers { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        [XmlArray(RedmineKeys.ROLES)]
-        [XmlArrayItem(RedmineKeys.ROLE)]
-        public IList<CustomFieldRole> Roles { get; set; }
+        [System.Xml.Serialization.XmlArray(RedmineKeys.ROLES)]
+        [System.Xml.Serialization.XmlArrayItem(RedmineKeys.ROLE)]
+        public System.Collections.Generic.IList<CustomFieldRole> Roles { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="reader"></param>
-        public override void ReadXml(XmlReader reader)
+        public override void ReadXml(System.Xml.XmlReader reader)
         {
             reader.Read();
             while (!reader.EOF)
@@ -174,7 +171,7 @@ namespace Redmine.Net.Api.Types
         /// 
         /// </summary>
         /// <param name="writer"></param>
-        public override void WriteXml(XmlWriter writer) { }
+        public override void WriteXml(System.Xml.XmlWriter writer) { }
 
         /// <summary>
         /// 
@@ -224,7 +221,7 @@ namespace Redmine.Net.Api.Types
         {
             unchecked
             {
-                var hashCode = 13;
+                int hashCode = 13;
                 hashCode = HashCodeHelper.GetHashCode(Id,hashCode);
 				hashCode = HashCodeHelper.GetHashCode(IsFilter,hashCode);
 				hashCode = HashCodeHelper.GetHashCode(IsRequired,hashCode);

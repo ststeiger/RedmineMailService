@@ -14,32 +14,31 @@
    limitations under the License.
 */
 
-using System;
-using System.Xml;
-using System.Xml.Serialization;
+
 using Redmine.Net.Api.Internals;
+
 
 namespace Redmine.Net.Api.Types
 {
     /// <summary>
     /// Availability 2.2
     /// </summary>
-    [XmlRoot(RedmineKeys.TIME_ENTRY_ACTIVITY)]
-    public class TimeEntryActivity : IdentifiableName, IEquatable<TimeEntryActivity>
+    [System.Xml.Serialization.XmlRoot(RedmineKeys.TIME_ENTRY_ACTIVITY)]
+    public class TimeEntryActivity 
+        : IdentifiableName
+        , System.IEquatable<TimeEntryActivity>
     {
         /// <summary>
         /// 
         /// </summary>
-        [XmlElement(RedmineKeys.IS_DEFAULT)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.IS_DEFAULT)]
         public bool IsDefault { get; set; }
-
-        #region Implementation of IXmlSerializable
-
+        
         /// <summary>
         /// Generates an object from its XML representation.
         /// </summary>
         /// <param name="reader">The <see cref="T:System.Xml.XmlReader"/> stream from which the object is deserialized.</param>
-        public override void ReadXml(XmlReader reader)
+        public override void ReadXml(System.Xml.XmlReader reader)
         {
             reader.Read();
             while (!reader.EOF)
@@ -67,12 +66,9 @@ namespace Redmine.Net.Api.Types
         /// 
         /// </summary>
         /// <param name="writer"></param>
-        public override void WriteXml(XmlWriter writer) { }
-
-        #endregion
-
-        #region Implementation of IEquatable<TimeEntryActivity>
-
+        public override void WriteXml(System.Xml.XmlWriter writer) { }
+        
+        
         /// <summary>
         /// 
         /// </summary>
@@ -106,15 +102,14 @@ namespace Redmine.Net.Api.Types
         {
             unchecked
             {
-                var hashCode = 13;
+                int hashCode = 13;
                 hashCode = HashCodeHelper.GetHashCode(Id, hashCode);
                 hashCode = HashCodeHelper.GetHashCode(Name, hashCode);
                 hashCode = HashCodeHelper.GetHashCode(IsDefault, hashCode);
                 return hashCode;
             }
         }
-
-        #endregion
+        
 
         /// <summary>
         /// 

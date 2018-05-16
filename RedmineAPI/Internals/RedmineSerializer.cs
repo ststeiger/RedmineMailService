@@ -14,13 +14,11 @@
    limitations under the License.
 */
 
-using System;
-using System.IO;
-using System.Xml;
-using System.Xml.Serialization;
-using Redmine.Net.Api.Extensions;
+
 using Redmine.Net.Api.Types;
+using Redmine.Net.Api.Extensions;
 using Redmine.Net.Api.Exceptions;
+
 
 namespace Redmine.Net.Api.Internals
 {
@@ -42,12 +40,12 @@ namespace Redmine.Net.Api.Internals
         // ReSharper disable once InconsistentNaming
         private static string ToXML<T>(T obj) where T : class
         {
-            var xws = new XmlWriterSettings { OmitXmlDeclaration = true };
-            using (var stringWriter = new StringWriter())
+            System.Xml.XmlWriterSettings xws = new System.Xml.XmlWriterSettings { OmitXmlDeclaration = true };
+            using (System.IO.StringWriter stringWriter = new System.IO.StringWriter())
             {
-                using (var xmlWriter = XmlWriter.Create(stringWriter, xws))
+                using (System.Xml.XmlWriter xmlWriter = System.Xml.XmlWriter.Create(stringWriter, xws))
                 {
-                    var sr = new XmlSerializer(typeof(T));
+                    System.Xml.Serialization.XmlSerializer sr = new System.Xml.Serialization.XmlSerializer(typeof(T));
                     sr.Serialize(xmlWriter, obj);
                     return stringWriter.ToString();
                 }
@@ -67,9 +65,9 @@ namespace Redmine.Net.Api.Internals
         // ReSharper disable once InconsistentNaming
         private static T FromXML<T>(string xml) where T : class
         {
-            using (var text = new StringReader(xml))
+            using (System.IO.StringReader text = new System.IO.StringReader(xml))
             {
-                var sr = new XmlSerializer(typeof(T));
+                System.Xml.Serialization.XmlSerializer sr = new System.Xml.Serialization.XmlSerializer(typeof(T));
                 return sr.Deserialize(text) as T;
             }
         }
@@ -85,11 +83,11 @@ namespace Redmine.Net.Api.Internals
         /// <exception cref="System.InvalidOperationException">An error occurred during deserialization. The original exception is available
         /// using the System.Exception.InnerException property.</exception>
         // ReSharper disable once InconsistentNaming
-        private static object FromXML(string xml, Type type)
+        private static object FromXML(string xml, System.Type type)
         {
-            using (var text = new StringReader(xml))
+            using (System.IO.StringReader text = new System.IO.StringReader(xml))
             {
-                var sr = new XmlSerializer(type);
+                System.Xml.Serialization.XmlSerializer sr = new System.Xml.Serialization.XmlSerializer(type);
                 return sr.Deserialize(text);
             }
         }
@@ -114,9 +112,11 @@ namespace Redmine.Net.Api.Internals
         /// <param name="mimeFormat">The MIME format.</param>
         /// <returns></returns>
         /// <exception cref="Redmine.Net.Api.Exceptions.RedmineException">could not deserialize:  + response</exception>
-        public static T Deserialize<T>(string response, MimeFormat mimeFormat) where T : class, new()
+        public static T Deserialize<T>(string response, MimeFormat mimeFormat) 
+            where T : class, new()
         {
-            if (string.IsNullOrEmpty(response)) throw new RedmineException("could not deserialize: " + response);
+            if (string.IsNullOrEmpty(response))
+                throw new RedmineException("could not deserialize: " + response);
 
             return FromXML<T>(response);
         }
@@ -129,9 +129,11 @@ namespace Redmine.Net.Api.Internals
         /// <param name="mimeFormat">The MIME format.</param>
         /// <returns></returns>
         /// <exception cref="Redmine.Net.Api.Exceptions.RedmineException">web response is null!</exception>
-        public static PaginatedObjects<T> DeserializeList<T>(string response, MimeFormat mimeFormat) where T : class, new()
+        public static PaginatedObjects<T> DeserializeList<T>(string response, MimeFormat mimeFormat) 
+            where T : class, new()
         {
-            if (string.IsNullOrEmpty(response)) throw new RedmineException("web response is null!");
+            if (string.IsNullOrEmpty(response))
+                throw new RedmineException("web response is null!");
 
             return XmlDeserializeList<T>(response);
         }
@@ -143,21 +145,23 @@ namespace Redmine.Net.Api.Internals
         /// <param name="response">The response.</param>
         /// <returns></returns>
         /// <exception cref="Redmine.Net.Api.Exceptions.RedmineException">could not deserialize:  + response</exception>
-        private static PaginatedObjects<T> XmlDeserializeList<T>(string response) where T : class, new()
+        private static PaginatedObjects<T> XmlDeserializeList<T>(string response) 
+            where T : class, new()
         {
-            if (string.IsNullOrEmpty(response)) throw new RedmineException("could not deserialize: " + response);
+            if (string.IsNullOrEmpty(response))
+                throw new RedmineException("could not deserialize: " + response);
 
-            using (var stringReader = new StringReader(response))
+            using (System.IO.StringReader stringReader = new System.IO.StringReader(response))
             {
-                using (var xmlReader = new XmlTextReader(stringReader))
+                using (System.Xml.XmlTextReader xmlReader = new System.Xml.XmlTextReader(stringReader))
                 {
-                    xmlReader.WhitespaceHandling = WhitespaceHandling.None;
+                    xmlReader.WhitespaceHandling = System.Xml.WhitespaceHandling.None;
                     xmlReader.Read();
                     xmlReader.Read();
 
-                    var totalItems = xmlReader.ReadAttributeAsInt(RedmineKeys.TOTAL_COUNT);
+                    int totalItems = xmlReader.ReadAttributeAsInt(RedmineKeys.TOTAL_COUNT);
 
-                    var result = xmlReader.ReadElementContentAsCollection<T>();
+                    System.Collections.Generic.List<T> result = xmlReader.ReadElementContentAsCollection<T>();
                     return new PaginatedObjects<T>()
                     {
                         TotalCount = totalItems,

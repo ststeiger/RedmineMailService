@@ -14,14 +14,15 @@
    limitations under the License.
 */
 
-using System.Xml.Serialization;
 
 namespace Redmine.Net.Api.Types
 {
+
+
     /// <summary>
     /// 
     /// </summary>
-    [XmlRoot(RedmineKeys.ISSUE_CATEGORY)]
+    [System.Xml.Serialization.XmlRoot(RedmineKeys.ISSUE_CATEGORY)]
     public class ProjectIssueCategory : IdentifiableName
     {
         /// <summary>
@@ -33,4 +34,6 @@ namespace Redmine.Net.Api.Types
 			return string.Format ("[ProjectIssueCategory: {0}]", base.ToString());
 		}
     }
+
+
 }

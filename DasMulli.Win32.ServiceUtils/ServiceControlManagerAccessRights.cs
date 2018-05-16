@@ -1,9 +1,10 @@
-﻿using System;
+﻿
 using System.Diagnostics.CodeAnalysis;
 
 namespace DasMulli.Win32.ServiceUtils
 {
-    [Flags]
+
+    [System.Flags]
     [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "External API")]
     internal enum ServiceControlManagerAccessRights : uint
     {
@@ -36,4 +37,6 @@ namespace DasMulli.Win32.ServiceUtils
 
         GenericAll = All
     }
+
+
 }

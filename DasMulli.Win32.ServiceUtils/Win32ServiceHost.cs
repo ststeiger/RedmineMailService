@@ -1,8 +1,8 @@
-﻿using System;
-using System.ComponentModel;
-using System.Runtime.InteropServices;
-using System.Threading.Tasks;
+﻿
 using JetBrains.Annotations;
+using System.Threading.Tasks;
+using System.Runtime.InteropServices;
+
 
 namespace DasMulli.Win32.ServiceUtils
 {
@@ -27,7 +27,7 @@ namespace DasMulli.Win32.ServiceUtils
         private ServiceStatusHandle serviceStatusHandle;
 
         private int resultCode;
-        private Exception resultException;
+        private System.Exception resultException;
 
         /// <summary>
         /// Initializes a new <see cref="Win32ServiceHost"/> to run the specified windows service implementation.
@@ -42,10 +42,10 @@ namespace DasMulli.Win32.ServiceUtils
         {
             if (service == null)
             {
-                throw new ArgumentNullException(nameof(service));
+                throw new System.ArgumentNullException(nameof(service));
             }
 
-            this.nativeInterop = nativeInterop ?? throw new ArgumentNullException(nameof(nativeInterop));
+            this.nativeInterop = nativeInterop ?? throw new System.ArgumentNullException(nameof(nativeInterop));
             serviceName = service.ServiceName;
             stateMachine = new SimpleServiceStateMachine(service);
 
@@ -65,10 +65,10 @@ namespace DasMulli.Win32.ServiceUtils
         {
             if (service == null)
             {
-                throw new ArgumentNullException(nameof(service));
+                throw new System.ArgumentNullException(nameof(service));
             }
 
-            this.nativeInterop = nativeInterop ?? throw new ArgumentNullException(nameof(nativeInterop));
+            this.nativeInterop = nativeInterop ?? throw new System.ArgumentNullException(nameof(nativeInterop));
             serviceName = service.ServiceName;
             stateMachine = new PausableServiceStateMachine(service);
 
@@ -88,9 +88,9 @@ namespace DasMulli.Win32.ServiceUtils
 
         internal Win32ServiceHost([NotNull] string serviceName, [NotNull] IWin32ServiceStateMachine stateMachine, [NotNull] INativeInterop nativeInterop)
         {
-            this.serviceName = serviceName ?? throw new ArgumentNullException(nameof(serviceName));
-            this.stateMachine = stateMachine ?? throw new ArgumentNullException(nameof(stateMachine));
-            this.nativeInterop = nativeInterop ?? throw new ArgumentNullException(nameof(nativeInterop));
+            this.serviceName = serviceName ?? throw new System.ArgumentNullException(nameof(serviceName));
+            this.stateMachine = stateMachine ?? throw new System.ArgumentNullException(nameof(stateMachine));
+            this.nativeInterop = nativeInterop ?? throw new System.ArgumentNullException(nameof(nativeInterop));
 
             serviceMainFunctionDelegate = ServiceMainFunction;
             serviceControlHandlerDelegate = HandleServiceControlCommand;
@@ -101,10 +101,10 @@ namespace DasMulli.Win32.ServiceUtils
         /// Only exists for compatibility with 1.0 API
         /// </summary>
         /// <returns></returns>
-        [Obsolete("Doesn't really work when used in an async continuation on a background thread due to windows API requirements. Use Run() from the main thread instead (blocking).")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
+        [System.Obsolete("Doesn't really work when used in an async continuation on a background thread due to windows API requirements. Use Run() from the main thread instead (blocking).")]
+        [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
 #if NETSTANDARD2_0
-        [Browsable(false)]
+        [System.ComponentModel.Browsable(false)]
 #endif
         public Task<int> RunAsync() => Task.FromResult(Run());
 
@@ -117,7 +117,7 @@ namespace DasMulli.Win32.ServiceUtils
         /// <exception cref="PlatformNotSupportedException">Thrown when run on a non-windows platform.</exception>
         public int Run()
         {
-            var serviceTable = new ServiceTableEntry[2]; // second one is null/null to indicate termination
+            ServiceTableEntry[] serviceTable = new ServiceTableEntry[2]; // second one is null/null to indicate termination
             serviceTable[0].serviceName = serviceName;
             serviceTable[0].serviceMainFunction = Marshal.GetFunctionPointerForDelegate(serviceMainFunctionDelegate);
 
@@ -128,13 +128,15 @@ namespace DasMulli.Win32.ServiceUtils
                 // to let the service main function dispatched to block until the service stops.
                 if (!nativeInterop.StartServiceCtrlDispatcherW(serviceTable))
                 {
-                    throw new Win32Exception(Marshal.GetLastWin32Error());
+                    throw new System.ComponentModel.Win32Exception(Marshal.GetLastWin32Error());
                 }
             }
-            catch (DllNotFoundException dllException)
+            catch (System.DllNotFoundException dllException)
             {
-                throw new PlatformNotSupportedException(nameof(Win32ServiceHost) + " is only supported on Windows with service management API set.",
-                    dllException);
+                throw new System.PlatformNotSupportedException(
+                    nameof(Win32ServiceHost) + " is only supported on Windows with service management API set.",
+                    dllException
+                );
             }
 
             if (resultException != null)
@@ -145,15 +147,15 @@ namespace DasMulli.Win32.ServiceUtils
             return resultCode;
         }
 
-        private void ServiceMainFunction(int numArgs, IntPtr argPtrPtr)
+        private void ServiceMainFunction(int numArgs, System.IntPtr argPtrPtr)
         {
-            var startupArguments = ParseArguments(numArgs, argPtrPtr);
+            string[] startupArguments = ParseArguments(numArgs, argPtrPtr);
 
-            serviceStatusHandle = nativeInterop.RegisterServiceCtrlHandlerExW(serviceName, serviceControlHandlerDelegate, IntPtr.Zero);
+            serviceStatusHandle = nativeInterop.RegisterServiceCtrlHandlerExW(serviceName, serviceControlHandlerDelegate, System.IntPtr.Zero);
 
             if (serviceStatusHandle.IsInvalid)
             {
-                resultException = new Win32Exception(Marshal.GetLastWin32Error());
+                resultException = new System.ComponentModel.Win32Exception(Marshal.GetLastWin32Error());
                 return;
             }
 
@@ -199,7 +201,10 @@ namespace DasMulli.Win32.ServiceUtils
             nativeInterop.SetServiceStatus(serviceStatusHandle, ref serviceStatus);
         }
 
-        private void HandleServiceControlCommand(ServiceControlCommand command, uint eventType, IntPtr eventData, IntPtr eventContext)
+        private void HandleServiceControlCommand(ServiceControlCommand command
+            , uint eventType
+            , System.IntPtr eventData
+            , System.IntPtr eventContext)
         {
             try
             {
@@ -211,18 +216,18 @@ namespace DasMulli.Win32.ServiceUtils
             }
         }
 
-        private static string[] ParseArguments(int numArgs, IntPtr argPtrPtr)
+        private static string[] ParseArguments(int numArgs, System.IntPtr argPtrPtr)
         {
             if (numArgs <= 0)
             {
-                return Array.Empty<string>();
+                return System.Array.Empty<string>();
             }
             // skip first parameter becuase it is the name of the service
-            var args = new string[numArgs - 1];
-            for (var i = 0; i < numArgs - 1; i++)
+            string[] args = new string[numArgs - 1];
+            for (int i = 0; i < numArgs - 1; i++)
             {
-                argPtrPtr = IntPtr.Add(argPtrPtr, IntPtr.Size);
-                var argPtr = Marshal.PtrToStructure<IntPtr>(argPtrPtr);
+                argPtrPtr = System.IntPtr.Add(argPtrPtr, System.IntPtr.Size);
+                System.IntPtr argPtr = Marshal.PtrToStructure<System.IntPtr>(argPtrPtr);
                 args[i] = Marshal.PtrToStringUni(argPtr);
             }
             return args;

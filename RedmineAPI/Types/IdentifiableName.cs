@@ -14,19 +14,19 @@
    limitations under the License.
 */
 
-using System;
-using System.Globalization;
-using System.Xml;
-using System.Xml.Schema;
-using System.Xml.Serialization;
+
 using Redmine.Net.Api.Internals;
+
 
 namespace Redmine.Net.Api.Types
 {
     /// <summary>
     /// 
     /// </summary>
-    public class IdentifiableName : Identifiable<IdentifiableName>, IXmlSerializable, IEquatable<IdentifiableName>
+    public class IdentifiableName 
+        : Identifiable<IdentifiableName>
+        , System.Xml.Serialization.IXmlSerializable
+        , System.IEquatable<IdentifiableName>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="IdentifiableName"/> class.
@@ -39,12 +39,12 @@ namespace Redmine.Net.Api.Types
         /// Initializes a new instance of the <see cref="IdentifiableName"/> class.
         /// </summary>
         /// <param name="reader">The reader.</param>
-        public IdentifiableName(XmlReader reader)
+        public IdentifiableName(System.Xml.XmlReader reader)
         {
             Initialize(reader);
         }
 
-        private void Initialize(XmlReader reader)
+        private void Initialize(System.Xml.XmlReader reader)
         {
             ReadXml(reader);
         }
@@ -53,22 +53,22 @@ namespace Redmine.Net.Api.Types
         /// Gets or sets the name.
         /// </summary>
         /// <value>The name.</value>
-        [XmlAttribute(RedmineKeys.NAME)]
-        public String Name { get; set; }
+        [System.Xml.Serialization.XmlAttribute(RedmineKeys.NAME)]
+        public string Name { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        public XmlSchema GetSchema() { return null; }
+        public System.Xml.Schema.XmlSchema GetSchema() { return null; }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="reader"></param>
-        public virtual void ReadXml(XmlReader reader)
+        public virtual void ReadXml(System.Xml.XmlReader reader)
         {
-            Id = Convert.ToInt32(reader.GetAttribute(RedmineKeys.ID));
+            Id = System.Convert.ToInt32(reader.GetAttribute(RedmineKeys.ID));
             Name = reader.GetAttribute(RedmineKeys.NAME);
             reader.Read();
         }
@@ -77,9 +77,9 @@ namespace Redmine.Net.Api.Types
         /// 
         /// </summary>
         /// <param name="writer"></param>
-        public virtual void WriteXml(XmlWriter writer)
+        public virtual void WriteXml(System.Xml.XmlWriter writer)
         {
-            writer.WriteAttributeString(RedmineKeys.ID, Id.ToString(CultureInfo.InvariantCulture));
+            writer.WriteAttributeString(RedmineKeys.ID, Id.ToString(System.Globalization.CultureInfo.InvariantCulture));
             writer.WriteAttributeString(RedmineKeys.NAME, Name);
         }
         /// <summary>
@@ -98,7 +98,9 @@ namespace Redmine.Net.Api.Types
         /// <returns></returns>
         public bool Equals(IdentifiableName other)
         {
-            if (other == null) return false;
+            if (other == null)
+                return false;
+
             return (Id == other.Id && Name == other.Name);
         }
 
@@ -110,7 +112,7 @@ namespace Redmine.Net.Api.Types
         {
             unchecked
             {
-                var hashCode = base.GetHashCode();
+                int hashCode = base.GetHashCode();
                 hashCode = HashCodeHelper.GetHashCode(Name, hashCode);
                 return hashCode;
             }

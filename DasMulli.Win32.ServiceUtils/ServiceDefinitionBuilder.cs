@@ -1,5 +1,6 @@
-﻿using System;
+﻿
 using JetBrains.Annotations;
+
 
 namespace DasMulli.Win32.ServiceUtils
 {
@@ -166,12 +167,12 @@ namespace DasMulli.Win32.ServiceUtils
         {
             if (string.IsNullOrEmpty(ServiceName))
             {
-                throw new InvalidOperationException($"Cannot create a ServiceDefinition when {nameof(ServiceName)} is not set to a non-empty string");
+                throw new System.InvalidOperationException($"Cannot create a ServiceDefinition when {nameof(ServiceName)} is not set to a non-empty string");
             }
 
             if (string.IsNullOrEmpty(BinaryPath))
             {
-                throw new InvalidOperationException($"Cannot create a ServiceDefinition when {nameof(BinaryPath)} is not set to a non-empty string");
+                throw new System.InvalidOperationException($"Cannot create a ServiceDefinition when {nameof(BinaryPath)} is not set to a non-empty string");
             }
 
             return new ServiceDefinition(ServiceName, BinaryPath)

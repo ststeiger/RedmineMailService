@@ -14,24 +14,24 @@
    limitations under the License.
 */
 
-using System;
-using System.Xml.Schema;
-using System.Xml.Serialization;
+
 using Redmine.Net.Api.Internals;
+
 
 namespace Redmine.Net.Api.Types
 {
     /// <summary>
     /// Support for adding attachments through the REST API is added in Redmine 1.4.0.
     /// </summary>
-    [XmlRoot(RedmineKeys.UPLOAD)]
-    public class Upload : IEquatable<Upload>
+    [System.Xml.Serialization.XmlRoot(RedmineKeys.UPLOAD)]
+    public class Upload 
+        : System.IEquatable<Upload>
     {
         /// <summary>
         /// Gets or sets the uploaded token.
         /// </summary>
         /// <value>The name of the file.</value>
-        [XmlElement(RedmineKeys.TOKEN)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.TOKEN)]
         public string Token { get; set; }
 
         /// <summary>
@@ -39,28 +39,28 @@ namespace Redmine.Net.Api.Types
         /// Maximum allowed file size (1024000).
         /// </summary>
         /// <value>The name of the file.</value>
-        [XmlElement(RedmineKeys.FILENAME)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.FILENAME)]
         public string FileName { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the file.
         /// </summary>
         /// <value>The name of the file.</value>
-        [XmlElement(RedmineKeys.CONTENT_TYPE)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.CONTENT_TYPE)]
         public string ContentType { get; set; }
 
         /// <summary>
         /// Gets or sets the file description. (Undocumented feature)
         /// </summary>
         /// <value>The file descroütopm.</value>
-        [XmlElement(RedmineKeys.DESCRIPTION)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.DESCRIPTION)]
         public string Description { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        public XmlSchema GetSchema() { return null; }
+        public System.Xml.Schema.XmlSchema GetSchema() { return null; }
 
         /// <summary>
         /// Indicates whether the current object is equal to another object of the same type.
@@ -99,7 +99,7 @@ namespace Redmine.Net.Api.Types
         {
             unchecked
             {
-                var hashCode = 13;
+                int hashCode = 13;
                 hashCode = HashCodeHelper.GetHashCode(Token, hashCode);
                 hashCode = HashCodeHelper.GetHashCode(FileName, hashCode);
                 hashCode = HashCodeHelper.GetHashCode(Description, hashCode);

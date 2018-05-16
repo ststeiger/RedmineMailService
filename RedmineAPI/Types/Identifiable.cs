@@ -14,9 +14,9 @@
    limitations under the License.
 */
 
-using System;
-using System.Xml.Serialization;
+
 using Redmine.Net.Api.Internals;
+
 
 namespace Redmine.Net.Api.Types
 {
@@ -24,14 +24,15 @@ namespace Redmine.Net.Api.Types
     /// 
     /// </summary>
     /// <typeparam name="T"></typeparam>
-	public abstract class Identifiable<T> where T : Identifiable<T>, IEquatable<T>
+	public abstract class Identifiable<T> 
+        where T : Identifiable<T>, System.IEquatable<T>
     {
 
         /// <summary>
         /// Gets or sets the id.
         /// </summary>
         /// <value>The id.</value>
-        [XmlAttribute(RedmineKeys.ID)]
+        [System.Xml.Serialization.XmlAttribute(RedmineKeys.ID)]
         public int Id { get; set; }
 
         /// <summary>
@@ -41,7 +42,8 @@ namespace Redmine.Net.Api.Types
         /// <returns></returns>
         public bool Equals(Identifiable<T> other)
         {
-            if (other == null) return false;
+            if (other == null)
+                return false;
 
             return Id == other.Id;
         }
@@ -67,7 +69,7 @@ namespace Redmine.Net.Api.Types
         {
             unchecked
             {
-                var hashCode = 13;
+                int hashCode = 13;
                 hashCode = HashCodeHelper.GetHashCode(Id, hashCode);
                 return hashCode;
             }

@@ -14,7 +14,6 @@
    limitations under the License.
 */
 
-using System;
 
 namespace Redmine.Net.Api.Logging
 {
@@ -35,19 +34,19 @@ namespace Redmine.Net.Api.Logging
                 switch (entry.Severity)
                 {
                     case LoggingEventType.Debug:
-                        Console.WriteLine(entry.Message);
+                        System.Console.WriteLine(entry.Message);
                         break;
                     case LoggingEventType.Information:
-                        Console.WriteLine(entry.Message);
+                        System.Console.WriteLine(entry.Message);
                         break;
                     case LoggingEventType.Warning:
-                        Console.WriteLine(entry.Message);
+                        System.Console.WriteLine(entry.Message);
                         break;
                     case LoggingEventType.Error:
-                        Console.WriteLine(entry.Message);
+                        System.Console.WriteLine(entry.Message);
                         break;
                     case LoggingEventType.Fatal:
-                        Console.WriteLine(entry.Message);
+                        System.Console.WriteLine(entry.Message);
                         break;
                 }
             }

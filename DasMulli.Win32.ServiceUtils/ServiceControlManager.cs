@@ -1,18 +1,18 @@
-﻿using System;
-using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
-using System.Runtime.InteropServices;
+﻿
 using JetBrains.Annotations;
+
 
 namespace DasMulli.Win32.ServiceUtils
 {
     [UsedImplicitly(ImplicitUseKindFlags.InstantiatedNoFixedConstructorSignature)]
-    internal class ServiceControlManager : SafeHandle
+    internal class ServiceControlManager : System.Runtime.InteropServices.SafeHandle
     {
-        [SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Exposed for testing via InternalsVisibleTo.")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("ReSharper", "MemberCanBePrivate.Global"
+            , Justification = "Exposed for testing via InternalsVisibleTo.")]
         internal INativeInterop NativeInterop { get; set; } = Win32Interop.Wrapper;
 
-        internal ServiceControlManager() : base(IntPtr.Zero, ownsHandle: true)
+        internal ServiceControlManager() 
+            : base(System.IntPtr.Zero, ownsHandle: true)
         {
         }
 
@@ -26,35 +26,42 @@ namespace DasMulli.Win32.ServiceUtils
             [System.Security.SecurityCritical]
             get
             {
-                return handle == IntPtr.Zero;
+                return handle == System.IntPtr.Zero;
             }
         }
 
         internal static ServiceControlManager Connect(INativeInterop nativeInterop, string machineName, string databaseName, ServiceControlManagerAccessRights desiredAccessRights)
         {
-            var mgr = nativeInterop.OpenSCManagerW(machineName, databaseName, desiredAccessRights);
+            ServiceControlManager mgr = nativeInterop.OpenSCManagerW(machineName, databaseName, desiredAccessRights);
 
             mgr.NativeInterop = nativeInterop;
 
             if (mgr.IsInvalid)
             {
-                throw new Win32Exception(Marshal.GetLastWin32Error());
+
+                throw new System.ComponentModel.Win32Exception(System.Runtime.InteropServices.Marshal.GetLastWin32Error());
             }
 
             return mgr;
         }
 
-        public ServiceHandle CreateService(string serviceName, string displayName, string binaryPath, ServiceType serviceType, ServiceStartType startupType, ErrorSeverity errorSeverity, Win32ServiceCredentials credentials)
+        public ServiceHandle CreateService(string serviceName
+            , string displayName
+            , string binaryPath
+            , ServiceType serviceType
+            , ServiceStartType startupType
+            , ErrorSeverity errorSeverity
+            , Win32ServiceCredentials credentials)
         {
-            var service = NativeInterop.CreateServiceW(this, serviceName, displayName, ServiceControlAccessRights.All, serviceType, startupType, errorSeverity,
+            ServiceHandle service = NativeInterop.CreateServiceW(this, serviceName, displayName, ServiceControlAccessRights.All, serviceType, startupType, errorSeverity,
                 binaryPath, null,
-                IntPtr.Zero, null, credentials.UserName, credentials.Password);
+                System.IntPtr.Zero, null, credentials.UserName, credentials.Password);
 
             service.NativeInterop = NativeInterop;
 
             if (service.IsInvalid)
             {
-                throw new Win32Exception(Marshal.GetLastWin32Error());
+                throw new System.ComponentModel.Win32Exception(System.Runtime.InteropServices.Marshal.GetLastWin32Error());
             }
             
             return service;
@@ -63,7 +70,7 @@ namespace DasMulli.Win32.ServiceUtils
         public ServiceHandle OpenService(string serviceName, ServiceControlAccessRights desiredControlAccess)
         {
             ServiceHandle service;
-            Win32Exception errorException;
+            System.ComponentModel.Win32Exception errorException;
 
             if (!TryOpenService(serviceName, desiredControlAccess, out service, out errorException))
             {
@@ -73,15 +80,18 @@ namespace DasMulli.Win32.ServiceUtils
             return service;
         }
 
-        public virtual bool TryOpenService(string serviceName, ServiceControlAccessRights desiredControlAccess, out ServiceHandle serviceHandle, out Win32Exception errorException)
+        public virtual bool TryOpenService(string serviceName
+            , ServiceControlAccessRights desiredControlAccess
+            , out ServiceHandle serviceHandle
+            , out System.ComponentModel.Win32Exception errorException)
         {
-            var service = NativeInterop.OpenServiceW(this, serviceName, desiredControlAccess);
+            ServiceHandle service = NativeInterop.OpenServiceW(this, serviceName, desiredControlAccess);
 
             service.NativeInterop = NativeInterop;
 
             if (service.IsInvalid)
             {
-                errorException = new Win32Exception(Marshal.GetLastWin32Error());
+                errorException = new System.ComponentModel.Win32Exception(System.Runtime.InteropServices.Marshal.GetLastWin32Error());
                 serviceHandle = null;
                 return false;
             }

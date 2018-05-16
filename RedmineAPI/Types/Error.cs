@@ -14,24 +14,21 @@
    limitations under the License.
 */
 
-using System;
-using System.Xml;
-using System.Xml.Schema;
-using System.Xml.Serialization;
 using Redmine.Net.Api.Internals;
+
 
 namespace Redmine.Net.Api.Types
 {
     /// <summary>
     /// 
     /// </summary>
-    [XmlRoot(RedmineKeys.ERROR)]
-    public class Error : IXmlSerializable, IEquatable<Error>
+    [System.Xml.Serialization.XmlRoot(RedmineKeys.ERROR)]
+    public class Error : System.Xml.Serialization.IXmlSerializable, System.IEquatable<Error>
     {
         /// <summary>
         /// 
         /// </summary>
-        [XmlText]
+        [System.Xml.Serialization.XmlText]
         public string Info { get; set; }
 
         /// <summary>
@@ -59,13 +56,13 @@ namespace Redmine.Net.Api.Types
         /// 
         /// </summary>
         /// <returns></returns>
-        public XmlSchema GetSchema() { return null; }
+        public System.Xml.Schema.XmlSchema GetSchema() { return null; }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="reader"></param>
-        public void ReadXml(XmlReader reader)
+        public void ReadXml(System.Xml.XmlReader reader)
         {
             while (!reader.EOF)
             {
@@ -88,7 +85,7 @@ namespace Redmine.Net.Api.Types
         /// 
         /// </summary>
         /// <param name="writer"></param>
-        public void WriteXml(XmlWriter writer) { }
+        public void WriteXml(System.Xml.XmlWriter writer) { }
 
         /// <summary>
         /// 
@@ -111,7 +108,7 @@ namespace Redmine.Net.Api.Types
         {
             unchecked
             {
-                var hashCode = 13;
+                int hashCode = 13;
                 hashCode = HashCodeHelper.GetHashCode(Info, hashCode);
                 return hashCode;
             }

@@ -12,10 +12,9 @@ namespace RedmineMailService
         {
             // https://github.com/dasMulli/dotnet-win32-service
             ServiceStarter.Start(args);
-
-            // RedmineMailService.Trash.MailSender.Test();
-
-            // RedmineMailService.TestMailReader.Test();
+            
+            MailSender.Test();
+            TestMailReader.Test();
 
             System.Console.WriteLine(System.Environment.NewLine);
             System.Console.WriteLine(" --- Press any key to continue --- ");

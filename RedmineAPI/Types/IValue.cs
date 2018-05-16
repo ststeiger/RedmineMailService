@@ -24,6 +24,6 @@ namespace Redmine.Net.Api.Types
         /// <summary>
         /// 
         /// </summary>
-		string Value{ get;}
-	}
+		string Value { get; }
+    }
 }

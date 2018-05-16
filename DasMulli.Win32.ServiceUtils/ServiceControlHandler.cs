@@ -1,6 +1,8 @@
-﻿using System;
-
+﻿
 namespace DasMulli.Win32.ServiceUtils
 {
-    internal delegate void ServiceControlHandler(ServiceControlCommand control, uint eventType, IntPtr eventData, IntPtr eventContext);
+    internal delegate void ServiceControlHandler(ServiceControlCommand control
+        , uint eventType
+        , System.IntPtr eventData
+        , System.IntPtr eventContext);
 }

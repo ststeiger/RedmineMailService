@@ -14,11 +14,9 @@
    limitations under the License.
 */
 
-using System.Collections.Specialized;
-using System.Net;
-using System.Text;
-using Redmine.Net.Api.Extensions;
 using Redmine.Net.Api.Types;
+using Redmine.Net.Api.Extensions;
+
 
 namespace Redmine.Net.Api.Internals
 {
@@ -27,19 +25,20 @@ namespace Redmine.Net.Api.Internals
     /// </summary>
     internal static class WebApiHelper
     {
-	    /// <summary>
-	    /// Executes the upload.
-	    /// </summary>
-	    /// <param name="redmineManager">The redmine manager.</param>
-	    /// <param name="address">The address.</param>
-	    /// <param name="actionType">Type of the action.</param>
-	    /// <param name="data">The data.</param>
-	    /// <param name="methodName">Name of the method.</param>
-	    /// <param name="parameters">The parameters</param>
-	    public static void ExecuteUpload(RedmineManager redmineManager, string address, string actionType, string data,
-            string methodName, NameValueCollection parameters = null)
+        /// <summary>
+        /// Executes the upload.
+        /// </summary>
+        /// <param name="redmineManager">The redmine manager.</param>
+        /// <param name="address">The address.</param>
+        /// <param name="actionType">Type of the action.</param>
+        /// <param name="data">The data.</param>
+        /// <param name="methodName">Name of the method.</param>
+        /// <param name="parameters">The parameters</param>
+        public static void ExecuteUpload(RedmineManager redmineManager, string address, string actionType
+            , string data, string methodName
+            , System.Collections.Specialized.NameValueCollection parameters = null)
         {
-            using (var wc = redmineManager.CreateWebClient(parameters))
+            using (RedmineWebClient wc = redmineManager.CreateWebClient(parameters))
             {
                 try
                 {
@@ -49,7 +48,7 @@ namespace Redmine.Net.Api.Internals
                         wc.UploadString(address, actionType, data);
                     }
                 }
-                catch (WebException webException)
+                catch (System.Net.WebException webException)
                 {
                     webException.HandleWebException(methodName, redmineManager.MimeFormat);
                 }
@@ -70,18 +69,18 @@ namespace Redmine.Net.Api.Internals
             string methodName)
             where T : class, new()
         {
-            using (var wc = redmineManager.CreateWebClient(null))
+            using (RedmineWebClient wc = redmineManager.CreateWebClient(null))
             {
                 try
                 {
                     if (actionType == HttpVerbs.POST || actionType == HttpVerbs.DELETE || actionType == HttpVerbs.PUT ||
                         actionType == HttpVerbs.PATCH)
                     {
-                        var response = wc.UploadString(address, actionType, data);
+                        string response = wc.UploadString(address, actionType, data);
                         return RedmineSerializer.Deserialize<T>(response, redmineManager.MimeFormat);
                     }
                 }
-                catch (WebException webException)
+                catch (System.Net.WebException webException)
                 {
                     webException.HandleWebException(methodName, redmineManager.MimeFormat);
                 }
@@ -98,19 +97,21 @@ namespace Redmine.Net.Api.Internals
         /// <param name="methodName">Name of the method.</param>
         /// <param name="parameters">The parameters.</param>
         /// <returns></returns>
-        public static T ExecuteDownload<T>(RedmineManager redmineManager, string address, string methodName,
-            NameValueCollection parameters = null)
+        public static T ExecuteDownload<T>(RedmineManager redmineManager
+            , string address
+            , string methodName
+            ,System.Collections.Specialized.NameValueCollection parameters = null)
             where T : class, new()
         {
-            using (var wc = redmineManager.CreateWebClient(parameters))
+            using (RedmineWebClient wc = redmineManager.CreateWebClient(parameters))
             {
                 try
                 {
-                    var response = wc.DownloadString(address);
+                    string response = wc.DownloadString(address);
                     if (!string.IsNullOrEmpty(response))
                         return RedmineSerializer.Deserialize<T>(response, redmineManager.MimeFormat);
                 }
-                catch (WebException webException)
+                catch (System.Net.WebException webException)
                 {
                     webException.HandleWebException(methodName, redmineManager.MimeFormat);
                 }
@@ -127,18 +128,21 @@ namespace Redmine.Net.Api.Internals
         /// <param name="methodName">Name of the method.</param>
         /// <param name="parameters">The parameters.</param>
         /// <returns></returns>
-        public static PaginatedObjects<T> ExecuteDownloadList<T>(RedmineManager redmineManager, string address,
-            string methodName,
-            NameValueCollection parameters = null) where T : class, new()
+        public static PaginatedObjects<T> ExecuteDownloadList<T>(RedmineManager redmineManager
+            , string address
+            , string methodName
+            , System.Collections.Specialized.NameValueCollection parameters = null
+            )
+            where T : class, new()
         {
-            using (var wc = redmineManager.CreateWebClient(parameters))
+            using (RedmineWebClient wc = redmineManager.CreateWebClient(parameters))
             {
                 try
                 {
-                    var response = wc.DownloadString(address);
+                    string response = wc.DownloadString(address);
                     return RedmineSerializer.DeserializeList<T>(response, redmineManager.MimeFormat);
                 }
-                catch (WebException webException)
+                catch (System.Net.WebException webException)
                 {
                     webException.HandleWebException(methodName, redmineManager.MimeFormat);
                 }
@@ -155,13 +159,13 @@ namespace Redmine.Net.Api.Internals
         /// <returns></returns>
         public static byte[] ExecuteDownloadFile(RedmineManager redmineManager, string address, string methodName)
         {
-            using (var wc = redmineManager.CreateWebClient(null, true))
+            using (RedmineWebClient wc = redmineManager.CreateWebClient(null, true))
             {
                 try
                 {
                     return wc.DownloadData(address);
                 }
-                catch (WebException webException)
+                catch (System.Net.WebException webException)
                 {
                     webException.HandleWebException(methodName, redmineManager.MimeFormat);
                 }
@@ -179,15 +183,15 @@ namespace Redmine.Net.Api.Internals
         /// <returns></returns>
         public static Upload ExecuteUploadFile(RedmineManager redmineManager, string address, byte[] data, string methodName)
         {
-            using (var wc = redmineManager.CreateWebClient(null, true))
+            using (RedmineWebClient wc = redmineManager.CreateWebClient(null, true))
             {
                 try
                 {
-                    var response = wc.UploadData(address, data);
-                    var responseString = Encoding.ASCII.GetString(response);
+                    byte[] response = wc.UploadData(address, data);
+                    string responseString = System.Text.Encoding.ASCII.GetString(response);
                     return RedmineSerializer.Deserialize<Upload>(responseString, redmineManager.MimeFormat);
                 }
-                catch (WebException webException)
+                catch (System.Net.WebException webException)
                 {
                     webException.HandleWebException(methodName, redmineManager.MimeFormat);
                 }

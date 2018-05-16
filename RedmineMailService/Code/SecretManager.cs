@@ -1,5 +1,5 @@
 ﻿
-namespace TestPlotly
+namespace RedmineMailService
 {
 
 

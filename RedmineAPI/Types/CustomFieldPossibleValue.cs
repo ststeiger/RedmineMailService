@@ -14,22 +14,22 @@
    limitations under the License.
 */
 
-using System;
-using System.Xml.Serialization;
+
 using Redmine.Net.Api.Internals;
+
 
 namespace Redmine.Net.Api.Types
 {
     /// <summary>
     /// 
     /// </summary>
-    [XmlRoot(RedmineKeys.POSSIBLE_VALUE)]
-    public class CustomFieldPossibleValue : IEquatable<CustomFieldPossibleValue>
+    [System.Xml.Serialization.XmlRoot(RedmineKeys.POSSIBLE_VALUE)]
+    public class CustomFieldPossibleValue : System.IEquatable<CustomFieldPossibleValue>
     {
         /// <summary>
         /// 
         /// </summary>
-        [XmlElement(RedmineKeys.VALUE)]
+        [System.Xml.Serialization.XmlElement(RedmineKeys.VALUE)]
         public string Value { get; set; }
 
         /// <summary>
@@ -64,8 +64,8 @@ namespace Redmine.Net.Api.Types
         {
             unchecked
             {
-                var hashCode = 13;
-				hashCode = HashCodeHelper.GetHashCode(Value,hashCode);
+                int hashCode = 13;
+				hashCode = HashCodeHelper.GetHashCode(Value, hashCode);
                 return hashCode;
             }
         }
