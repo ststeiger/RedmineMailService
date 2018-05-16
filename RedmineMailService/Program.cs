@@ -15,7 +15,7 @@ namespace RedmineMailService
 
             // RedmineMailService.Trash.MailSender.Test();
 
-            RedmineMailService.TestMailReader.Test();
+            // RedmineMailService.TestMailReader.Test();
 
             System.Console.WriteLine(System.Environment.NewLine);
             System.Console.WriteLine(" --- Press any key to continue --- ");

@@ -15,5 +15,5 @@ namespace RedmineMailService.Trash
         public static string info = "service@friends.com";
     }
 
-
+    
 }

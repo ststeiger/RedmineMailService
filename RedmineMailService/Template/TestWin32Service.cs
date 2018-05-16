@@ -56,7 +56,7 @@ namespace RedmineMailService
             IConfigurationRoot config = new Microsoft.Extensions.Configuration.ConfigurationBuilder()
                .AddCommandLine(combinedArguments) // Microsoft.Extensions.Configuration.CommandLine.dll
                .Build();
-
+            
             webHost = new Microsoft.AspNetCore.Hosting.WebHostBuilder()
                 .UseKestrel() // Microsoft.AspNetCore.Server.Kestrel.dll
                 .UseStartup<AspNetCoreStartup>()

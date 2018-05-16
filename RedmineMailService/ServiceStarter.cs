@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Linq;
 
 
@@ -12,16 +13,59 @@ namespace RedmineMailService
         private const string RegisterServiceFlag = "--register-service";
         private const string UnregisterServiceFlag = "--unregister-service";
         private const string InteractiveFlag = "--interactive";
-
+        private const string StopServiceFlag = "--stop-service";
+        private const string RestartServiceFlag = "--restart-service";
+        
+        
+        // systemctl status mssql-server
+        // initctl show-config <servicename> t
+        // systemctl list-unit-files --type=service
+        
+        // initctl list
+        // service --status-all
+        
+        // sudo systemctl start mssql-server
+        // /etc/init.d/mysql start
+        
+        // sudo systemctl stop mssql-server
+        // /etc/init.d/mysql stop
+        
+        // sudo systemctl restart mssql-server
+        // /etc/init.d/mysql restart
+        
+        // sudo systemctl enable mssql-server
+        // sudo update-rc.d mysql defaults
+        
+        // sudo systemctl disable mssql-server
+        // sudo update-rc.d -f mysql remove
+        
         private const string ServiceName = "DemoService";
         private const string ServiceDisplayName = "Demo .NET Core Service";
         private const string ServiceDescription = "Demo ASP.NET Core Service running on .NET Core";
 
 
+        public static void ipc()
+        {
+            // https://docs.microsoft.com/en-us/dotnet/standard/io/how-to-use-named-pipes-for-network-interprocess-communication
+            System.IO.Pipes.NamedPipeServerStream pipeServer = 
+                new System.IO.Pipes.NamedPipeServerStream("testpipe"
+                    , System.IO.Pipes.PipeDirection.InOut, 1);
+            
+            // Wait for a client to connect
+            pipeServer.WaitForConnection();
+            
+            // pipeServer.Write(
+            System.IO.MemoryMappedFiles.MemoryMappedFile.CreateOrOpen("lul", 2);
+            
+            // System.IO.MemoryMappedFiles
+        }
+        
+        
         public static void Start(string[] args)
         {
-            args = new string[] { "--interactive" };
-
+            // args = new string[] { "--interactive" };
+            args = new string[] { "--run-as-service" };
+            
             // Demo ASP.NET Core Service running on.NET Core
             // This demo application is intened to be run as windows service.Use one of the following options:
             //
@@ -62,10 +106,19 @@ namespace RedmineMailService
 
         private static void RunAsService(string[] args)
         {
-            TestWin32Service testService = new TestWin32Service(args.Where(a => a != RunAsServiceFlag).ToArray());
-            DasMulli.Win32.ServiceUtils.Win32ServiceHost serviceHost =
-                new DasMulli.Win32.ServiceUtils.Win32ServiceHost(testService);
-            serviceHost.Run();
+            DasMulli.Win32.ServiceUtils.IWin32Service service = 
+                new TestWin32Service(args.Where(a => a != RunAsServiceFlag).ToArray());
+            
+            if (System.Environment.OSVersion.Platform == System.PlatformID.Unix)
+            {
+                service.Start(new string[0], () => { });
+            }
+            else
+            {
+                DasMulli.Win32.ServiceUtils.Win32ServiceHost serviceHost =
+                    new DasMulli.Win32.ServiceUtils.Win32ServiceHost(service);
+                serviceHost.Run();
+            }
         }
 
 
@@ -79,8 +132,8 @@ namespace RedmineMailService
             System.Console.ReadLine();
             service.Stop();
         }
-
-
+        
+        
         private static void RegisterService()
         {
             // Environment.GetCommandLineArgs() includes the current DLL from a "dotnet my.dll --register-service" call, which is not passed to Main()
