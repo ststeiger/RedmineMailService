@@ -333,8 +333,6 @@ namespace RedmineMailService
 
             try
             {
-
-
                 Folder rootfolder = Folder.Bind(service, WellKnownFolderName.MsgFolderRoot);
 
                 // Set the properties you want to retrieve when you load the folder.

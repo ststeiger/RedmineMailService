@@ -31,6 +31,20 @@ namespace System.Drawing
 #endif
 
 
+// https://github.com/OfficeDev/ews-managed-api
+// from sherlock1982 
+// https://github.com/sherlock1982/ews-managed-api
+// to officedef/msft-default-repo with personal fixes 
+// https://github.com/OfficeDev/ews-managed-api
+
+// Fix: Novell.Directory.Ldap.NETStandard 
+// https://github.com/dsbenghe/Novell.Directory.Ldap.NETStandard
+
+
+
+// Fix TimeZoneTransitionGroup.cs (132, 151, 166)
+// Dictionary.add(key, value) to dictionary[key] = value;
+
 // Removed D:\github\Microsoft.Exchange.WebServices.Data\Autodiscover\DirectoryHelper.cs 
 // Replaced with new dummy class 
 
