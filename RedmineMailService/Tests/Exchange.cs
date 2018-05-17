@@ -322,7 +322,7 @@ namespace RedmineMailService
         // openssl x509 -in foo.pem -inform PEM -out foo.crt
         // cert-sync "/root/Desktop/DO_NOT_TRUST_FiddlerRoot.pem"
         // cert-sync --user "/root/Desktop/DO_NOT_TRUST_FiddlerRoot.pem"
-        public static async void ListFolders()
+        public static void ListFolders()
         {
             System.Console.WriteLine("start folder listing");
             ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
@@ -388,7 +388,7 @@ namespace RedmineMailService
         } // End Sub ListFolders 
 
 
-        public static async void TestSend()
+        public static void TestSend()
         {
             ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
 
@@ -402,6 +402,7 @@ namespace RedmineMailService
             } // End if (listener != null) 
 
 
+            service.UseDefaultCredentials = false;
             service.Credentials = new WebCredentials(RedmineMailService.Trash.UserData.Email, RedmineMailService.Trash.UserData.Password);
             service.AutodiscoverUrl(RedmineMailService.Trash.UserData.Email, RedirectionUrlValidationCallback);
 
