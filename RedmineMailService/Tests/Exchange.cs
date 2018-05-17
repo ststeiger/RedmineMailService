@@ -307,10 +307,27 @@ namespace RedmineMailService
 
         } // End Sub FindUnreadEmail 
 
+        // https://blogs.msdn.microsoft.com/fiddler/2011/12/10/revisiting-fiddler-and-win8-immersive-applications/
 
+        // mono mozroots.exe --import --sync
+        // https://support.securly.com/hc/en-us/articles/206081828-How-to-manually-install-the-Securly-SSL-certificate-in-Chrome
+        // https://askubuntu.com/questions/73287/how-do-i-install-a-root-certificate
+
+        // sudo cp foo.crt /usr/share/ca-certificates/extra/foo.crt
+        // sudo dpkg-reconfigure ca-certificates
+
+        // cer = cert. 
+        // In case of a.pem file on Ubuntu, it must first be converted to a.crt file:
+        // import firefox > export pem
+        // openssl x509 -in foo.pem -inform PEM -out foo.crt
+        // cert-sync "/root/Desktop/DO_NOT_TRUST_FiddlerRoot.pem"
+        // cert-sync --user "/root/Desktop/DO_NOT_TRUST_FiddlerRoot.pem"
         public static async void ListFolders()
         {
+            System.Console.WriteLine("start folder listing");
             ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
+
+            service.UseDefaultCredentials = false;
             service.Credentials = new WebCredentials(RedmineMailService.Trash.UserData.Email, RedmineMailService.Trash.UserData.Password);
 
             Microsoft.Exchange.WebServices.Data.ITraceListener listener = new NoTrace();
@@ -364,7 +381,10 @@ namespace RedmineMailService
             catch (System.Exception ex)
             {
                 System.Console.WriteLine(ex);
+                System.Environment.Exit(-1);
             }
+
+            System.Console.WriteLine("finished");
         } // End Sub ListFolders 
 
 
