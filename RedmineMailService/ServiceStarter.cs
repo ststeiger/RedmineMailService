@@ -236,6 +236,7 @@ Environment=DOTNET_CLI_TELEMETRY_OPTOUT=1
 
 [Install]
 WantedBy=multi-user.target
+
 ";
 
                 string serviceFile = @"/etc/systemd/system/RedmineMailService.service";
@@ -266,7 +267,7 @@ WantedBy=multi-user.target
                     p.Start();
                     p.WaitForExit();
                 }
-
+                
             }
             else if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows))
             {
