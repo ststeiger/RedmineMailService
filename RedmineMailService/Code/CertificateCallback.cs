@@ -18,7 +18,7 @@ namespace RedmineMailService
         public static void Initialize()
         { }
 
-
+/*
         public static bool Callback(
             object sender,
             System.Security.Cryptography.X509Certificates.X509Certificate certificate,
@@ -27,14 +27,16 @@ namespace RedmineMailService
         {
             return CertificateValidationCallBack(sender, certificate, chain, sslPolicyErrors);
         }
-
+*/
 
             private static bool CertificateValidationCallBack(
              object sender,
              System.Security.Cryptography.X509Certificates.X509Certificate certificate,
              System.Security.Cryptography.X509Certificates.X509Chain chain,
              System.Net.Security.SslPolicyErrors sslPolicyErrors)
-        {
+            {
+                return true;
+            
             // If the certificate is a valid, signed certificate, return true.
             if (sslPolicyErrors == System.Net.Security.SslPolicyErrors.None)
             {

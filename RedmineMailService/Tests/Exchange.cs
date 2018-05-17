@@ -203,6 +203,8 @@ namespace RedmineMailService
         public static void FindUnreadEmail()
         {
             ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
+
+            service.UseDefaultCredentials = false;
             service.Credentials = new WebCredentials(RedmineMailService.Trash.UserData.Email, RedmineMailService.Trash.UserData.Password);
             
             Microsoft.Exchange.WebServices.Data.ITraceListener listener = new NoTrace();
