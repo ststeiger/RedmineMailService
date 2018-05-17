@@ -331,33 +331,42 @@ namespace RedmineMailService
             // nslookup -type=srv _autodiscover._tcp.cor.local
             // service.AutodiscoverUrl(RedmineMailService.Trash.UserData.Email, RedirectionUrlValidationCallback);
 
-            Folder rootfolder = Folder.Bind(service, WellKnownFolderName.MsgFolderRoot);
-
-            // Set the properties you want to retrieve when you load the folder.
-            PropertySet propsToLoad = new PropertySet(FolderSchema.DisplayName,
-                                                      FolderSchema.ChildFolderCount,
-                                                      FolderSchema.FolderClass,
-                                                      // Note that you don't display the folder IDs because they're very large,
-                                                      // but retrieve them because they can be useful in other methods you might call.
-                                                      FolderSchema.Id);
-
-            // Get the root folder with the selected properties.
-            rootfolder.Load(propsToLoad);
-
-            // Load the number of subfolders unless there are more than 100.
-            int numSubFoldersToView = rootfolder.ChildFolderCount <= 100 ? rootfolder.ChildFolderCount : 100;
-
-            // Display the child folders under the root, the number of subfolders under each child, and the folder class of each child folder.
-            System.Console.WriteLine("\r\n" + "Folder Name".PadRight(28) + "\t" + "subfolders".PadRight(12) + "Folder Class" + "\r\n");
-
-            foreach (Folder childFolder in rootfolder.FindFolders(new FolderView(numSubFoldersToView)))
+            try
             {
-                System.Console.WriteLine(childFolder.DisplayName.PadRight(28) 
-                    + "\t" 
-                    + childFolder.ChildFolderCount.ToString().PadRight(12) 
-                    + childFolder.FolderClass);
-            } // Next childFolder 
 
+
+                Folder rootfolder = Folder.Bind(service, WellKnownFolderName.MsgFolderRoot);
+
+                // Set the properties you want to retrieve when you load the folder.
+                PropertySet propsToLoad = new PropertySet(FolderSchema.DisplayName,
+                    FolderSchema.ChildFolderCount,
+                    FolderSchema.FolderClass,
+                    // Note that you don't display the folder IDs because they're very large,
+                    // but retrieve them because they can be useful in other methods you might call.
+                    FolderSchema.Id);
+
+                // Get the root folder with the selected properties.
+                rootfolder.Load(propsToLoad);
+
+                // Load the number of subfolders unless there are more than 100.
+                int numSubFoldersToView = rootfolder.ChildFolderCount <= 100 ? rootfolder.ChildFolderCount : 100;
+
+                // Display the child folders under the root, the number of subfolders under each child, and the folder class of each child folder.
+                System.Console.WriteLine("\r\n" + "Folder Name".PadRight(28) + "\t" + "subfolders".PadRight(12) +
+                                         "Folder Class" + "\r\n");
+
+                foreach (Folder childFolder in rootfolder.FindFolders(new FolderView(numSubFoldersToView)))
+                {
+                    System.Console.WriteLine(childFolder.DisplayName.PadRight(28)
+                                             + "\t"
+                                             + childFolder.ChildFolderCount.ToString().PadRight(12)
+                                             + childFolder.FolderClass);
+                } // Next childFolder 
+            }
+            catch (System.Exception ex)
+            {
+                System.Console.WriteLine(ex);
+            }
         } // End Sub ListFolders 
 
 
