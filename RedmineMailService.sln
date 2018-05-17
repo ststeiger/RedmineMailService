@@ -3,15 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26730.12
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedmineMailService", "RedmineMailService\RedmineMailService.csproj", "{8AF938B5-D692-43B8-93F7-1233E7EE3310}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RedmineMailService", "RedmineMailService\RedmineMailService.csproj", "{8AF938B5-D692-43B8-93F7-1233E7EE3310}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DasMulli.Win32.ServiceUtils", "DasMulli.Win32.ServiceUtils\DasMulli.Win32.ServiceUtils.csproj", "{310F484C-8E84-4F40-BEA0-F4C96E802E33}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DasMulli.Win32.ServiceUtils", "DasMulli.Win32.ServiceUtils\DasMulli.Win32.ServiceUtils.csproj", "{310F484C-8E84-4F40-BEA0-F4C96E802E33}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedmineAPI", "RedmineAPI\RedmineAPI.csproj", "{D5A225A6-1956-4D10-903A-BF2669BDBF1C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RedmineAPI", "RedmineAPI\RedmineAPI.csproj", "{D5A225A6-1956-4D10-903A-BF2669BDBF1C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ARSoft.Tools.Net", "ARSoft.Tools.Net\ARSoft.Tools.Net.csproj", "{6D09F3D0-2A27-4613-86AA-7BB9306170B9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ARSoft.Tools.Net", "ARSoft.Tools.Net\ARSoft.Tools.Net.csproj", "{6D09F3D0-2A27-4613-86AA-7BB9306170B9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BouncyCastle", "BouncyCastle\BouncyCastle.csproj", "{F2842BD5-3212-4164-8C03-0A7BCDA4E819}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BouncyCastle", "BouncyCastle\BouncyCastle.csproj", "{F2842BD5-3212-4164-8C03-0A7BCDA4E819}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Exchange.WebServices.Data", "Microsoft.Exchange.WebServices.Data\Microsoft.Exchange.WebServices.Data.csproj", "{E7E21FA3-DD30-4D62-A730-298190E19488}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{F2842BD5-3212-4164-8C03-0A7BCDA4E819}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F2842BD5-3212-4164-8C03-0A7BCDA4E819}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F2842BD5-3212-4164-8C03-0A7BCDA4E819}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E7E21FA3-DD30-4D62-A730-298190E19488}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7E21FA3-DD30-4D62-A730-298190E19488}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7E21FA3-DD30-4D62-A730-298190E19488}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7E21FA3-DD30-4D62-A730-298190E19488}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

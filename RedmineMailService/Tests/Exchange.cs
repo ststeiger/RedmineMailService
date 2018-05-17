@@ -22,7 +22,7 @@ namespace RedmineMailService
             }
         }
 
-        public static async void ListAllMails()
+        public static void ListAllMails()
         {
             ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
             service.Credentials = new WebCredentials(RedmineMailService.Trash.UserData.Email
@@ -39,7 +39,7 @@ namespace RedmineMailService
 
             service.AutodiscoverUrl(RedmineMailService.Trash.UserData.Email, RedirectionUrlValidationCallback);
 
-            Folder inbox = await Folder.Bind(service, WellKnownFolderName.Inbox);
+            Folder inbox = Folder.Bind(service, WellKnownFolderName.Inbox);
 
         } // End Sub ListAllMails 
 
@@ -50,7 +50,7 @@ namespace RedmineMailService
         /// is enabled for the caller.
         /// </summary>
         /// <param name="service">An ExchangeService object with credentials and the EWS URL.</param>
-        public static async void PlayEmailOnPhone()
+        public static void PlayEmailOnPhone()
         {
 
             /// <summary>
@@ -88,7 +88,7 @@ namespace RedmineMailService
             view.PropertySet = new PropertySet(BasePropertySet.IdOnly);
 
             // Find the first email message in the Inbox. This results in a FindItem operation call to EWS. 
-            FindItemsResults<Item> results = await service.FindItems(WellKnownFolderName.Inbox, view);
+            FindItemsResults<Item> results = service.FindItems(WellKnownFolderName.Inbox, view);
 
             try
             {
@@ -97,7 +97,7 @@ namespace RedmineMailService
 
                 // Initiate a call to dictate an email message over a phone call. 
                 // This results in a PlayOnPhone operation call to EWS.
-                PhoneCall call = await service.UnifiedMessaging.PlayOnPhone(itemId, dialstring);
+                PhoneCall call = service.UnifiedMessaging.PlayOnPhone(itemId, dialstring);
 
                 System.Console.WriteLine("Call Number: " + dialstring);
                 System.Console.WriteLine(System.DateTime.Now + " - Call Status: " + call.State + "\n\r");
@@ -126,14 +126,14 @@ namespace RedmineMailService
         } // End Sub PlayEmailOnPhone 
 
 
-        public static async Task<FolderId> FindFolderIdByDisplayName(
+        public static FolderId FindFolderIdByDisplayName(
             ExchangeService service, string DisplayName, WellKnownFolderName SearchFolder)
         {
             // Specify the root folder to be searched.
-            Folder rootFolder = await Folder.Bind(service, SearchFolder);
+            Folder rootFolder = Folder.Bind(service, SearchFolder);
 
             // Loop through the child folders of the folder being searched.
-            foreach (Folder folder in await rootFolder.FindFolders(new FolderView(100)))
+            foreach (Folder folder in rootFolder.FindFolders(new FolderView(100)))
             {
                 // If the display name of the current folder matches the specified display name, return the folder's unique identifier.
                 if (folder.DisplayName == DisplayName)
@@ -147,7 +147,7 @@ namespace RedmineMailService
         } // End Function FindFolderIdByDisplayName 
 
 
-        public static async void DelaySendEmail()
+        public static void DelaySendEmail()
         {
             ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
             service.Credentials = new WebCredentials(RedmineMailService.Trash.UserData.Email, RedmineMailService.Trash.UserData.Password);
@@ -196,11 +196,11 @@ namespace RedmineMailService
             System.Console.WriteLine("Email message will be sent at: " + sendTime + ".");
 
             // Submit the request to send the email message.
-            await message.SendAndSaveCopy();
+            message.SendAndSaveCopy();
         } // End Sub DelaySendEmail 
 
 
-        public static async void FindUnreadEmail()
+        public static void FindUnreadEmail()
         {
             ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
             service.Credentials = new WebCredentials(RedmineMailService.Trash.UserData.Email, RedmineMailService.Trash.UserData.Password);
@@ -219,7 +219,7 @@ namespace RedmineMailService
 
             try
             {
-                Folder inbox = await Folder.Bind(service, WellKnownFolderName.Inbox);
+                Folder inbox = Folder.Bind(service, WellKnownFolderName.Inbox);
 
             }
             catch (Exception e)
@@ -239,7 +239,7 @@ namespace RedmineMailService
             {
                 // Fire the query for the unread items.
                 // This method call results in a FindItem call to EWS.
-                findResults = await service.FindItems(WellKnownFolderName.Inbox, sf, view);
+                findResults = service.FindItems(WellKnownFolderName.Inbox, sf, view);
 
                 System.Console.WriteLine(findResults.TotalCount);
 
@@ -253,8 +253,7 @@ namespace RedmineMailService
                         // https://msdn.microsoft.com/en-us/library/office/dn726695(v=exchg.150).aspx
                         if (em.HasAttachments)
                         {
-                            EmailMessage message = await
-                                EmailMessage.Bind(service, item.Id
+                            EmailMessage message = EmailMessage.Bind(service, item.Id
                                 , new PropertySet(BasePropertySet.IdOnly, ItemSchema.Attachments));
 
                             foreach (Attachment attachment in message.Attachments)
@@ -264,7 +263,7 @@ namespace RedmineMailService
                                 if (attachment is FileAttachment)
                                 {
                                     FileAttachment fa = attachment as FileAttachment;
-                                    await fa.Load();
+                                    fa.Load();
                                     // System.Console.WriteLine(fa.Content);
                                     // System.IO.File.WriteAllBytes(@"d:\" + attachment.Name, fa.Content);
                                     // System.Console.WriteLine(fa.ContentType);
@@ -273,7 +272,7 @@ namespace RedmineMailService
                                 else if (attachment is ItemAttachment)
                                 {
                                     ItemAttachment itemAttachment = attachment as ItemAttachment;
-                                    await itemAttachment.Load(ItemSchema.MimeContent);
+                                    itemAttachment.Load(ItemSchema.MimeContent);
                                     string fileName = @"C:\Temp\" + itemAttachment.Item.Subject + @".eml";
 
                                     // Write the bytes of the attachment into a file.
@@ -327,11 +326,12 @@ namespace RedmineMailService
             service.TraceFlags = TraceFlags.All;
             service.TraceEnabled = true;
             
-            // service.Url = new System.Uri("https://webmail.cor-management.ch/ews/exchange.asmx");
+            service.Url = new System.Uri("https://webmail.cor-management.ch/ews/exchange.asmx");
             // nslookup -type=srv _autodiscover._tcp.cor-management.ch
-            service.AutodiscoverUrl(RedmineMailService.Trash.UserData.Email, RedirectionUrlValidationCallback);
-            
-            Folder rootfolder = await Folder.Bind(service, WellKnownFolderName.MsgFolderRoot);
+            // nslookup -type=srv _autodiscover._tcp.cor.local
+            // service.AutodiscoverUrl(RedmineMailService.Trash.UserData.Email, RedirectionUrlValidationCallback);
+
+            Folder rootfolder = Folder.Bind(service, WellKnownFolderName.MsgFolderRoot);
 
             // Set the properties you want to retrieve when you load the folder.
             PropertySet propsToLoad = new PropertySet(FolderSchema.DisplayName,
@@ -342,7 +342,7 @@ namespace RedmineMailService
                                                       FolderSchema.Id);
 
             // Get the root folder with the selected properties.
-            await rootfolder.Load(propsToLoad);
+            rootfolder.Load(propsToLoad);
 
             // Load the number of subfolders unless there are more than 100.
             int numSubFoldersToView = rootfolder.ChildFolderCount <= 100 ? rootfolder.ChildFolderCount : 100;
@@ -350,7 +350,7 @@ namespace RedmineMailService
             // Display the child folders under the root, the number of subfolders under each child, and the folder class of each child folder.
             System.Console.WriteLine("\r\n" + "Folder Name".PadRight(28) + "\t" + "subfolders".PadRight(12) + "Folder Class" + "\r\n");
 
-            foreach (Folder childFolder in await rootfolder.FindFolders(new FolderView(numSubFoldersToView)))
+            foreach (Folder childFolder in rootfolder.FindFolders(new FolderView(numSubFoldersToView)))
             {
                 System.Console.WriteLine(childFolder.DisplayName.PadRight(28) 
                     + "\t" 
@@ -387,7 +387,7 @@ namespace RedmineMailService
             string now  = System.DateTime.Now.ToString("dddd, dd.MM.yyyy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
             email.Body = new MessageBody($"This email has been sent by using the EWS Managed API at {now}.");
 
-            await email.Send();
+            email.Send();
             System.Console.WriteLine("E-Mail sent...");
         } // End Sub TestSend 
 

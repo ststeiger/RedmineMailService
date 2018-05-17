@@ -17,7 +17,6 @@
     <PackageReference Include="MailKit" Version="2.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version="2.0.3" />
-    <PackageReference Include="Microsoft.Exchange.WebServices.NETStandard" Version="1.1.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="2.0.2" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.0.0" />
     <PackageReference Include="Microsoft.Win32.Registry" Version="4.4.0" />
@@ -25,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DasMulli.Win32.ServiceUtils\DasMulli.Win32.ServiceUtils.csproj" />
+    <ProjectReference Include="..\Microsoft.Exchange.WebServices.Data\Microsoft.Exchange.WebServices.Data.csproj" />
     <ProjectReference Include="..\RedmineAPI\RedmineAPI.csproj" />
   </ItemGroup>
 

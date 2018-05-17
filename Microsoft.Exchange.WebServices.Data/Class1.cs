@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ARSoft.Tools.Net
+namespace Microsoft.Exchange.WebServices.Data
 {
     public class Class1
     {

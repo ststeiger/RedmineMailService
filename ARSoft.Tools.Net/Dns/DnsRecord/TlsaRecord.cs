@@ -230,7 +230,7 @@ namespace ARSoft.Tools.Net.Dns
 
 				case TlsaSelector.SubjectPublicKeyInfo:
 					selectedBytes = SubjectPublicKeyInfoFactory.CreateSubjectPublicKeyInfo(DotNetUtilities.FromX509Certificate(certificate).GetPublicKey()).GetDerEncoded();
-					break;
+                    break;
 
 				default:
 					throw new NotSupportedException();
