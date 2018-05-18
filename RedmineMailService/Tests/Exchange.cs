@@ -338,7 +338,15 @@ namespace RedmineMailService
             // service.WebProxy
             service.PreAuthenticate = true;
             service.UseDefaultCredentials = false;
-            service.Credentials = new WebCredentials(RedmineMailService.Trash.UserData.Email, RedmineMailService.Trash.UserData.Password);
+            service.Credentials = new WebCredentials(Trash.UserData.Email, Trash.UserData.Password);
+
+            // Workaround: NTLM doesn't work...
+            // and then just set the correct header yourself.
+            byte[] bytes = System.Text.Encoding.ASCII.GetBytes($"{Trash.UserData.Email}:{Trash.UserData.Password}");
+            string headerValue = "Basic " + Convert.ToBase64String(bytes);
+            service.HttpHeaders.Add("Authorization", headerValue);
+
+
 
             Microsoft.Exchange.WebServices.Data.ITraceListener listener = new NoTrace();
             listener = null;
