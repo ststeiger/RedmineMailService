@@ -324,10 +324,18 @@ namespace RedmineMailService
         // openssl x509 -in foo.pem -inform PEM -out foo.crt
         // cert-sync "/root/Desktop/DO_NOT_TRUST_FiddlerRoot.pem"
         // cert-sync --user "/root/Desktop/DO_NOT_TRUST_FiddlerRoot.pem"
+
+        // WWW-Authenticate: Negotiate <!!!
+        // WWW-Authenticate: NTLM
+
+        // <t:TimeZoneDefinition Id="W. Europe Standard Time" />
+        // NTLM - Negotiate
         public static void ListFolders()
         {
             System.Console.WriteLine("start folder listing");
             ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
+
+            // service.WebProxy
 
             service.UseDefaultCredentials = false;
             service.Credentials = new WebCredentials(RedmineMailService.Trash.UserData.Email, RedmineMailService.Trash.UserData.Password);
