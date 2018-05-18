@@ -1,0 +1,71 @@
+﻿
+https://stackoverflow.com/questions/4629774/hide-div-on-blur
+http://cordb2016/ReportServer/Pages/ReportViewer.aspx?%2fRedmine%2fIssues&rs:Command=Render
+
+https://jsfiddle.net/KyleMit/mqcp7f3s/
+https://stackoverflow.com/questions/17714705/how-to-use-checkbox-inside-select-option
+
+
+
+https://blogs.msdn.microsoft.com/benjaminperkins/2014/05/05/make-your-own-ssl-certificate-for-testing-and-learning/
+https://blog.jayway.com/2014/09/03/creating-self-signed-certificates-with-makecert-exe-for-development/
+
+
+https://github.com/guardian/scribe/wiki/Plugins
+https://github.com/iDoRecall/comparisons/blob/master/JavaScript-WYSIWYG-editors.md
+
+
+https://www.codeproject.com/Articles/93301/Implementing-a-Multithreaded-HTTP-HTTPS-Debugging
+https://github.com/AdvancedHacker101/C-Sharp-Proxy-Server
+https://github.com/agabani/PassThroughProxy
+
+
+
+https://blog.jayway.com/2014/09/03/creating-self-signed-certificates-with-makecert-exe-for-development/
+
+makecert.exe ^
+-n "CN=CARoot" ^
+-r ^
+-pe ^
+-a sha512 ^
+-len 4096 ^
+-cy authority ^
+-sv CARoot.pvk ^
+CARoot.cer
+ 
+pvk2pfx.exe ^
+-pvk CARoot.pvk ^
+-spc CARoot.cer ^
+-pfx CARoot.pfx ^
+-po Test123
+
+
+
+The makecert.exe parameters:
+
+-n “CN=CARoot” ➜ Subject’s certificate name and must be formatted as the standard: “CN=Your CA Name Here”
+You can also add more than one in the -n parameter for example: “-n “CA=CARoot,O=My Organization,OU=Dev,C=Denmark”  and so on. Reference:
+CN = commonName (for example, “CN=My Root CA”)
+OU = organizationalUnitName (for example, “OU=Dev”)
+O = organizationName (for example, “O=Jayway”)
+L = localityName (for example, “L=San Francisco”)
+S = stateOrProvinceName (for example, “S=CA”)
+C = countryName (for example, “C=US”)
+-r ➜ Indicates that this certificate is self signed
+-pe ➜ The generated private key is exportable and can be included in the certificate
+-a sha512 ➜ We declare which signature algorithm we will be using
+(DO NOT use the sha1 algoritm, it is no longer secure)
+-len 4096 ➜ The generated key length in bits
+-cy authority ➜ Specifies that this is a certificate authority
+-sv CARoot.pvk ➜ The subject’s .pvk private key file
+CARoot.cer ➜ The certificate file
+Optional: install certificate directly into the Trusted Root CA store
+
+-sr LocalMachine ➜ The subject’s certificate store location
+-ss Root ➜ The certificate store name
+The pvk2pfx.exe parameters:
+
+-pvk CARoot.pvk ➜ The name of the .pvk file
+-spc CARoot.cer ➜ The name of the .cer file
+-pfx CARoot.pfx ➜ The name of the -pfx file
+-po Test123 ➜ The password for the .pfx file
