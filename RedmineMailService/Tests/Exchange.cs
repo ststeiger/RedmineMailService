@@ -27,7 +27,7 @@ namespace RedmineMailService
             ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
             service.Credentials = new WebCredentials(RedmineMailService.Trash.UserData.Email
                 , RedmineMailService.Trash.UserData.Password);
-
+            
             Microsoft.Exchange.WebServices.Data.ITraceListener listener = new NoTrace();
 
             if (listener != null)
@@ -336,7 +336,7 @@ namespace RedmineMailService
             ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
 
             // service.WebProxy
-
+            service.PreAuthenticate = true;
             service.UseDefaultCredentials = false;
             service.Credentials = new WebCredentials(RedmineMailService.Trash.UserData.Email, RedmineMailService.Trash.UserData.Password);
 

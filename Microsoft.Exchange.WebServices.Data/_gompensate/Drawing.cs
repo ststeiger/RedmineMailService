@@ -34,7 +34,7 @@ namespace System.Drawing
 // https://github.com/OfficeDev/ews-managed-api
 // from sherlock1982 
 // https://github.com/sherlock1982/ews-managed-api
-// to officedef/msft-default-repo with personal fixes 
+// to officedev/msft-default-repo with personal fixes 
 // https://github.com/OfficeDev/ews-managed-api
 
 // Fix: Novell.Directory.Ldap.NETStandard 
