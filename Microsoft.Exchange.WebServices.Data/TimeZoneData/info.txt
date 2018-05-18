@@ -24,3 +24,11 @@ In any case, I'm sure they were smoking something illegal together.
 https://docs.telerik.com/fiddler/KnowledgeBase/FiddlerScript/ModifyRequestOrResponse
 https://stackoverflow.com/questions/28326215/how-to-modify-a-request-in-fiddler
 https://www.youtube.com/watch?v=8bo5kXMAcV0
+
+
+
+Request-breakpoint:
+pbu + (CTRL + i)
+
+Response-breakpoint
+bpafter
