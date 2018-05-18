@@ -1,0 +1,26 @@
+﻿
+https://www.unicode.org/cldr/charts/latest/supplemental/zone_tzid.html
+https://stackoverflow.com/questions/4967903/linux-windows-timezone-mapping
+https://stackoverflow.com/questions/19695439/get-the-default-timezone-for-a-country-via-cultureinfo
+https://stackoverflow.com/questions/7908343/list-of-timezone-ids-for-use-with-findtimezonebyid-in-c
+
+
+Note that whoever implemented the timezone support in Windows was on drugs. 
+I'm not kidding you. Look at the timezone names. 
+Why is Central European time known as "Romance standard Time". 
+Romance? 
+What, because it includes Paris, or? 
+Roman Standard Time could have made sense a it also includes Rome, but Romance!?
+
+Also, in the registry the timezones are not organized under their id. 
+No, they are, insanely, organized under their display name! 
+Since that is localized, it means every timezone will be located under a different key in different translations of Windows!!! 
+So to find the right timezone, you have to look through all the timezone to see which has the correct id.
+
+I wonder if it is the same guy who designed this that decided that POSIX should reverse the sign on timezones, 
+so that -8 hours mean plus 8 hours. 
+In any case, I'm sure they were smoking something illegal together.
+
+https://docs.telerik.com/fiddler/KnowledgeBase/FiddlerScript/ModifyRequestOrResponse
+https://stackoverflow.com/questions/28326215/how-to-modify-a-request-in-fiddler
+https://www.youtube.com/watch?v=8bo5kXMAcV0

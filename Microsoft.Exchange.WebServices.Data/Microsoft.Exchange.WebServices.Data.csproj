@@ -9,6 +9,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="TimeZoneData\metaZones.xml" />
+    <None Remove="TimeZoneData\windowsZones.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="TimeZoneData\metaZones.xml" />
+    <EmbeddedResource Include="TimeZoneData\windowsZones.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="_gompensate\removed\AutoDiscover\DirectoryHelper.cs" />
   </ItemGroup>
 

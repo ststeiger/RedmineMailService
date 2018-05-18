@@ -208,6 +208,7 @@ namespace Microsoft.Exchange.WebServices.Data
         {
             this.name = reader.ReadAttributeValue(XmlAttributeNames.Name);
             this.id = reader.ReadAttributeValue(XmlAttributeNames.Id);
+            this.id = TimeZoneData.TimeZoneTranslator.TranslateRead(this.id);
 
             // EWS can return a TimeZone definition with no Id. Generate a new Id in this case.
             if (string.IsNullOrEmpty(this.id))
@@ -229,7 +230,8 @@ namespace Microsoft.Exchange.WebServices.Data
                 writer.WriteAttributeValue(XmlAttributeNames.Name, this.name);
             }
 
-            writer.WriteAttributeValue(XmlAttributeNames.Id, this.id);
+            string normValue = TimeZoneData.TimeZoneTranslator.TranslateWrite(this.id);
+            writer.WriteAttributeValue(XmlAttributeNames.Id, normValue);
         }
 
         /// <summary>
