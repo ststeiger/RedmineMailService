@@ -16,7 +16,9 @@ namespace RedmineMailService
 
 
         public static void Initialize()
-        { }
+        {
+            System.Net.ServicePointManager.ServerCertificateValidationCallback = CertificateValidationCallBack;
+        }
 
 /*
         public static bool Callback(
