@@ -128,25 +128,8 @@
         <option>Elephant 6</option>
         <option>Elephant 7</option>
     </select>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
+    
     <div style='position:fixed;bottom:0;left:0; background:lightgray;width:100%;'>
         About this SO Question:
         <a href='https://stackoverflow.com/q/17714705/1366033'>
@@ -155,7 +138,24 @@
     </div>
 
     <script>
-       
+
+        // https://stackoverflow.com/questions/8641729/how-to-avoid-the-need-for-ctrl-click-in-a-multi-select-box-using-javascript
+        var options = [].slice.call(document.querySelectorAll("option"));
+        
+        options.forEach(function (element)
+        {
+            // console.log("element", element);
+            element.addEventListener("mousedown", 
+                function (e)
+                {
+                    e.preventDefault();
+                    this.selected = !this.selected;
+                    return false;
+                }
+                , false
+            );
+        });
+        
     </script>
 
 </body>

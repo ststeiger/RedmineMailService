@@ -96,7 +96,7 @@
                 </select>
                 <div class="overSelect"></div>
             </div>
-            <div class="checkboxes hiddenContent">
+            <div class="checkboxes">
                 <label for="one">
                     <input type="checkbox" id="one" />First checkbox
                 </label>
@@ -108,9 +108,8 @@
                 </label>
             </div>
         </div>
-
-
-
+        
+        
         <div class="multiselect">
             <div class="selectBox" nonclick="showCheckboxes()">
                 <select>
@@ -118,15 +117,18 @@
                 </select>
                 <div class="overSelect"></div>
             </div>
-            <div class="checkboxes hiddenContent">
-                <label for="one">
-                    <input type="checkbox" id="one" />A checkbox
+            <div class="checkboxes">
+                <label for="All2">
+                    <input type="checkbox" id="All2" />Select All
                 </label>
-                <label for="two">
-                    <input type="checkbox" id="two" />B checkbox
+                <label for="A">
+                    <input type="checkbox" id="A" />A checkbox
                 </label>
-                <label for="three">
-                    <input type="checkbox" id="three" />C checkbox
+                <label for="B">
+                    <input type="checkbox" id="B" />B checkbox
+                </label>
+                <label for="C">
+                    <input type="checkbox" id="C" />C checkbox
                 </label>
             </div>
         </div>
@@ -134,102 +136,68 @@
 
 
     <script type="text/javascript">
-
-
-
+        
         function showCheckboxes(e)
         {
-            checkboxes = this.parentElement.getElementsByClassName("hiddenContent")[0];
-            
-            var expanded = checkboxes.style.display === "block";
-
-            if (!expanded)
-            {
+            var checkboxes = this.parentElement.getElementsByClassName("checkboxes")[0];
+            if (checkboxes.style.display !== "block")
                 checkboxes.style.display = "block";
-                expanded = true;
-            }
             else
-            {
                 checkboxes.style.display = "none";
-                expanded = false;
-            }
+            
+            e.stopPropagation();
         }
-
+        
         // On the click on the span the div should be toggled
         // On the body click the div should be hidden
         // On the click on the div, the event should not be propagated to the body
         // On the click on the span the event should not be propagated to the body
-
-        function foo()
-        {
-            console.log("foo");
-        }
-
-
         function autorun()
         {
-            console.log("autorun")
+            console.log("autorun");
             var selectBoxes = [].slice.call(document.querySelectorAll(".selectBox"));
-
             
-                //[].slice.call(document.querySelectorAll(".selectBox + .hiddenContent"));
-            // console.log(selectBoxes);
-
-
             selectBoxes.forEach(function (element)
             {
-                console.log("element", element);
+                // console.log("element", element);
                 element.addEventListener("click", showCheckboxes, false);
             });
-
+            
+            
             document.body.addEventListener("click", function ()
             {
-                var hiddenContent = [].slice.call(document.querySelectorAll(".multiselect .hiddenContent"));
-                hiddenContent.forEach(function (element)
-                {
-                    console.log("element", element);
-                    element.style.display = "none";
-                });
+                var checkboxes = [].slice.call(document.querySelectorAll(".multiselect .checkboxes"));
+                checkboxes.forEach(
+                    function (element)
+                    {
+                        // console.log("element", element);
+                        element.style.display = "none";
+                    }
+                );
 
             }, false);
-
-
-
-            var hc = [].slice.call(document.querySelectorAll(".multiselect .hiddenContent"));
+            
+            
+            var hc = [].slice.call(document.querySelectorAll(".multiselect .checkboxes"));
             hc.forEach(function (element)
             {
-                console.log("element", element);
-                element.addEventListener("click", function (e)
-                {
-                    e.stopPropagation();
-                }, false);
+                // console.log("element", element);
+                element.addEventListener("click", 
+                    function (e)
+                    {
+                        e.stopPropagation();
+                    }
+                    , false
+                );
             });
-
-            /*
-            $('.selectBox').click(function (e)
-            {
-                $('.hiddenContent').toggle();
-                e.stopPropagation();
-            });
-
-            $(document.body).click(function ()
-            {
-                $('.hiddenContent').hide();
-            });
-
-
-            $('.hiddenContent').click(function (e)
-            {
-                e.stopPropagation();
-            });
-            */
+            
         }
-
-
+        
+        
         if (document.addEventListener) document.addEventListener("DOMContentLoaded", autorun, false);
         else if (document.attachEvent) document.attachEvent("onreadystatechange", autorun);
         else window.onload = autorun;
-
+        
         /*
         function autorun()
         {
@@ -238,34 +206,30 @@
         if (window.addEventListener) window.addEventListener("load", autorun, false);
         else if (window.attachEvent) window.attachEvent("onload", autorun);
         else window.onload = autorun;
-
-
-
+        */
+        
+        /*
         $(document).ready(function ()
         {
             $('.openHide').click(function (e)
             {
-                $('.hiddenContent').toggle();
+                $('.checkboxes').toggle();
                 e.stopPropagation();
             });
 
             $(document.body).click(function ()
             {
-                $('.hiddenContent').hide();
+                $('.checkboxes').hide();
             });
 
-            $('.hiddenContent').click(function (e)
+            $('.checkboxes').click(function (e)
             {
                 e.stopPropagation();
             });
         });
         */
-
+        
     </script>
-
-
-
-
-
+    
 </body>
 </html>
