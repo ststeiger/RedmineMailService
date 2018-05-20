@@ -114,23 +114,33 @@ namespace RedmineMailService
             // ListTimeZones();
 
             CertificateCallback.Initialize();
-            
+            Titanium.Web.Proxy.Examples.Basic.ProxyTestController controller = Titanium.Web.Proxy.Examples.Basic.ProxyServerProgram.Start();
+
+
+            // System.Console.WriteLine("Hit any key to exit..");
+            // System.Console.WriteLine();
+            // System.Console.Read();
+
+            // controller.Stop();
+
             /*
             using (System.Net.WebClient wc = new System.Net.WebClient())
             {
+                // wc.Proxy = new System.Net.WebProxy("127.0.0.1", 8000);
+
+                // string text = wc.DownloadString("http://sps.ch");
                 string text = wc.DownloadString("https://www.whatismybrowser.com/detect/what-is-my-user-agent");
+
                 System.Console.WriteLine(text);
             }
             */
 
             TestMailReader.Test();
             
-            
-            
-            
             System.Console.WriteLine(System.Environment.NewLine);
             System.Console.WriteLine(" --- Press any key to continue --- ");
             System.Console.ReadKey();
+            controller.Stop();
         } // End Sub Main 
 
 
