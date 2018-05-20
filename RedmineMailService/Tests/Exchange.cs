@@ -335,6 +335,10 @@ namespace RedmineMailService
             System.Console.WriteLine("start folder listing");
             ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
 
+
+            service.WebProxy = new System.Net.WebProxy("127.0.0.1", 8000);
+
+
             // service.WebProxy
             service.PreAuthenticate = true;
             service.UseDefaultCredentials = false;

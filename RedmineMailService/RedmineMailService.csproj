@@ -24,6 +24,7 @@
     <ProjectReference Include="..\DasMulli.Win32.ServiceUtils\DasMulli.Win32.ServiceUtils.csproj" />
     <ProjectReference Include="..\Microsoft.Exchange.WebServices.Data\Microsoft.Exchange.WebServices.Data.csproj" />
     <ProjectReference Include="..\RedmineAPI\RedmineAPI.csproj" />
+    <ProjectReference Include="..\Titanium.Web.Proxy\Titanium.Web.Proxy.csproj" />
   </ItemGroup>
 
 </Project>
