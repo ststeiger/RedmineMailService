@@ -344,9 +344,9 @@ namespace RedmineMailService
             
             // Workaround: NTLM doesn't work...
             // and then just set the correct header yourself.
-            byte[] bytes = System.Text.Encoding.ASCII.GetBytes($"{Trash.UserData.Email}:{Trash.UserData.Password}");
-            string headerValue = "Basic " + Convert.ToBase64String(bytes);
-            service.HttpHeaders.Add("Authorization", headerValue);
+            // byte[] bytes = System.Text.Encoding.ASCII.GetBytes($"{Trash.UserData.Email}:{Trash.UserData.Password}");
+            // string headerValue = "Basic " + Convert.ToBase64String(bytes);
+            // service.HttpHeaders.Add("Authorization", headerValue);
             
             
             Microsoft.Exchange.WebServices.Data.ITraceListener listener = new NoTrace();

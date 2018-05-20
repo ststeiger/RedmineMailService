@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using Org.BouncyCastle.Asn1;
@@ -146,8 +147,14 @@ namespace Titanium.Web.Proxy.Network.Certificate
             x509Certificate.PrivateKey = DotNetUtilities.ToRSA(rsaparams);
 #else
             var x509Certificate = withPrivateKey(certificate, rsaparams);
-            x509Certificate.FriendlyName = subjectName;
+            if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                x509Certificate.FriendlyName = subjectName;    
+            }
+            
 #endif
+
+            doNotSetFriendlyName = false;
 
             if (!doNotSetFriendlyName)
             {
