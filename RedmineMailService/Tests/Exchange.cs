@@ -1,6 +1,5 @@
 ﻿
 using System;
-using System.Threading.Tasks;
 using Microsoft.Exchange.WebServices.Data;
 
 
@@ -334,24 +333,22 @@ namespace RedmineMailService
         {
             System.Console.WriteLine("start folder listing");
             ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
-
-
+            
             service.WebProxy = new System.Net.WebProxy("127.0.0.1", 8000);
-
-
+            
+            
             // service.WebProxy
             service.PreAuthenticate = true;
             service.UseDefaultCredentials = false;
             service.Credentials = new WebCredentials(Trash.UserData.Email, Trash.UserData.Password);
-
+            
             // Workaround: NTLM doesn't work...
             // and then just set the correct header yourself.
             byte[] bytes = System.Text.Encoding.ASCII.GetBytes($"{Trash.UserData.Email}:{Trash.UserData.Password}");
             string headerValue = "Basic " + Convert.ToBase64String(bytes);
             service.HttpHeaders.Add("Authorization", headerValue);
-
-
-
+            
+            
             Microsoft.Exchange.WebServices.Data.ITraceListener listener = new NoTrace();
             listener = null;
             
@@ -440,8 +437,8 @@ namespace RedmineMailService
             email.Send();
             System.Console.WriteLine("E-Mail sent...");
         } // End Sub TestSend 
-
-
+        
+        
         private static bool RedirectionUrlValidationCallback(string redirectionUrl)
         {
             // The default for the validation callback is to reject the URL.
@@ -459,9 +456,9 @@ namespace RedmineMailService
 
             return result;
         } // End Function RedirectionUrlValidationCallback 
-
-
+        
+        
     } // End Class 
-
-
+    
+    
 } // End Namespace 

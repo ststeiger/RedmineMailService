@@ -14,7 +14,7 @@ namespace Titanium.Web.Proxy.Examples.Basic
         public static ProxyTestController Start()
         {
             // fix console hang due to QuickEdit mode
-            ConsoleHelper.DisableQuickEditMode();
+            // ConsoleHelper.DisableQuickEditMode();
 
             // Start proxy controller
             controller.StartProxy();

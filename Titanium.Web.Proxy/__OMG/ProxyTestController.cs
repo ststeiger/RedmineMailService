@@ -286,6 +286,8 @@ namespace Titanium.Web.Proxy.Examples.Basic
         /// <param name="e"></param>
         public Task OnCertificateValidation(object sender, CertificateValidationEventArgs e)
         {
+            e.IsValid = true;
+            
             // set IsValid to true/false based on Certificate Errors
             if (e.SslPolicyErrors == SslPolicyErrors.None)
             {
