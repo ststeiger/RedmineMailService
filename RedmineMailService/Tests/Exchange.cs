@@ -308,6 +308,24 @@ namespace RedmineMailService
 
         } // End Sub FindUnreadEmail 
 
+
+        public static void SetBasicHeader(ExchangeService ews, string username, string password)
+        {
+            byte[] bytes = System.Text.Encoding.ASCII.GetBytes($"{username}:{password}");
+            string headerValue = "Basic " + System.Convert.ToBase64String(bytes);
+            ews.HttpHeaders.Add("Authorization", headerValue);
+        }
+
+
+        public static void SetNtlmHeader(ExchangeService ews, string username, string password)
+        {
+            var cache = new System.Net.CredentialCache();
+            cache.Add(ews.Url, "NTLM", new System.Net.NetworkCredential(username, password));
+            ews.Credentials = cache;
+        }
+
+
+
         // https://blogs.msdn.microsoft.com/fiddler/2011/12/10/revisiting-fiddler-and-win8-immersive-applications/
 
         // mono mozroots.exe --import --sync
@@ -341,14 +359,13 @@ namespace RedmineMailService
             service.PreAuthenticate = true;
             service.UseDefaultCredentials = false;
             service.Credentials = new WebCredentials(Trash.UserData.Email, Trash.UserData.Password);
-            
+
             // Workaround: NTLM doesn't work...
             // and then just set the correct header yourself.
-            // byte[] bytes = System.Text.Encoding.ASCII.GetBytes($"{Trash.UserData.Email}:{Trash.UserData.Password}");
-            // string headerValue = "Basic " + Convert.ToBase64String(bytes);
-            // service.HttpHeaders.Add("Authorization", headerValue);
-            
-            
+            // SetBasicHeader(service, Trash.UserData.Email, Trash.UserData.Password);
+            // SetNtlmHeader(service, Trash.UserData.Email, Trash.UserData.Password);
+
+
             Microsoft.Exchange.WebServices.Data.ITraceListener listener = new NoTrace();
             listener = null;
             

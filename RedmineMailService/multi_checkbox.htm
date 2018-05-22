@@ -11,7 +11,7 @@
     <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
     <meta http-equiv="pragma" content="no-cache" />
 
-    <title>WYSIWYG</title>
+    <title>multi-checkbox IE compat</title>
 
     <!--
     <meta name="viewport" content="width=device-width, initial-scale=1.00, minimum-scale=1.00, maximum-scale=1.00" />
@@ -39,7 +39,6 @@
 
 
     <style type="text/css" media="all">
-
     </style>
 
 
@@ -47,6 +46,9 @@
 
     </script>
 
+    <!--
+    https://stackoverflow.com/questions/17714705/how-to-use-checkbox-inside-select-option
+    -->
 
 </head>
 <body>
@@ -108,8 +110,8 @@
                 </label>
             </div>
         </div>
-        
-        
+
+
         <div class="multiselect">
             <div class="selectBox" nonclick="showCheckboxes()">
                 <select>
@@ -136,7 +138,7 @@
 
 
     <script type="text/javascript">
-        
+
         function showCheckboxes(e)
         {
             var checkboxes = this.parentElement.getElementsByClassName("checkboxes")[0];
@@ -144,10 +146,10 @@
                 checkboxes.style.display = "block";
             else
                 checkboxes.style.display = "none";
-            
+
             e.stopPropagation();
         }
-        
+
         // On the click on the span the div should be toggled
         // On the body click the div should be hidden
         // On the click on the div, the event should not be propagated to the body
@@ -156,14 +158,14 @@
         {
             console.log("autorun");
             var selectBoxes = [].slice.call(document.querySelectorAll(".selectBox"));
-            
+
             selectBoxes.forEach(function (element)
             {
                 // console.log("element", element);
                 element.addEventListener("click", showCheckboxes, false);
             });
-            
-            
+
+
             document.body.addEventListener("click", function ()
             {
                 var checkboxes = [].slice.call(document.querySelectorAll(".multiselect .checkboxes"));
@@ -176,13 +178,13 @@
                 );
 
             }, false);
-            
-            
+
+
             var hc = [].slice.call(document.querySelectorAll(".multiselect .checkboxes"));
             hc.forEach(function (element)
             {
                 // console.log("element", element);
-                element.addEventListener("click", 
+                element.addEventListener("click",
                     function (e)
                     {
                         e.stopPropagation();
@@ -190,14 +192,14 @@
                     , false
                 );
             });
-            
+
         }
-        
-        
+
+
         if (document.addEventListener) document.addEventListener("DOMContentLoaded", autorun, false);
         else if (document.attachEvent) document.attachEvent("onreadystatechange", autorun);
         else window.onload = autorun;
-        
+
         /*
         function autorun()
         {
@@ -207,7 +209,7 @@
         else if (window.attachEvent) window.attachEvent("onload", autorun);
         else window.onload = autorun;
         */
-        
+
         /*
         $(document).ready(function ()
         {
@@ -228,8 +230,8 @@
             });
         });
         */
-        
+
     </script>
-    
+
 </body>
 </html>

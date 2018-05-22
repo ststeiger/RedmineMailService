@@ -11,7 +11,7 @@
     <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
     <meta http-equiv="pragma" content="no-cache" />
 
-    <title>WYSIWYG</title>
+    <title>multi-checkbox select</title>
 
     <!--
     <meta name="viewport" content="width=device-width, initial-scale=1.00, minimum-scale=1.00, maximum-scale=1.00" />
@@ -37,29 +37,25 @@
         }
     </style>
 
-    <!-- 
+    <!--
     <link id="" rel="stylesheet" type="text/css" href="https://fiddle.jshell.net/css/embed/embed-light.css?update_23_04_2018_1">
-        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.css">
-       -->
-
-<!--
+    -->
+    <!--  -->
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/paper/bootstrap.min.css">
-
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.css">
 
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
--->
+
 
 
     <style type="text/css" media="all">
-        
         select:focus, select.form-control:focus {
             -webkit-box-shadow: inset 0 -2px 0 #2196f3;
             box-shadow: inset 0 -2px 0 #2196f3;
             background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAMAAACelLz8AAAAJ1BMV…3X6xt0QL6JpZWq30pdvdadme+0PMdzvHm8YThHcT1H7K0BtOMDniZhWOgAAAAASUVORK5CYII=);
         }
-        
-        option 
-        {
+
+        option {
             font-weight: normal;
             display: block;
             white-space: pre;
@@ -67,16 +63,15 @@
             padding: 0px 2px 1px;
         }
 
-       /* 
+        /*
                 option:checked {
                     background: red linear-gradient(0deg, red 0%, red 100%);
                 }
         */
-        
-                select[multiple]:focus option:checked {
-                    background: red linear-gradient(0deg, red 0%, red 100%);
-                }
-                
+
+        select[multiple]:focus option:checked {
+            background: red linear-gradient(0deg, red 0%, red 100%);
+        }
     </style>
 
 
@@ -86,11 +81,13 @@
 
     </script>
 
-
+    <!--
+    https://jsfiddle.net/KyleMit/mqcp7f3s/
+    -->
 
 </head>
 <body>
-   
+
 
     <style type="text/css" media="all">
         body {
@@ -153,8 +150,8 @@
         <option>Elephant 6</option>
         <option>Elephant 7</option>
     </select>
-    
-    
+
+
     <div style='position:fixed;bottom:0;left:0; background:lightgray;width:100%;'>
         About this SO Question:
         <a href='https://stackoverflow.com/q/17714705/1366033'>
@@ -166,21 +163,22 @@
 
         // https://stackoverflow.com/questions/8641729/how-to-avoid-the-need-for-ctrl-click-in-a-multi-select-box-using-javascript
         var options = [].slice.call(document.querySelectorAll("option"));
-        
+
         options.forEach(function (element)
         {
             // console.log("element", element);
-            element.addEventListener("mousedown", 
+            element.addEventListener("mousedown",
                 function (e)
                 {
                     e.preventDefault();
+                    element.parentElement.focus();
                     this.selected = !this.selected;
                     return false;
                 }
                 , false
             );
         });
-        
+
     </script>
 
 </body>
