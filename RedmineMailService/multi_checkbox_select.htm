@@ -35,29 +35,20 @@
             box-sizing: border-box;
             #white-space-collapse: discard;
         }
-
-
-
-        
     </style>
 
-    <!-- 
+    <!--
     <link id="" rel="stylesheet" type="text/css" href="https://fiddle.jshell.net/css/embed/embed-light.css?update_23_04_2018_1">
     -->
-    
-    
-    <!--      
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/paper/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.css">
+    <!--
+     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/paper/bootstrap.min.css">
+     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.css">
 
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
-   -->
+    -->
 
 
     <style type="text/css" media="all">
-
-
-
         h3, .h3 {
             font-size: 24px;
         }
@@ -78,8 +69,7 @@
 
 
 
-        select
-        {
+        select {
             width: 400px;
             font-size: 16px;
             line-height: 1.5;
@@ -92,24 +82,50 @@
             border-bottom-color: rgb(204, 204, 204);
             border-bottom-style: solid;
             border-bottom-width: 1px;
+            padding-bottom: 1mm;
+            padding-right: 1mm;
         }
-        
-        
-        select:focus {
-            -webkit-box-shadow: inset 0 -2px 0 #2196f3;
-            box-shadow: inset 0 -2px 0 #2196f3;
-            background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAMAAACelLz8AAAAJ1BMV…3X6xt0QL6JpZWq30pdvdadme+0PMdzvHm8YThHcT1H7K0BtOMDniZhWOgAAAAASUVORK5CYII=);
-            transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-        }
+
+
+            select:focus {
+                -webkit-box-shadow: inset 0 -2px 0 #2196f3;
+                box-shadow: inset 0 -2px 0 #2196f3;
+                background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAMAAACelLz8AAAAJ1BMV…3X6xt0QL6JpZWq30pdvdadme+0PMdzvHm8YThHcT1H7K0BtOMDniZhWOgAAAAASUVORK5CYII=);
+                transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+            }
 
 
         option:checked {
-            background: red linear-gradient(0deg, blue 0%, red 100%);
+            #background: red linear-gradient(0deg, blue 0%, red 100%);
+            #background: linear-gradient(rgba(200,200,200, 1.0), rgba(200,200,200, 1.0));
+            #background: linear-gradient(#c8c8c8, #c8c8c8);
         }
 
         select[multiple]:focus option:checked {
-            background: green linear-gradient(0deg, yellow 0%, lightseagreen 100%);
+            #background: green linear-gradient(0deg, yellow 0%, lightseagreen 100%);
+            #background: linear-gradient(#FAFAFA, #F4F4F4 40%, #E5E5E5);
+            #background: linear-gradient(#779126, #779126 40%, #779126);
+            #background: linear-gradient(#d6d6d6, #d6d6d6);
+            #background: linear-gradient(#1E90FF, #1E90FF);
+            #background: linear-gradient(rgba(30,144,255, 1.0), rgba(30,144,255, 1.0));
+            #background: linear-gradient(rgba(30,144,255, 0.5), rgba(30,144,255, 0.5));
         }
+
+
+        @font-face {
+            font-family: 'FontAwesome';
+            src: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/fonts/fontawesome-webfont.eot?v=4.7.0');
+            src: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/fonts/fontawesome-webfont.eot?#iefix&v=4.7.0') format('embedded-opentype'), url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/fonts/fontawesome-webfont.woff2?v=4.7.0') format('woff2'), url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/fonts/fontawesome-webfont.woff?v=4.7.0') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/fonts/fontawesome-webfont.ttf?v=4.7.0') format('truetype'), url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/fonts/fontawesome-webfont.svg?v=4.7.0#fontawesomeregular') format('svg');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+
+        /*
+            FA: 250 - 11
+            F4: 244 - 15
+            E5: 229
+        */
 
         option {
             font-weight: normal;
