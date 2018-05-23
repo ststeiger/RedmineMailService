@@ -35,24 +35,80 @@
             box-sizing: border-box;
             #white-space-collapse: discard;
         }
+
+
+
+        
     </style>
 
-    <!--
+    <!-- 
     <link id="" rel="stylesheet" type="text/css" href="https://fiddle.jshell.net/css/embed/embed-light.css?update_23_04_2018_1">
     -->
-    <!--  -->
+    
+    
+    <!--      
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/paper/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.css">
 
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
-
+   -->
 
 
     <style type="text/css" media="all">
-        select:focus, select.form-control:focus {
+
+
+
+        h3, .h3 {
+            font-size: 24px;
+        }
+
+        h1, .h1, h2, .h2, h3, .h3 {
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+            font-weight: 500;
+            line-height: 1.1;
+        }
+
+        h3, .h3 {
+            font-size: 34px;
+        }
+
+
+
+        select
+        {
+            width: 400px;
+            font-size: 16px;
+            line-height: 1.5;
+            border: 0;
+            border-radius: 0;
+            padding-left: 0;
+            -webkit-box-shadow: inset 0 -1px 0 #ddd;
+            box-shadow: inset 0 -1px 0 #ddd;
+            outline: 0;
+            border-bottom-color: rgb(204, 204, 204);
+            border-bottom-style: solid;
+            border-bottom-width: 1px;
+        }
+        
+        
+        select:focus {
             -webkit-box-shadow: inset 0 -2px 0 #2196f3;
             box-shadow: inset 0 -2px 0 #2196f3;
             background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAMAAACelLz8AAAAJ1BMV…3X6xt0QL6JpZWq30pdvdadme+0PMdzvHm8YThHcT1H7K0BtOMDniZhWOgAAAAASUVORK5CYII=);
+            transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+        }
+
+
+        option:checked {
+            background: red linear-gradient(0deg, blue 0%, red 100%);
+        }
+
+        select[multiple]:focus option:checked {
+            background: green linear-gradient(0deg, yellow 0%, lightseagreen 100%);
         }
 
         option {
@@ -68,10 +124,11 @@
                     background: red linear-gradient(0deg, red 0%, red 100%);
                 }
         */
-
+        /*
         select[multiple]:focus option:checked {
             background: red linear-gradient(0deg, red 0%, red 100%);
         }
+        */
     </style>
 
 
