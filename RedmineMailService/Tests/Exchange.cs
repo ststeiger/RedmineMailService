@@ -215,8 +215,7 @@ namespace RedmineMailService
                 service.TraceEnabled = true;
             } // End if (listener != null) 
 
-            service.Url = new System.Uri("https://webmail.cor-management.ch/ews/exchange.asmx");
-            // service.AutodiscoverUrl(RedmineMailService.Trash.UserData.Email, RedirectionUrlValidationCallback);
+            service.AutodiscoverUrl(RedmineMailService.Trash.UserData.Email, RedirectionUrlValidationCallback);
 
             try
             {
@@ -378,10 +377,10 @@ namespace RedmineMailService
 
             service.TraceFlags = TraceFlags.All;
             service.TraceEnabled = true;
-            
-            // service.Url = new System.Uri("https://webmail.cor-management.ch/ews/exchange.asmx");
-            // nslookup -type=srv _autodiscover._tcp.cor-management.ch
-            // nslookup -type=srv _autodiscover._tcp.cor.local
+
+            // service.Url = new System.Uri("https://webmail.somedomain.com/ews/exchange.asmx");
+            // nslookup -type=srv _autodiscover._tcp.somedomain.com
+            // nslookup -type=srv _autodiscover._tcp.somedomain.local
             service.AutodiscoverUrl(RedmineMailService.Trash.UserData.Email, RedirectionUrlValidationCallback);
 
             try

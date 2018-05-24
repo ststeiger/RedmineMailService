@@ -9,13 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DasMulli.Win32.ServiceUtils
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RedmineAPI", "RedmineAPI\RedmineAPI.csproj", "{D5A225A6-1956-4D10-903A-BF2669BDBF1C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ARSoft.Tools.Net", "ARSoft.Tools.Net\ARSoft.Tools.Net.csproj", "{6D09F3D0-2A27-4613-86AA-7BB9306170B9}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BouncyCastle", "BouncyCastle\BouncyCastle.csproj", "{F2842BD5-3212-4164-8C03-0A7BCDA4E819}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Exchange.WebServices.Data", "Microsoft.Exchange.WebServices.Data\Microsoft.Exchange.WebServices.Data.csproj", "{E7E21FA3-DD30-4D62-A730-298190E19488}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Titanium.Web.Proxy", "Titanium.Web.Proxy\Titanium.Web.Proxy.csproj", "{2EF37724-E6D6-4E27-8AB3-C9EC2B30BA10}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Titanium.Web.Proxy", "Titanium.Web.Proxy\Titanium.Web.Proxy.csproj", "{2EF37724-E6D6-4E27-8AB3-C9EC2B30BA10}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +33,6 @@ Global
 		{D5A225A6-1956-4D10-903A-BF2669BDBF1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5A225A6-1956-4D10-903A-BF2669BDBF1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D5A225A6-1956-4D10-903A-BF2669BDBF1C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6D09F3D0-2A27-4613-86AA-7BB9306170B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6D09F3D0-2A27-4613-86AA-7BB9306170B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6D09F3D0-2A27-4613-86AA-7BB9306170B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6D09F3D0-2A27-4613-86AA-7BB9306170B9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F2842BD5-3212-4164-8C03-0A7BCDA4E819}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F2842BD5-3212-4164-8C03-0A7BCDA4E819}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F2842BD5-3212-4164-8C03-0A7BCDA4E819}.Release|Any CPU.ActiveCfg = Release|Any CPU

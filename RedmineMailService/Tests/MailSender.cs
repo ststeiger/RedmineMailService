@@ -33,14 +33,14 @@ namespace RedmineMailService
                     mail.Body = "Test";
 
 
-                    // mail.From = new System.Net.Mail.MailAddress("hartmann@cor-management.ch", "Thomas Hartmann");
+                    // mail.From = new System.Net.Mail.MailAddress("somebody@friends.com", "SomeBody");
                     mail.From = new System.Net.Mail.MailAddress(RedmineMailService.Trash.UserData.info, "COR ServiceDesk");
 
                     
 
                     mail.To.Add(new System.Net.Mail.MailAddress(RedmineMailService.Trash.UserData.Email, "A"));
-                    // mail.To.Add(new System.Net.Mail.MailAddress("hartmann@cor-management.ch", "B"));
-                    // mail.To.Add(new System.Net.Mail.MailAddress("rico.luder@cor-management.ch", "B"));
+                    // mail.To.Add(new System.Net.Mail.MailAddress("user1@friends.com", "B"));
+                    // mail.To.Add(new System.Net.Mail.MailAddress("user2@friends.com", "B"));
                     // mail.To.Add(new System.Net.Mail.MailAddress(RedmineMailService.Trash.UserData.info, "ServiceDesk"));
 
 
