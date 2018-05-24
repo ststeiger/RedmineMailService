@@ -379,10 +379,10 @@ namespace RedmineMailService
             service.TraceFlags = TraceFlags.All;
             service.TraceEnabled = true;
             
-            service.Url = new System.Uri("https://webmail.cor-management.ch/ews/exchange.asmx");
+            // service.Url = new System.Uri("https://webmail.cor-management.ch/ews/exchange.asmx");
             // nslookup -type=srv _autodiscover._tcp.cor-management.ch
             // nslookup -type=srv _autodiscover._tcp.cor.local
-            // service.AutodiscoverUrl(RedmineMailService.Trash.UserData.Email, RedirectionUrlValidationCallback);
+            service.AutodiscoverUrl(RedmineMailService.Trash.UserData.Email, RedirectionUrlValidationCallback);
 
             try
             {
