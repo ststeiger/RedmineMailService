@@ -167,7 +167,7 @@
             padding: 15px;
         }
 
-        .select-checkbox option:before {
+        .select-checkbox option::before {
             content: "\2610";
             width: 1.3em;
             text-align: center;
@@ -191,8 +191,9 @@
         }
     </style>
 
-
+    <b></b>
     <h3>Unicode</h3>
+    <!-- IE doesn't allow pseude-selector on input elements, and also doesn't allow add other tags inside or before option... -->
     <select multiple="multiple" class="form-control select-checkbox" size="5">
         <option>Dog</option>
         <option>Cat</option>
@@ -244,8 +245,20 @@
                 function (e)
                 {
                     e.preventDefault();
-                    element.parentElement.focus();
+                    var selectBox = element.parentElement;
+                    var scrollPos = selectBox.scrollTop;
+
+                    selectBox.focus();
+
                     this.selected = !this.selected;
+
+                    // Reset scroll-position...
+                    window.setTimeout(function ()
+                    {
+                        selectBox.scrollTop = scrollPos;
+                    }, 0)
+
+
                     return false;
                 }
                 , false

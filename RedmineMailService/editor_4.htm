@@ -40,12 +40,10 @@
 
 
     <style>
-        body 
-        {
+        body {
             font-family: Verdana;
             font-size: 18px;
         }
-
     </style>
 
     <script>
@@ -97,8 +95,8 @@
         // https://developer.mozilla.org/en-US/docs/Web/API/Document/execCommand
         // https://codepen.io/netsi1964/full/QbLLGW/
         // https://w3c.github.io/editing/execCommand.html
-        // window.clipboardData.getData('Text') 
-        // JavaScript document.execCommand('copy') 
+        // window.clipboardData.getData('Text')
+        // JavaScript document.execCommand('copy')
 
         function removeFormat(me)
         {
@@ -188,7 +186,7 @@
 
 
         // https://stackoverflow.com/questions/16529316/javascript-document-execcommand-own-tags
-        
+
         function custom(me)
         {
             var commandName = "insertHTML";
@@ -196,12 +194,12 @@
 
             // For commands which require an input argument - Specify null if no argument is needed.
 
-            // but... this strips all existing tags from the selection! 
-            // Potential problem: This removes all newlines from the selected text. 
-            //var valueArgument = "<span class='own-class'>" + document.getSelection() + "</span>"; 
+            // but... this strips all existing tags from the selection!
+            // Potential problem: This removes all newlines from the selected text.
+            //var valueArgument = "<span class='own-class'>" + document.getSelection() + "</span>";
             var valueArgument = getSelectionHtml();
             alert(valueArgument);
-            valueArgument = "<span class='own-class'>" + valueArgument + "</span>"; 
+            valueArgument = "<span class='own-class'>" + valueArgument + "</span>";
 
             // execCommand() will affect the currently active editable element.
             document.execCommand(commandName, showDefaultUI, valueArgument);
@@ -264,7 +262,7 @@
         {
             //if (node.childNodes.length > 0)
             //    return node.firstChild;
-            
+
             if (node.nextSibling)
                 return node.nextSibling;
 
@@ -279,7 +277,7 @@
                 }
                 else
                     break; // return null;
-            } // Whend 
+            } // Whend
 
             return null;
         }
@@ -307,7 +305,7 @@
 
             //if (ele.children.length > 0)
             //    return ele.firstElementChild;
-            
+
             if (ele.nextElementSibling)
                 return ele.nextElementSibling;
 
@@ -322,14 +320,14 @@
                 }
                 else
                     break; // return null;
-            } // Whend 
+            } // Whend
 
             return null;
         }
 
 
 
-        
+
         // https://javascript.info/dom-navigation
         // https://stackoverflow.com/questions/7935689/what-is-the-difference-between-children-and-childnodes-in-javascript
         // In a node tree, the top node is called the root (or root node)
@@ -354,7 +352,7 @@
             var el = ele;
             // debugger;
 
-            // while el is descendant of some container 
+            // while el is descendant of some container
             // document.body.contains(document.getElementById("lol"))
             while (el != null && document.body.contains(el))
             {
@@ -368,7 +366,7 @@
                 }
 
                 while (true)
-                { 
+                {
                     if (el.parentElement)
                     {
                         if (el.parentElement.nextElementSibling)
@@ -386,7 +384,7 @@
                     }
                 }
 
-                if(el == null)
+                if (el == null)
                     break;
 
                 //if (el.children.length != 0)
@@ -418,14 +416,13 @@
         function insertHtmlBeforeSelection(html)
         {
             console.log("before")
-
             m++;
             if (window.getSelection)
             {
 
                 var sel = window.getSelection();
                 var range = sel.getRangeAt(0);
-                
+
                 var frag = document.createDocumentFragment();
 
                 // frag.innerHTML = html;
@@ -439,7 +436,7 @@
                 {
                     frag.appendChild(child);
                 }
-                
+
 
                 range.insertNode(frag);
             } else if (document.selection && document.selection.createRange)
@@ -476,16 +473,16 @@
                     // Range.createContextualFragment() would be useful here but is
                     // non-standard and not supported in all browsers (IE9, for one)
 
-                    
+
                     var el = document.createElement("div");
                     el.innerHTML = html;
-                    
+
                     var frag = document.createDocumentFragment(), node, lastNode;
                     while ((node = el.firstChild))
                     {
                         lastNode = frag.appendChild(node);
                     }
-                    
+
                     range.insertNode(frag);
 
                     // Preserve the selection
@@ -507,7 +504,7 @@
                 expandedSelRange.select();
             }
         }
-        
+
 
         function replaceSelectionHtml(before, after, cleanUp)
         {
@@ -525,9 +522,9 @@
 
                 var sel = window.getSelection();
                 var range = sel.getRangeAt(0);
-                
+
                 range.deleteContents();
-                
+
                 var temp = document.createElement("div");
                 temp.innerHTML = html;
 
@@ -543,7 +540,7 @@
                 {
                     range.setStartBefore(lastNode);
                     range.setEndAfter(lastNode);
-                    
+
                     // range.setStartAfter(null);
                     // range.setEndBefore(null);
 
@@ -579,7 +576,7 @@
         {
             if (before != null)
                 insertHtmlBeforeSelection(before)
-            
+
             if (after != null) insertHtmlAfterSelection(after)
         }
 
@@ -618,38 +615,40 @@
 
         function inserHtmlBeforeAfter(before, after)
         {
+            debugger;
+
             if (before != null)
 
 
-            // replaceSelectionHtml("<div style='font-size: 20px; font-weight: bold; display: inline-block;'>", "</div>");
+                // replaceSelectionHtml("<div style='font-size: 20px; font-weight: bold; display: inline-block;'>", "</div>");
 
 
 
-            function allDescendants(node)
-            {
-
-                for (var i = 0; i < node.childNodes.length; i++)
+                function allDescendants(node)
                 {
-                    var child = node.childNodes[i];
-                    allDescendants(child);
+
+                    for (var i = 0; i < node.childNodes.length; i++)
+                    {
+                        var child = node.childNodes[i];
+                        allDescendants(child);
+                    }
+
+                    // console.log("cchild", node);
+                    //my_elem.parentNode.insertBefore(span, my_elem);
+
+                    if (compareStrings(node.tagName, "b", true, false))
+                    {
+                        // console.log("match innerHTML", node.innerHTML);
+                        // console.log("match node", node);
+                        // console.log("match node.parent", node.parentElement);
+                        node.insertAdjacentHTML('beforebegin', node.innerHTML);
+                        node.parentElement.removeChild(node);
+                    }
+
+
+                    console.log("cchild.inner", node.innerHTML);
+                    // doSomethingToNode(child);
                 }
-
-                // console.log("cchild", node);
-                //my_elem.parentNode.insertBefore(span, my_elem);
-
-                if (compareStrings(node.tagName, "b", true, false))
-                {
-                    // console.log("match innerHTML", node.innerHTML);
-                    // console.log("match node", node);
-                    // console.log("match node.parent", node.parentElement);
-                    node.insertAdjacentHTML('beforebegin', node.innerHTML);
-                    node.parentElement.removeChild(node);
-                }
-
-
-                console.log("cchild.inner", node.innerHTML);
-                // doSomethingToNode(child);
-            }
 
             replaceSelectionHtml("<b>", "</b>", function cu(html)
             {
@@ -664,9 +663,9 @@
 
                 return temp.innerHTML;
             });
-            
+
             // if (after != null) insertHtmlAfterSelection(after)
-        } 
+        }
 
 
         function foo(me)
@@ -677,13 +676,11 @@
         }
 
 
-        var m=n=0;
+        var m = n = 0;
     </script>
 
 
     <style type="text/css" media="all">
-
-
         .icon {
             display: inline-block;
             width: 18px;
@@ -695,7 +692,7 @@
             background-color: rgb(239, 239, 239);
             border: rgb(239, 239, 239);
             background-image: url(images/nicEditIcons-latest.gif);
-            float:left;
+            float: left;
             border: 1px solid gray;
         }
 
@@ -749,24 +746,26 @@
         .icon-unknown-1 {
             background-position: -360px 0px;
         }
+
         .icon-unknown-2 {
             background-position: -468px 0px;
         }
+
         .icon-unknown-3 {
             background-position: -378px 0px;
         }
+
         .icon-unknown-4 {
             background-position: -396px 0px;
         }
+
         .icon-unknown-5 {
             background-position: -36px 0px;
         }
+
         .icon-unknown-6 {
             background-position: -18px 0px;
         }
-
-
-             
     </style>
 
 
@@ -783,8 +782,8 @@
 
         <div class="icon icon-list-bullet" style=" " unselectable="on"></div>
         <div class="icon icon-list-num" style=" " unselectable="on"></div>
-        
-        
+
+
         <div class="icon icon-indent-left" style=" " unselectable="on"></div>
         <div class="icon icon-indent-right" style=" " unselectable="on"></div>
 
@@ -796,7 +795,7 @@
         <div class="icon icon-unknown-6" style=" " unselectable="on"></div>
 
     </div>
-    
+
     <br />
 
     <div class=" nicEdit-panel" unselectable="on" style="margin: 0px 2px 2px; zoom: 1; overflow: hidden;"><div style="float: left; margin-top: 2px; display: none;"><div class=" nicEdit-buttonContain " style="width: 20px; height: 20px; opacity: 0.6;"><div class=" nicEdit-button-undefined" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div class=" nicEdit-button" unselectable="on" style="width: 18px; height: 18px; overflow: hidden; zoom: 1; cursor: pointer; background-image: url(&quot;http://js.nicedit.com/nicEditIcons-latest.gif&quot;); background-position: -432px 0px;"></div></div></div></div><div unselectable="on" style="float: left; margin-top: 2px;"><div class=" nicEdit-buttonContain " unselectable="on" style="width: 20px; height: 20px; opacity: 0.6;"><div class=" nicEdit-button-undefined" unselectable="on" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div class=" nicEdit-button" unselectable="on" style="width: 18px; height: 18px; overflow: hidden; zoom: 1; cursor: pointer; background-image: url(&quot;http://js.nicedit.com/nicEditIcons-latest.gif&quot;); background-position: -54px 0px;"></div></div></div></div><div unselectable="on" style="float: left; margin-top: 2px;"><div class=" nicEdit-buttonContain " unselectable="on" style="width: 20px; height: 20px; opacity: 0.6;"><div class=" nicEdit-button-undefined nicEdit-button-hover" unselectable="on" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div class=" nicEdit-button" unselectable="on" style="width: 18px; height: 18px; overflow: hidden; zoom: 1; cursor: pointer; background-image: url(&quot;http://js.nicedit.com/nicEditIcons-latest.gif&quot;); background-position: -126px 0px;"></div></div></div></div><div unselectable="on" style="float: left; margin-top: 2px;"><div class=" nicEdit-buttonContain " unselectable="on" style="width: 20px; height: 20px; opacity: 0.6;"><div class=" nicEdit-button-undefined nicEdit-button-hover nicEdit-button-active" unselectable="on" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div class=" nicEdit-button" unselectable="on" style="width: 18px; height: 18px; overflow: hidden; zoom: 1; cursor: pointer; background-image: url(&quot;http://js.nicedit.com/nicEditIcons-latest.gif&quot;); background-position: -342px 0px;"></div></div></div></div><div unselectable="on" style="float: left; margin-top: 2px;"><div class=" nicEdit-buttonContain " unselectable="on" style="width: 20px; height: 20px; opacity: 0.6;"><div class=" nicEdit-button-undefined" unselectable="on" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div class=" nicEdit-button" unselectable="on" style="width: 18px; height: 18px; overflow: hidden; zoom: 1; cursor: pointer; background-image: url(&quot;http://js.nicedit.com/nicEditIcons-latest.gif&quot;); background-position: -162px 0px;"></div></div></div></div><div unselectable="on" style="float: left; margin-top: 2px;"><div class=" nicEdit-buttonContain " unselectable="on" style="width: 20px; height: 20px; opacity: 0.6;"><div class=" nicEdit-button-undefined" unselectable="on" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div class=" nicEdit-button" unselectable="on" style="width: 18px; height: 18px; overflow: hidden; zoom: 1; cursor: pointer; background-image: url(&quot;http://js.nicedit.com/nicEditIcons-latest.gif&quot;); background-position: -72px 0px;"></div></div></div></div><div unselectable="on" style="float: left; margin-top: 2px;"><div class=" nicEdit-buttonContain " unselectable="on" style="width: 20px; height: 20px; opacity: 0.6;"><div class=" nicEdit-button-undefined" unselectable="on" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div class=" nicEdit-button" unselectable="on" style="width: 18px; height: 18px; overflow: hidden; zoom: 1; cursor: pointer; background-image: url(&quot;http://js.nicedit.com/nicEditIcons-latest.gif&quot;); background-position: -234px 0px;"></div></div></div></div><div unselectable="on" style="float: left; margin-top: 2px;"><div class=" nicEdit-buttonContain " unselectable="on" style="width: 20px; height: 20px; opacity: 0.6;"><div class=" nicEdit-button-undefined" unselectable="on" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div class=" nicEdit-button" unselectable="on" style="width: 18px; height: 18px; overflow: hidden; zoom: 1; cursor: pointer; background-image: url(&quot;http://js.nicedit.com/nicEditIcons-latest.gif&quot;); background-position: -144px 0px;"></div></div></div></div><div unselectable="on" style="float: left; margin-top: 2px;"><div class=" nicEdit-buttonContain " unselectable="on" style="width: 20px; height: 20px; opacity: 0.6;"><div class=" nicEdit-button-undefined" unselectable="on" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div class=" nicEdit-button" unselectable="on" style="width: 18px; height: 18px; overflow: hidden; zoom: 1; cursor: pointer; background-image: url(&quot;http://js.nicedit.com/nicEditIcons-latest.gif&quot;); background-position: -180px 0px;"></div></div></div></div><div unselectable="on" style="float: left; margin-top: 2px;"><div class=" nicEdit-buttonContain " unselectable="on" style="width: 20px; height: 20px; opacity: 0.6;"><div class=" nicEdit-button-undefined" unselectable="on" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div class=" nicEdit-button" unselectable="on" style="width: 18px; height: 18px; overflow: hidden; zoom: 1; cursor: pointer; background-image: url(&quot;http://js.nicedit.com/nicEditIcons-latest.gif&quot;); background-position: -324px 0px;"></div></div></div></div><div unselectable="on" style="float: left; margin: 2px 1px 0px;"><div class=" nicEdit-selectContain" unselectable="on" style="width: 90px; height: 20px; cursor: pointer; overflow: hidden; opacity: 0.6;"><div unselectable="on" style="overflow: hidden; zoom: 1; border: 1px solid rgb(204, 204, 204); padding-left: 3px; background-color: rgb(255, 255, 255);"><div class=" nicEdit-selectControl" unselectable="on" style="overflow: hidden; float: right; height: 18px; width: 16px; background-image: url(&quot;http://js.nicedit.com/nicEditIcons-latest.gif&quot;); background-position: -450px 0px;"></div><div class=" nicEdit-selectTxt" unselectable="on" style="overflow: hidden; float: left; width: 66px; height: 14px; margin-top: 1px; font-family: sans-serif; text-align: center; font-size: 12px;">Font&nbsp;Size...</div></div></div></div><div unselectable="on" style="float: left; margin: 2px 1px 0px;"><div class=" nicEdit-selectContain" unselectable="on" style="width: 90px; height: 20px; cursor: pointer; overflow: hidden; opacity: 0.6;"><div unselectable="on" style="overflow: hidden; zoom: 1; border: 1px solid rgb(204, 204, 204); padding-left: 3px; background-color: rgb(255, 255, 255);"><div class=" nicEdit-selectControl" unselectable="on" style="overflow: hidden; float: right; height: 18px; width: 16px; background-image: url(&quot;http://js.nicedit.com/nicEditIcons-latest.gif&quot;); background-position: -450px 0px;"></div><div class=" nicEdit-selectTxt" unselectable="on" style="overflow: hidden; float: left; width: 66px; height: 14px; margin-top: 1px; font-family: sans-serif; text-align: center; font-size: 12px;">Font&nbsp;Family...</div></div></div></div><div unselectable="on" style="float: left; margin: 2px 1px 0px;"><div class=" nicEdit-selectContain" unselectable="on" style="width: 90px; height: 20px; cursor: pointer; overflow: hidden; opacity: 0.6;"><div unselectable="on" style="overflow: hidden; zoom: 1; border: 1px solid rgb(204, 204, 204); padding-left: 3px; background-color: rgb(255, 255, 255);"><div class=" nicEdit-selectControl" unselectable="on" style="overflow: hidden; float: right; height: 18px; width: 16px; background-image: url(&quot;http://js.nicedit.com/nicEditIcons-latest.gif&quot;); background-position: -450px 0px;"></div><div class=" nicEdit-selectTxt" unselectable="on" style="overflow: hidden; float: left; width: 66px; height: 14px; margin-top: 1px; font-family: sans-serif; text-align: center; font-size: 12px;">Font&nbsp;Format...</div></div></div></div><div unselectable="on" style="float: left; margin-top: 2px;"><div class=" nicEdit-buttonContain " unselectable="on" style="width: 20px; height: 20px; opacity: 0.6;"><div class=" nicEdit-button-undefined" unselectable="on" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div class=" nicEdit-button" unselectable="on" style="width: 18px; height: 18px; overflow: hidden; zoom: 1; cursor: pointer; background-image: url(&quot;http://js.nicedit.com/nicEditIcons-latest.gif&quot;); background-position: -108px 0px;"></div></div></div></div><div unselectable="on" style="float: left; margin-top: 2px;"><div class=" nicEdit-buttonContain " unselectable="on" style="width: 20px; height: 20px; opacity: 0.6;"><div class=" nicEdit-button-undefined" unselectable="on" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div class=" nicEdit-button" unselectable="on" style="width: 18px; height: 18px; overflow: hidden; zoom: 1; cursor: pointer; background-image: url(&quot;http://js.nicedit.com/nicEditIcons-latest.gif&quot;); background-position: -198px 0px;"></div></div></div></div><div style="float: left; margin-top: 2px;"><div class=" nicEdit-buttonContain " style="width: 20px; height: 20px; opacity: 0.6;"><div class=" nicEdit-button-undefined" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div class=" nicEdit-button" unselectable="on" style="width: 18px; height: 18px; overflow: hidden; zoom: 1; cursor: pointer; background-image: url(&quot;http://js.nicedit.com/nicEditIcons-latest.gif&quot;); background-position: -360px 0px;"></div></div></div></div><div style="float: left; margin-top: 2px;"><div class=" nicEdit-buttonContain " style="width: 20px; height: 20px; opacity: 0.6;"><div class=" nicEdit-button-undefined" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div class=" nicEdit-button" unselectable="on" style="width: 18px; height: 18px; overflow: hidden; zoom: 1; cursor: pointer; background-image: url(&quot;http://js.nicedit.com/nicEditIcons-latest.gif&quot;); background-position: -468px 0px;"></div></div></div></div><div style="float: left; margin-top: 2px;"><div class=" nicEdit-buttonContain " style="width: 20px; height: 20px; opacity: 0.6;"><div class=" nicEdit-button-undefined" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div class=" nicEdit-button" unselectable="on" style="width: 18px; height: 18px; overflow: hidden; zoom: 1; cursor: pointer; background-image: url(&quot;http://js.nicedit.com/nicEditIcons-latest.gif&quot;); background-position: -378px 0px;"></div></div></div></div><div style="float: left; margin-top: 2px;"><div class=" nicEdit-buttonContain " style="width: 20px; height: 20px; opacity: 0.6;"><div class=" nicEdit-button-undefined" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div class=" nicEdit-button" unselectable="on" style="width: 18px; height: 18px; overflow: hidden; zoom: 1; cursor: pointer; background-image: url(&quot;http://js.nicedit.com/nicEditIcons-latest.gif&quot;); background-position: -396px 0px;"></div></div></div></div><div style="float: left; margin-top: 2px;"><div class=" nicEdit-buttonContain " style="width: 20px; height: 20px; opacity: 0.6;"><div class=" nicEdit-button-undefined" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div class=" nicEdit-button" unselectable="on" style="width: 18px; height: 18px; overflow: hidden; zoom: 1; cursor: pointer; background-image: url(&quot;http://js.nicedit.com/nicEditIcons-latest.gif&quot;); background-position: -36px 0px;"></div></div></div></div><div style="float: left; margin-top: 2px;"><div class=" nicEdit-buttonContain " style="width: 20px; height: 20px; opacity: 0.6;"><div class=" nicEdit-button-undefined" style="background-color: rgb(239, 239, 239); border: 1px solid rgb(239, 239, 239);"><div class=" nicEdit-button" unselectable="on" style="width: 18px; height: 18px; overflow: hidden; zoom: 1; cursor: pointer; background-image: url(&quot;http://js.nicedit.com/nicEditIcons-latest.gif&quot;); background-position: -18px 0px;"></div></div></div></div></div>
@@ -811,20 +810,39 @@
 
     <input type="button" value="B" onclick="inserHtmlBeforeAfter('<h1>', '</h1>');" />
     <input type="button" value="IMG" onclick="inserImageBefore('<h1>', '</h1>');" />
-   
-    
+
+
     <input type="button" value="LOG" onclick="console.log(document.body.innerHTML);" />
-    
 
 
-    
+
+
     <div id="editor" style="width: 15cm; height: 2cm; padding: 0.25cm; background-color: dodgerblue;" contenteditable="true">
         this is a simple test
     </div>
 
     <script>
-        
+
     </script>
+
+
+    <textarea id="txtSource" style="width: 100%; height: 15cm; text-align: left;"></textarea>
+
+
+    <script>
+        // https://developer.mozilla.org/en-US/docs/Web/Events/DOMSubtreeModified
+        var editElement = document.getElementById("editor");
+        var txtSource = document.getElementById("txtSource");
+
+        if (editElement.addEventListener)
+            editElement.addEventListener('DOMSubtreeModified', function ()
+            {
+                console.log("innerHTML: ", editElement.innerHTML);
+                txtSource.value = editElement.innerHTML;
+            }, false);
+
+    </script>
+
 
 </body>
 </html>
