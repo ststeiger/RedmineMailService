@@ -8,6 +8,68 @@ namespace RedmineMailService
     class Program
     {
 
+        public static void Html2Tex()
+        {
+            // alert(&quot;This is a test...&quot;);
+            string res = System.Web.HttpUtility.HtmlAttributeEncode("alert(\"This is a test...\");");
+            System.Console.WriteLine(res);
+
+
+            // Allow text-only email ? 
+            // HtmlAgilityPack
+
+            // <b>Test</b> ==> *Test*
+            // <i>Test</i> ==> _Test_
+            // <u>Test</u> ==> +Test+
+            // <del>Test</del> ==> -Test-
+            // <code>Test</code> ==> @test@
+            // <pre>Test</pre> ==> <pre>test</pre>
+
+            // <h1>Test</h1> ==> h1. test
+            // ul => * hello
+            // num => # hello
+            // links einrücken > 
+            // link
+            // image
+
+
+
+/*
+Tracker: Anfrage
+Status: neu
+Kundenname:
+Verrechenbar: nein
+gemeldet von: email
+
+
+From: foo@domain.com ==> projekte/ZH
+To: issue.tracker@cor
+Date:
+
+Sub: <issue title>
+
+
+Content: <html>
+Anlage:
+
+
+DB:
+projects (sync)
+kundenname (sync)
+kunde 
+--domains (manual)
+zo_kunde_multiAtt(kunde_id, domain/_id, email) UIX where domain is not null 
+zo_kunde_email(kunde, email)
+*/
+
+            // Read unread emails
+            // Add redmine issue
+            // Move email to non-inbox folder
+            // don't explode on any step
+            // How to ensure text-only email ? 
+        }
+
+
         //Code snippet
         /// <summary>
         /// method for generating a country list, say for populating
@@ -94,6 +156,7 @@ namespace RedmineMailService
         [System.STAThread]
         static void Main(string[] args)
         {
+            Html2Tex();
             //string linuxTimezone = Microsoft.Exchange.WebServices.Data.TimeZoneData.TimeZoneTranslator.WindowsToLinux("W. Europe Standard Time");
             //linuxTimezone = Microsoft.Exchange.WebServices.Data.TimeZoneData.TimeZoneTranslator.WindowsToLinux("Greenwich Standard Time");
             //string windowsTimezone = Microsoft.Exchange.WebServices.Data.TimeZoneData.TimeZoneTranslator.LinuxToWindows("Europe/Zurich");
