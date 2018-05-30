@@ -3,7 +3,7 @@ namespace RedmineMailService
 {
 
 
-    static class Tests
+    static class SpecialCharactersTest 
     {
 
 

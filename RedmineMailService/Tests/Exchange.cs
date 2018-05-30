@@ -1,5 +1,4 @@
 ﻿
-using System;
 using Microsoft.Exchange.WebServices.Data;
 
 
@@ -10,10 +9,11 @@ namespace RedmineMailService
     // https://github.com/sherlock1982/ews-managed-api
     // https://msdn.microsoft.com/en-us/library/office/dn567668(v=exchg.150).aspx
     // https://msdn.microsoft.com/en-us/library/office/dn495632(v=exchg.150).aspx
-    class Exchange
+    public class Exchange
     {
 
-        class NoTrace : Microsoft.Exchange.WebServices.Data.ITraceListener
+
+        private class NoTrace : Microsoft.Exchange.WebServices.Data.ITraceListener
         {
             void ITraceListener.Trace(string traceType, string traceMessage)
             {
@@ -21,13 +21,60 @@ namespace RedmineMailService
             }
         }
 
-        public static void ListAllMails()
+
+
+        private static void SetBasicHeader(ExchangeService ews, string username, string password)
         {
-            ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
-            service.Credentials = new WebCredentials(RedmineMailService.Trash.UserData.Email
-                , RedmineMailService.Trash.UserData.Password);
-            
+            byte[] bytes = System.Text.Encoding.ASCII.GetBytes($"{username}:{password}");
+            string headerValue = "Basic " + System.Convert.ToBase64String(bytes);
+            ews.HttpHeaders.Add("Authorization", headerValue);
+        }
+
+
+        private static void SetNtlmHeader(ExchangeService ews, string username, string password)
+        {
+            var cache = new System.Net.CredentialCache();
+            cache.Add(ews.Url, "NTLM", new System.Net.NetworkCredential(username, password));
+            ews.Credentials = cache;
+        }
+        
+
+        private static bool RedirectionUrlValidationCallback(string redirectionUrl)
+        {
+            // The default for the validation callback is to reject the URL.
+            bool result = false;
+
+            System.Uri redirectionUri = new System.Uri(redirectionUrl);
+
+            // Validate the contents of the redirection URL. In this simple validation
+            // callback, the redirection URL is considered valid if it is using HTTPS
+            // to encrypt the authentication credentials. 
+            if (redirectionUri.Scheme == "https")
+            {
+                result = true;
+            } // End if (redirectionUri.Scheme == "https") 
+
+            return result;
+        } // End Function RedirectionUrlValidationCallback 
+
+
+        public static ExchangeService GetService(ExchangeVersion version)
+        {
+            ExchangeService service = new ExchangeService(version);
+            service.WebProxy = new System.Net.WebProxy("127.0.0.1", 8000);
+
+            // service.WebProxy
+            service.PreAuthenticate = true;
+            service.UseDefaultCredentials = false;
+            service.Credentials = new WebCredentials(Trash.UserData.Email, Trash.UserData.Password);
+
+            // Workaround: NTLM doesn't work...
+            // and then just set the correct header yourself.
+            // SetBasicHeader(service, Trash.UserData.Email, Trash.UserData.Password);
+            // SetNtlmHeader(service, Trash.UserData.Email, Trash.UserData.Password);
+
             Microsoft.Exchange.WebServices.Data.ITraceListener listener = new NoTrace();
+            listener = null;
 
             if (listener != null)
             {
@@ -36,10 +83,28 @@ namespace RedmineMailService
                 service.TraceEnabled = true;
             } // End if (listener != null) 
 
+            service.TraceFlags = TraceFlags.All;
+            service.TraceEnabled = true;
+
+            // service.Url = new System.Uri("https://webmail.somedomain.com/ews/exchange.asmx");
+            // nslookup -type=srv _autodiscover._tcp.somedomain.com
+            // nslookup -type=srv _autodiscover._tcp.somedomain.local
             service.AutodiscoverUrl(RedmineMailService.Trash.UserData.Email, RedirectionUrlValidationCallback);
 
-            Folder inbox = Folder.Bind(service, WellKnownFolderName.Inbox);
+            return service;
+        }
 
+
+        public static ExchangeService GetService()
+        {
+            return GetService(ExchangeVersion.Exchange2007_SP1);
+        }
+
+
+
+        public static void GetInbox(ExchangeService service)
+        {
+            Folder inbox = Folder.Bind(service, WellKnownFolderName.Inbox);
         } // End Sub ListAllMails 
 
 
@@ -49,7 +114,7 @@ namespace RedmineMailService
         /// is enabled for the caller.
         /// </summary>
         /// <param name="service">An ExchangeService object with credentials and the EWS URL.</param>
-        public static void PlayEmailOnPhone()
+        public static void PlayEmailOnPhone(ExchangeService service)
         {
 
             /// <summary>
@@ -65,21 +130,6 @@ namespace RedmineMailService
 
                 System.Console.WriteLine(System.DateTime.Now + " - Call Status: " + phoneCall.State);
             } // End Sub RefreshPhoneCallState 
-
-            // PlayOnPhone requires 2010+ !
-            ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2010);
-            service.Credentials = new WebCredentials(RedmineMailService.Trash.UserData.Email, RedmineMailService.Trash.UserData.Password);
-
-            Microsoft.Exchange.WebServices.Data.ITraceListener listener = new NoTrace();
-
-            if (listener != null)
-            {
-                service.TraceListener = listener;
-                service.TraceFlags = TraceFlags.All;
-                service.TraceEnabled = true;
-            } // End if (listener != null) 
-
-            service.AutodiscoverUrl(RedmineMailService.Trash.UserData.Email, RedirectionUrlValidationCallback);
 
 
             // Find the first email message in the Inbox folder.
@@ -125,7 +175,16 @@ namespace RedmineMailService
         } // End Sub PlayEmailOnPhone 
 
 
-        public static FolderId FindFolderIdByDisplayName(
+        public static void PlayEmailOnPhone()
+        {
+            // PlayOnPhone requires 2010+ !
+            PlayEmailOnPhone(GetService(ExchangeVersion.Exchange2010));
+        } // End Sub PlayEmailOnPhone 
+
+
+
+
+        private static FolderId FindFolderIdByDisplayName(
             ExchangeService service, string DisplayName, WellKnownFolderName SearchFolder)
         {
             // Specify the root folder to be searched.
@@ -144,24 +203,10 @@ namespace RedmineMailService
             // If no folders have a display name that matches the specified display name, return null.
             return null;
         } // End Function FindFolderIdByDisplayName 
+        
 
-
-        public static void DelaySendEmail()
+        public static void DelaySendEmail(ExchangeService service)
         {
-            ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
-            service.Credentials = new WebCredentials(RedmineMailService.Trash.UserData.Email, RedmineMailService.Trash.UserData.Password);
-
-            Microsoft.Exchange.WebServices.Data.ITraceListener listener = new NoTrace();
-
-            if (listener != null)
-            {
-                service.TraceListener = listener;
-                service.TraceFlags = TraceFlags.All;
-                service.TraceEnabled = true;
-            } // End if (listener != null) 
-
-            service.AutodiscoverUrl(RedmineMailService.Trash.UserData.Email, RedirectionUrlValidationCallback);
-
             // Create a new email message.
             EmailMessage message = new EmailMessage(service);
 
@@ -199,32 +244,22 @@ namespace RedmineMailService
         } // End Sub DelaySendEmail 
 
 
-        public static void FindUnreadEmail()
+        public static void DelaySendEmail()
         {
-            ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
+            DelaySendEmail(GetService());
+        } // End Sub DelaySendEmail 
 
-            service.UseDefaultCredentials = false;
-            service.Credentials = new WebCredentials(RedmineMailService.Trash.UserData.Email, RedmineMailService.Trash.UserData.Password);
-            
-            Microsoft.Exchange.WebServices.Data.ITraceListener listener = new NoTrace();
 
-            if (listener != null)
-            {
-                service.TraceListener = listener;
-                service.TraceFlags = TraceFlags.All;
-                service.TraceEnabled = true;
-            } // End if (listener != null) 
-
-            service.AutodiscoverUrl(RedmineMailService.Trash.UserData.Email, RedirectionUrlValidationCallback);
-
+        public static void FindUnreadEmail(ExchangeService service)
+        {
             try
             {
                 Folder inbox = Folder.Bind(service, WellKnownFolderName.Inbox);
 
             }
-            catch (Exception e)
+            catch (System.Exception e)
             {
-                Console.WriteLine(e);
+                System.Console.WriteLine(e);
             }
             
             // The search filter to get unread email.
@@ -308,21 +343,141 @@ namespace RedmineMailService
         } // End Sub FindUnreadEmail 
 
 
-        public static void SetBasicHeader(ExchangeService ews, string username, string password)
+        public static void FindUnreadEmail()
         {
-            byte[] bytes = System.Text.Encoding.ASCII.GetBytes($"{username}:{password}");
-            string headerValue = "Basic " + System.Convert.ToBase64String(bytes);
-            ews.HttpHeaders.Add("Authorization", headerValue);
+            FindUnreadEmail(GetService());
+        } // End Sub FindUnreadEmail 
+
+
+
+        public static void MoveMessage(ExchangeService service)
+        {
+            // Create two items to be moved. You can move any item type in your Exchange mailbox. 
+            // You will need to save these items to your Exchange mailbox before they can be moved.
+            EmailMessage email1 = new EmailMessage(service);
+            email1.Subject = "Draft email one";
+            email1.Body = new MessageBody(BodyType.Text, "Draft body of the mail.");
+
+            EmailMessage email2 = new EmailMessage(service);
+            email2.Subject = "Draft email two";
+            email1.Body = new MessageBody(BodyType.Text, "Draft body of the mail.");
+
+
+            System.Collections.ObjectModel.Collection<EmailMessage> messages = new System.Collections.ObjectModel.Collection<EmailMessage>();
+            messages.Add(email1);
+            messages.Add(email2);
+
+            try
+            {
+                // This results in a CreateItem operation call to EWS. The items are created on the server.
+                // The response contains the item identifiers of the newly created items. The items on the client
+                // now have item identifiers, which you need in order to move the item.
+                ServiceResponseCollection<ServiceResponse> responses = service.CreateItems(messages, WellKnownFolderName.Drafts, MessageDisposition.SaveOnly, null);
+
+                if (responses.OverallResult == ServiceResult.Success)
+                {
+                    System.Console.WriteLine("Successfully created items to be copied.");
+                }
+                else
+                {
+                    throw new System.Exception("The batch creation of the email message draft items was not successful.");
+                }
+            }
+            catch (ServiceResponseException ex)
+            {
+                System.Console.WriteLine("Error: {0}", ex.Message);
+            }
+
+            try
+            {
+                // You can move a single item. This will result in a MoveItem operation call to EWS.
+                // The EmailMessage that is returned is the item with its updated item identifier. You must save the email
+                // message to the server before you can move it. 
+                EmailMessage email3 = email1.Move(WellKnownFolderName.DeletedItems) as EmailMessage;
+            }
+
+            catch (ServiceResponseException ex)
+            {
+                System.Console.WriteLine("Error: {0}", ex.Message);
+            }
+
+        } // End Sub MoveMessage 
+
+
+        public static void MoveMessage()
+        {
+            MoveMessage(GetService());
+        } // End Sub MoveMessage  
+
+
+        /// <summary>
+        /// Creates and tries to send three email messages with one call to EWS. The third email message intentionally fails 
+        /// to demonstrate how EWS returns errors for batch requests.
+        /// </summary>
+        /// <param name="service">A valid ExchangeService object with credentials and the EWS URL.</param>
+        static void SendBatchEmails(ExchangeService service)
+        {
+            // Create three separate email messages.
+            EmailMessage message1 = new EmailMessage(service);
+            message1.ToRecipients.Add("user1@contoso.com");
+            message1.ToRecipients.Add("user2@contoso.com");
+            message1.Subject = "Status Update";
+            message1.Body = "Project complete!";
+
+            EmailMessage message2 = new EmailMessage(service);
+            message2.ToRecipients.Add("user1@contoso.com");
+            message2.Subject = "High priority work items";
+            message2.Importance = Importance.High;
+            message2.Body = "Finish estimate by EOD!";
+
+            EmailMessage message3 = new EmailMessage(service);
+            message3.BccRecipients.Add("user1@contoso.com");
+            message3.BccRecipients.Add("user2contoso.com"); // Invalid email address format. 
+            message3.Subject = "Surprise party!";
+            message3.Body = "Don't tell anyone. It will be at 6:00 at Aisha's house. Shhh!";
+            message3.Categories.Add("Personal Party");
+
+            System.Collections.ObjectModel.Collection<EmailMessage> msgs = new System.Collections.ObjectModel.Collection<EmailMessage>() { message1, message2, message3 };
+
+            try
+            {
+                // Send the batch of email messages. This results in a call to EWS. The response contains the results of the batched request to send email messages.
+                ServiceResponseCollection<ServiceResponse> response = service.CreateItems(msgs, WellKnownFolderName.Drafts, MessageDisposition.SendOnly, null);
+
+                // Check the response to determine whether the email messages were successfully submitted.
+                if (response.OverallResult == ServiceResult.Success)
+                {
+                    System.Console.WriteLine("All email messages were successfully submitted");
+                    return;
+                }
+
+                int counter = 1;
+
+                /* If the response was not an overall success, access the errors.
+                 * Results are returned in the order that the action was submitted. For example, the attempt for message1
+                 * will be represented by the first result since it was the first one added to the collection.
+                 * Errors are not returned if an NDR is returned.
+                 */
+                foreach (ServiceResponse resp in response)
+                {
+                    System.Console.WriteLine("Result (message {0}): {1}", counter, resp.Result);
+                    System.Console.WriteLine("Error Code: {0}", resp.ErrorCode);
+                    System.Console.WriteLine("Error Message: {0}\r\n", resp.ErrorMessage);
+
+                    counter++;
+                }
+            }
+            catch (System.Exception e)
+            {
+                System.Console.WriteLine(e.Message);
+            }
         }
 
 
-        public static void SetNtlmHeader(ExchangeService ews, string username, string password)
+        public static void SendBatchEmails()
         {
-            var cache = new System.Net.CredentialCache();
-            cache.Add(ews.Url, "NTLM", new System.Net.NetworkCredential(username, password));
-            ews.Credentials = cache;
-        }
-
+            SendBatchEmails(GetService());
+        } // End Sub SendBatchEmails
 
 
         // https://blogs.msdn.microsoft.com/fiddler/2011/12/10/revisiting-fiddler-and-win8-immersive-applications/
@@ -346,43 +501,10 @@ namespace RedmineMailService
 
         // <t:TimeZoneDefinition Id="W. Europe Standard Time" />
         // NTLM - Negotiate
-        public static void ListFolders()
+        public static void ListFolders(ExchangeService service)
         {
             System.Console.WriteLine("start folder listing");
-            ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
             
-            service.WebProxy = new System.Net.WebProxy("127.0.0.1", 8000);
-            
-            
-            // service.WebProxy
-            service.PreAuthenticate = true;
-            service.UseDefaultCredentials = false;
-            service.Credentials = new WebCredentials(Trash.UserData.Email, Trash.UserData.Password);
-
-            // Workaround: NTLM doesn't work...
-            // and then just set the correct header yourself.
-            // SetBasicHeader(service, Trash.UserData.Email, Trash.UserData.Password);
-            // SetNtlmHeader(service, Trash.UserData.Email, Trash.UserData.Password);
-
-
-            Microsoft.Exchange.WebServices.Data.ITraceListener listener = new NoTrace();
-            listener = null;
-            
-            if (listener != null)
-            {
-                service.TraceListener = listener;
-                service.TraceFlags = TraceFlags.All;
-                service.TraceEnabled = true;
-            } // End if (listener != null) 
-
-            service.TraceFlags = TraceFlags.All;
-            service.TraceEnabled = true;
-
-            // service.Url = new System.Uri("https://webmail.somedomain.com/ews/exchange.asmx");
-            // nslookup -type=srv _autodiscover._tcp.somedomain.com
-            // nslookup -type=srv _autodiscover._tcp.somedomain.local
-            service.AutodiscoverUrl(RedmineMailService.Trash.UserData.Email, RedirectionUrlValidationCallback);
-
             try
             {
                 Folder rootfolder = Folder.Bind(service, WellKnownFolderName.MsgFolderRoot);
@@ -423,25 +545,14 @@ namespace RedmineMailService
         } // End Sub ListFolders 
 
 
-        public static void TestSend()
+        public static void ListFolders()
         {
-            ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2007_SP1);
-
-            Microsoft.Exchange.WebServices.Data.ITraceListener listener = new NoTrace();
-
-            if (listener != null)
-            {
-                service.TraceListener = listener;
-                service.TraceFlags = TraceFlags.All;
-                service.TraceEnabled = true;
-            } // End if (listener != null) 
+            ListFolders(GetService());
+        } // End Sub ListFolders 
 
 
-            service.UseDefaultCredentials = false;
-            service.Credentials = new WebCredentials(RedmineMailService.Trash.UserData.Email, RedmineMailService.Trash.UserData.Password);
-            service.AutodiscoverUrl(RedmineMailService.Trash.UserData.Email, RedirectionUrlValidationCallback);
-
-
+        public static void TestSend(ExchangeService service)
+        {
             EmailMessage email = new EmailMessage(service);
 
             email.ToRecipients.Add(RedmineMailService.Trash.UserData.info);
@@ -453,28 +564,15 @@ namespace RedmineMailService
             email.Send();
             System.Console.WriteLine("E-Mail sent...");
         } // End Sub TestSend 
-        
-        
-        private static bool RedirectionUrlValidationCallback(string redirectionUrl)
+
+
+        public static void TestSend()
         {
-            // The default for the validation callback is to reject the URL.
-            bool result = false;
+            TestSend(GetService());
+        } // End Sub TestSend 
 
-            System.Uri redirectionUri = new System.Uri(redirectionUrl);
 
-            // Validate the contents of the redirection URL. In this simple validation
-            // callback, the redirection URL is considered valid if it is using HTTPS
-            // to encrypt the authentication credentials. 
-            if (redirectionUri.Scheme == "https")
-            {
-                result = true;
-            } // End if (redirectionUri.Scheme == "https") 
-
-            return result;
-        } // End Function RedirectionUrlValidationCallback 
-        
-        
     } // End Class 
-    
-    
+
+
 } // End Namespace 

@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="SgmlReader\Html.dtd" />
+    <None Remove="SgmlReader\htmllat1.ent" />
+    <None Remove="SgmlReader\HTMLspecial.ent" />
+    <None Remove="SgmlReader\HTMLsymbol.ent" />
+    <None Remove="SgmlReader\loose.dtd" />
+    <None Remove="SgmlReader\Sloppy.dtd" />
+    <None Remove="SgmlReader\strict.dtd" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="SgmlReader\Html.dtd" />
+    <EmbeddedResource Include="SgmlReader\htmllat1.ent" />
+    <EmbeddedResource Include="SgmlReader\HTMLspecial.ent" />
+    <EmbeddedResource Include="SgmlReader\HTMLsymbol.ent" />
+    <EmbeddedResource Include="SgmlReader\loose.dtd" />
+    <EmbeddedResource Include="SgmlReader\Sloppy.dtd" />
+    <EmbeddedResource Include="SgmlReader\strict.dtd" />
+  </ItemGroup>
+
+</Project>
