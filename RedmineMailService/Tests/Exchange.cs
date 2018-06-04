@@ -101,6 +101,101 @@ namespace RedmineMailService
         }
 
 
+        public static void GetRoom(ExchangeService service)
+        {
+
+            
+
+            service.GetRoomLists();
+
+            var locationAddress = new EmailAddress();
+            service.GetRooms(locationAddress);
+
+            System.DateTime startTime = System.DateTime.Now;
+            System.DateTime endTime = System.DateTime.Now.AddHours(1);
+
+
+            var appointment = new Appointment(service)
+            {
+                Subject = "Created by ExchangeTest app",
+                Body = "Some body text....",
+                Start = startTime,
+                End = endTime
+            };
+            appointment.RequiredAttendees.Add("AnAttendee@myexchangeserver.co.uk");
+            appointment.Resources.Add("ARoom@myexchangeserver.co.uk");
+            appointment.Save(SendInvitationsMode.SendOnlyToAll);
+
+            // https://stackoverflow.com/questions/4224451/exchange-web-services-create-appointment-with-resource-but-attendees-cannot-se
+            // https://github.com/OfficeDev/ews-java-api/issues/528
+            // https://stackoverflow.com/questions/35082377/how-to-get-truly-free-rooms-from-exchange-ews
+
+
+            System.Collections.ObjectModel.Collection<EmailAddress> rooms = service.GetRooms(locationAddress);
+
+
+
+            // all the meeting rooms at location
+            //var rooms2 = rooms.Select(i => new AttendeeInfo { SmtpAddress = i.Address, AttendeeType = MeetingAttendeeType.Room });
+            System.Collections.Generic.List<AttendeeInfo> rooms2 = new System.Collections.Generic.List<AttendeeInfo>();
+            foreach (EmailAddress thisRoom in rooms)
+            {
+                rooms2.Add(new AttendeeInfo() { SmtpAddress = thisRoom.Address, AttendeeType = MeetingAttendeeType.Room });
+            }
+
+
+            TimeWindow timeframe = new TimeWindow(startTime, endTime);
+
+            // Get all availabilites from all rooms at given locations
+            GetUserAvailabilityResults availability = service.GetUserAvailability(rooms2, timeframe, AvailabilityData.FreeBusy);
+            
+
+            foreach (AttendeeAvailability a in availability.AttendeesAvailability)
+            {
+
+                // a.CalendarEvents[0].StartTime
+                // a.CalendarEvents[0].EndTime
+
+                // Here we always get all the free rooms
+                // including the ones we booked earlier
+                // UNTIL somebody clicks accept in Outlook and then it does not appear here!?
+                // var busyRoomToRemove = a.CalendarEvents.ToList().Find(x => x.FreeBusyStatus == LegacyFreeBusyStatus.Busy);
+                // a.CalendarEvents.Remove(busyRoomToRemove);
+            }
+
+            // http://blog.darrenparkinson.uk/2013/12/using-ews-managed-api-to-access-meeting_13.html
+            // https://docs.microsoft.com/en-us/previous-versions/office/developer/exchange-server-2010/hh532568(v%3Dexchg.80)
+            // https://docs.microsoft.com/en-us/exchange/client-developer/exchange-web-services/distribution-groups-and-ews-in-exchange
+            // https://www.linkedin.com/pulse/creating-meeting-using-ews-managed-api-sunil-chauhan
+
+            // https://support.zoom.us/hc/en-us/articles/203847339-Setting-Up-Zoom-Rooms-with-Exchange-2013-2016
+
+
+            // https://docs.microsoft.com/en-us/exchange/client-developer/exchange-web-services/calendars-and-ews-in-exchange
+            Appointment meeting = new Appointment(service);
+            // Set the properties on the meeting object to create the meeting.
+            meeting.Subject = "Team building exercise";
+            meeting.Body = "Let's learn to really work as a team and then have lunch!";
+            meeting.Start = System.DateTime.Now.AddDays(2);
+            meeting.End = meeting.Start.AddHours(2);
+            meeting.Location = "Conference Room 12";
+            meeting.RequiredAttendees.Add("Mack.Chaves@contoso.com");
+            meeting.RequiredAttendees.Add("Sadie.Daniels@contoso.com");
+            meeting.OptionalAttendees.Add("Magdalena.Kemp@contoso.com");
+            meeting.ReminderMinutesBeforeStart = 60;
+            // Send the meeting request
+            meeting.Save(SendInvitationsMode.SendToAllAndSaveCopy);
+
+
+            // Create and manage room mailboxes
+            // https://technet.microsoft.com/en-us/library/jj215781(v=exchg.160).aspx
+            // https://blogs.technet.microsoft.com/exchange/2007/12/13/how-to-access-multiple-resource-mailboxes-in-exchange-web-services-ews/
+            // https://docs.microsoft.com/en-us/exchange/client-developer/management/create-exchange-management-shell-tools
+
+
+        } // End Sub ListAllMails 
+
+
 
         public static void GetInbox(ExchangeService service)
         {
