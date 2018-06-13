@@ -37,18 +37,17 @@ namespace System.Configuration.ConfigurationManager
         
         public static string Get()
         {
-            string val = GetSanitizedTranslate("field", "value", false);
-            
+            // string val = GetSanitizedTranslate("field", "value", false);
+
             // true
             // translate(field,"ABCDEFGHIJKLMNOPQRSTUVWXYZʼ           “”", concat("abcdefghijklmnopqrstuvwxyz'           ",'""'))="value"
             // translate(field,"ABCDEFGHIJKLMNOPQRSTUVWXYZʼ           “”", concat("abcdefghijklmnopqrstuvwxyz'           ",'""')),"value"
-            
-            return val;
-            
-            return Get("count\\\"offiles");
+
+            //return Get("count\\\"offiles");
+            return Get("countoffiles");
         }
-        
-        
+
+
         // https://www.coveros.com/escaping-and-translating-in-xpath/
         static string APOSTROPHES = "\u02BC";
         static string SPACES = "\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A";
@@ -99,8 +98,8 @@ namespace System.Configuration.ConfigurationManager
 
 namespace RedmineMailService
 {
-    
-    
+
+
     public class MailSettings
     {
         public string Host;
@@ -108,7 +107,61 @@ namespace RedmineMailService
         public bool Ssl;
         public string Username;
         public string Password;
-        public bool DefaultCredentials;
+
+
+        protected string m_FromAddress;
+        public string FromAddress
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(m_FromAddress))
+                    return this.m_FromAddress;
+
+                return "servicedesk@cor-management.ch";
+            }
+            set
+            {
+                this.m_FromAddress = value;
+            }
+        }
+
+
+        protected string m_FromName;
+        public string FromName
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(m_FromName))
+                    return this.m_FromName;
+
+                if (string.Equals(this.m_FromAddress, "servicedesk@cor-management.ch", System.StringComparison.InvariantCultureIgnoreCase))
+                    return "COR ServiceDesk";
+
+                return this.FromAddress;
+            }
+            set
+            {
+                this.m_FromName = value;
+            }
+        }
+
+
+        protected bool? m_DefaultCredentials;
+
+        public bool DefaultCredentials
+        {
+            get
+            {
+                if (m_DefaultCredentials.HasValue)
+                    return m_DefaultCredentials.Value;
+
+                return string.IsNullOrEmpty(this.Username);
+            }
+            set
+            {
+                this.m_DefaultCredentials = value;
+            }
+        }
     }
     
     
@@ -120,32 +173,37 @@ namespace RedmineMailService
     {
 
 
-        public static void Test()
+        public static void TestWebConfig()
         {
-
             string smtpserver = System.Configuration.ConfigurationManager.AppSettings.Get("smtp_server");
             string smtpport = System.Configuration.ConfigurationManager.AppSettings.Get("smtp_port");
             int port = int.TryParse(smtpport, out port) ? port : 25;
+
+            string smtp_user = System.Configuration.ConfigurationManager.AppSettings.Get("smtp_user");
+            string smtp_password = System.Configuration.ConfigurationManager.AppSettings.Get("smtp_passwort");
+
+            string smtp_authenticate = System.Configuration.ConfigurationManager.AppSettings.Get("smtp_authenticate");
+
+            bool authenticate = false;
+
+            if (!bool.TryParse(smtp_authenticate, out authenticate))
+            {
+                authenticate = !string.IsNullOrEmpty(smtp_user);
+            }
 
 
             MailSettings ms = new MailSettings()
             {
                 Host = "smtp.gmail.com",
-                Username = Trash.UserData.GMail,
-                Password= Trash.UserData.GMailPassword,
-                Port=  587 // 25,
-                ,Ssl = true,
-                
+                Username = smtp_user,
+                Password = smtp_password,
+                Port = port, // 587, // 25,
+                Ssl = true,
+                DefaultCredentials = !authenticate
             };
 
         }
 
-        public static bool IsInteger(object Expression)
-        {
-            int n;
-            return int.TryParse(System.Convert.ToString(Expression), out n);
-        }
-        
 
         public static void Send(System.Net.Mail.MailMessage message)
         {
@@ -157,7 +215,7 @@ namespace RedmineMailService
             {
                 smtp.Host = smtpserver;
                 smtp.Port = port;
-                
+
                 string smtpauthenticate = System.Configuration.ConfigurationManager.AppSettings.Get("smtp_authenticate");
                 if (!string.IsNullOrEmpty(smtpauthenticate) && smtpauthenticate.ToLower().Equals("true"))
                 {
@@ -175,16 +233,161 @@ namespace RedmineMailService
 
         } // End Sub Send 
 
+
+
+        // https://stackoverflow.com/questions/18358534/send-inline-image-in-email
+        private static System.Net.Mail.AlternateView GetAlternativeView(string htmlBody, string filePath)
+        {
+            System.Net.Mail.LinkedResource res = new System.Net.Mail.LinkedResource(filePath, "image/png");
+            res.ContentId = System.Guid.NewGuid().ToString();
+            htmlBody = htmlBody.Replace("{@COR_LOGO}", "cid:" + res.ContentId);
+
+            System.Net.Mail.AlternateView alternateView = System.Net.Mail.AlternateView.CreateAlternateViewFromString(htmlBody, null, System.Net.Mime.MediaTypeNames.Text.Html);
+            alternateView.LinkedResources.Add(res);
+            return alternateView;
+        }
+
+
+
+        
+
+
+
+        public static void SendAttachment()
+        {
+
+            MailSettings ms = new MailSettings()
+            {
+                Host = Trash.UserData.GMailSMTP,
+                Username = Trash.UserData.GMail,
+                Password = Trash.UserData.GMailPassword,
+                FromAddress= Trash.UserData.info,
+                Port = 587, // 25,
+                Ssl = true 
+            };
+            
+
+            string json = Newtonsoft.Json.JsonConvert.SerializeObject(ms, Newtonsoft.Json.Formatting.Indented);
+            System.Console.WriteLine(json);
+
+            System.Collections.Generic.List<byte[]> attachmentBytes = new System.Collections.Generic.List<byte[]>();
+            System.Collections.Generic.List<System.IO.MemoryStream> streams = new System.Collections.Generic.List<System.IO.MemoryStream>();
+            System.Collections.Generic.List<System.Net.Mail.Attachment> attachments = new System.Collections.Generic.List<System.Net.Mail.Attachment>();
+
+
+
+
+            
+            string path = @"D:\Stefan.Steiger\Desktop\Intro to Docker.pdf";
+            string fileName = System.IO.Path.GetFileName(path);
+            attachmentBytes.Add(System.IO.File.ReadAllBytes(path));
+
+            /*
+            for (int i = 0; i < attachmentBytes.Count; ++i)
+            {
+                streams.Add(new System.IO.MemoryStream(attachmentBytes[i]));
+            }
+
+            for (int i = 0; i < streams.Count; ++i)
+            {
+                attachments.Add(new System.Net.Mail.Attachment(streams[i], fileName, "application/pdf"));
+            }
+
+            */
+
+            attachments.Add(new System.Net.Mail.Attachment(path, "application/pdf"));
+            attachments.Add(new System.Net.Mail.Attachment(@"D:\Stefan.Steiger\Desktop\NET_Core-2.0-Getting_Started_Guide-en-US.pdf", "application/pdf"));
+
+
+            using (System.Net.Mail.MailMessage mail = new System.Net.Mail.MailMessage())
+            {
+                mail.HeadersEncoding = System.Text.Encoding.UTF8;
+
+                mail.SubjectEncoding = System.Text.Encoding.UTF8;
+                mail.Subject = "Test-Mail mit Anlage 你好，世界";
+                
+                mail.BodyEncoding = System.Text.Encoding.UTF8;
+                mail.BodyTransferEncoding = System.Net.Mime.TransferEncoding.Base64;
+                mail.IsBodyHtml = true;
+                mail.Body = System.IO.File.ReadAllText("mail_template.htm");
+                mail.AlternateViews.Add(GetAlternativeView(mail.Body, "logo.png"));
+
+
+                for (int i = 0; i < attachments.Count; ++i)
+                {
+                    mail.Attachments.Add(attachments[i]);
+                }
+                
+                mail.From = new System.Net.Mail.MailAddress(ms.FromAddress, ms.FromName);
+
+                mail.To.Add(new System.Net.Mail.MailAddress(RedmineMailService.Trash.UserData.info, "A"));
+                // mail.To.Add(new System.Net.Mail.MailAddress("user1@friends.com", "B"));
+                // mail.To.Add(new System.Net.Mail.MailAddress("user2@friends.com", "B"));
+
+                Send(ms, mail);
+            }
+
+            for (int i = 0; i < attachments.Count; ++i)
+            {
+                attachments[i].Dispose();
+            }
+
+            for (int i = 0; i < streams.Count; ++i)
+            {
+                streams[i].Dispose();
+            }
+
+        }
+
+
+
+        public static void Send(MailSettings ms, System.Net.Mail.MailMessage message)
+        {
+            // http://vmstzhdb/Reports_HBD_DBH
+            using (System.Net.Mail.SmtpClient client = new System.Net.Mail.SmtpClient())
+            {
+                client.Host = ms.Host;
+                client.Port = ms.Port;
+                client.EnableSsl = ms.Ssl;
+                client.DeliveryMethod = System.Net.Mail.SmtpDeliveryMethod.Network;
+
+                client.UseDefaultCredentials = ms.DefaultCredentials;
+                // Must be after UseDefaultCredentials 
+                if (client.UseDefaultCredentials)
+                    client.Credentials = System.Net.CredentialCache.DefaultNetworkCredentials;
+                else
+                    client.Credentials = new System.Net.NetworkCredential(ms.Username, ms.Password);
+
+                try
+                {
+                    client.Send(message);
+                }
+                catch (System.Exception ex)
+                {
+                    do
+                    {
+                        System.Console.Write("Fehler: ");
+                        System.Console.WriteLine(ex.Message);
+                        System.Console.WriteLine("Stacktrace: ");
+                        System.Console.WriteLine(ex.StackTrace);
+                        System.Console.WriteLine(System.Environment.NewLine);
+                        ex = ex.InnerException;
+                    } while (ex != null);
+                } // End Catch 
+
+            } // End Using client 
+
+        } // End Sub Test 
+
+
+
         // .NET 4.5+
         // https://github.com/jstedfast/MailKit
         // https://github.com/jstedfast/MimeKit
 
         // https://stackoverflow.com/questions/4677258/send-email-using-system-net-mail-through-gmail
         public static void Test(MailSettings ms)
-        {
-            //Trash.UserData.RSN, Trash.UserData.RSNA)
-            // Trash.UserData.SMTP
-            
+        {   
             // http://vmstzhdb/Reports_HBD_DBH
             using (System.Net.Mail.SmtpClient client = new System.Net.Mail.SmtpClient())
             {

@@ -1,6 +1,10 @@
 ﻿
 #if (NETSTANDARD1_0 || NETSTANDARD1_1 || NETSTANDARD1_2 || NETSTANDARD1_3 || NETSTANDARD1_4 || NETSTANDARD1_5 || NETSTANDARD1_6 || NETSTANDARD1_7 || NETSTANDARD1_8 || NETSTANDARD1_9 || NETSTANDARD2_0 || NETSTANDARD2_1 || NETSTANDARD2_2)
 
+#if false 
+
+
+
 namespace System.Drawing 
 {
 
@@ -27,6 +31,8 @@ namespace System.Drawing
     }
 
 }
+
+#endif 
 
 #endif
 
