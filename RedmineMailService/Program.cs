@@ -73,6 +73,7 @@ namespace RedmineMailService
         [System.STAThread]
         static void Main(string[] args)
         {
+            System.Configuration.ConfigurationManager.AppSettings.Get();
             MailSender2.Test();
             // https://github.com/dasMulli/dotnet-win32-service
             // ServiceStarter.Start(args);
