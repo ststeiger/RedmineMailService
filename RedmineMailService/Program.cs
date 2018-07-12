@@ -75,6 +75,7 @@ namespace RedmineMailService
         {
             System.Configuration.ConfigurationManager.AppSettings.Get();
             MailSender2.SendAttachment();
+            return;
             // https://github.com/dasMulli/dotnet-win32-service
             // ServiceStarter.Start(args);
 
@@ -83,7 +84,7 @@ namespace RedmineMailService
             CertificateCallback.Initialize();
             Titanium.Web.Proxy.Examples.Basic.ProxyTestController controller = Titanium.Web.Proxy.Examples.Basic.ProxyServerProgram.Start();
 
-            TestMailReader.Test();
+            // TestMailReader.Test();
             
 
 

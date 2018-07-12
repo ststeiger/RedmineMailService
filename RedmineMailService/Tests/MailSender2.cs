@@ -324,6 +324,8 @@ namespace RedmineMailService
                 // mail.To.Add(new System.Net.Mail.MailAddress("user1@friends.com", "B"));
                 // mail.To.Add(new System.Net.Mail.MailAddress("user2@friends.com", "B"));
 
+                mail.ReplyToList.Add(new System.Net.Mail.MailAddress(RedmineMailService.Trash.UserData.ReplyTo, "Catch22"));
+                
                 Send(ms, mail);
             }
 

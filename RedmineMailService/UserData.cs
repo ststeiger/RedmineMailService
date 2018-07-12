@@ -11,6 +11,7 @@ namespace RedmineMailService.Trash
         public static string Password = SecretManager.GetSecret<string>("Password");
 
         public static string info = SecretManager.GetSecret<string>("info");
+        public static string ReplyTo = SecretManager.GetSecret<string>("ReplyTo");
         public static string RSN = SecretManager.GetSecret<string>("RSN");
         public static string RSNA = AES.DeCrypt(SecretManager.GetSecret<string>("RSNA"));
 
