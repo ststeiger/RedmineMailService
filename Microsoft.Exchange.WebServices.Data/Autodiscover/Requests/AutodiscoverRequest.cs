@@ -480,11 +480,11 @@ namespace Microsoft.Exchange.WebServices.Autodiscover
             string contentEncoding = response.ContentEncoding;
             Stream responseStream = response.GetResponseStream();
 
-            if (contentEncoding.ToLowerInvariant().Contains("gzip"))
+            if (contentEncoding != null && contentEncoding.ToLowerInvariant().Contains("gzip"))
             {
                 return new GZipStream(responseStream, CompressionMode.Decompress);
             }
-            else if (contentEncoding.ToLowerInvariant().Contains("deflate"))
+            else if (contentEncoding != null && contentEncoding.ToLowerInvariant().Contains("deflate"))
             {
                 return new DeflateStream(responseStream, CompressionMode.Decompress);
             }

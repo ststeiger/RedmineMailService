@@ -74,7 +74,7 @@ namespace RedmineMailService
         static void Main(string[] args)
         {
             System.Configuration.ConfigurationManager.AppSettings.Get();
-            MailSender2.SendAttachment();
+            RedmineMailService.Exchange.SendMailWithAttachment();
             return;
             // https://github.com/dasMulli/dotnet-win32-service
             // ServiceStarter.Start(args);

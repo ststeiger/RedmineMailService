@@ -1,6 +1,6 @@
 ﻿
 using Microsoft.Exchange.WebServices.Data;
-
+using System.Linq;
 
 namespace RedmineMailService
 {
@@ -33,7 +33,7 @@ namespace RedmineMailService
 
         private static void SetNtlmHeader(ExchangeService ews, string username, string password)
         {
-            var cache = new System.Net.CredentialCache();
+            System.Net.CredentialCache cache = new System.Net.CredentialCache();
             cache.Add(ews.Url, "NTLM", new System.Net.NetworkCredential(username, password));
             ews.Credentials = cache;
         }
@@ -61,7 +61,7 @@ namespace RedmineMailService
         public static ExchangeService GetService(ExchangeVersion version)
         {
             ExchangeService service = new ExchangeService(version);
-            service.WebProxy = new System.Net.WebProxy("127.0.0.1", 8000);
+            //service.WebProxy = new System.Net.WebProxy("127.0.0.1", 8000);
 
             // service.WebProxy
             service.PreAuthenticate = true;
@@ -103,19 +103,16 @@ namespace RedmineMailService
 
         public static void GetRoom(ExchangeService service)
         {
-
-            
-
             service.GetRoomLists();
 
-            var locationAddress = new EmailAddress();
+            EmailAddress locationAddress = new EmailAddress();
             service.GetRooms(locationAddress);
 
             System.DateTime startTime = System.DateTime.Now;
             System.DateTime endTime = System.DateTime.Now.AddHours(1);
 
 
-            var appointment = new Appointment(service)
+            Appointment appointment = new Appointment(service)
             {
                 Subject = "Created by ExchangeTest app",
                 Body = "Some body text....",
@@ -133,10 +130,8 @@ namespace RedmineMailService
 
             System.Collections.ObjectModel.Collection<EmailAddress> rooms = service.GetRooms(locationAddress);
 
-
-
             // all the meeting rooms at location
-            //var rooms2 = rooms.Select(i => new AttendeeInfo { SmtpAddress = i.Address, AttendeeType = MeetingAttendeeType.Room });
+            //System.Collections.Generic.IEnumerable<AttendeeInfo> rooms2 = rooms.Select(i => new AttendeeInfo { SmtpAddress = i.Address, AttendeeType = MeetingAttendeeType.Room });
             System.Collections.Generic.List<AttendeeInfo> rooms2 = new System.Collections.Generic.List<AttendeeInfo>();
             foreach (EmailAddress thisRoom in rooms)
             {
@@ -152,14 +147,13 @@ namespace RedmineMailService
 
             foreach (AttendeeAvailability a in availability.AttendeesAvailability)
             {
-
                 // a.CalendarEvents[0].StartTime
                 // a.CalendarEvents[0].EndTime
 
                 // Here we always get all the free rooms
                 // including the ones we booked earlier
                 // UNTIL somebody clicks accept in Outlook and then it does not appear here!?
-                // var busyRoomToRemove = a.CalendarEvents.ToList().Find(x => x.FreeBusyStatus == LegacyFreeBusyStatus.Busy);
+                // CalendarEvent busyRoomToRemove = a.CalendarEvents.ToList().Find(x => x.FreeBusyStatus == LegacyFreeBusyStatus.Busy);
                 // a.CalendarEvents.Remove(busyRoomToRemove);
             }
 
@@ -343,6 +337,58 @@ namespace RedmineMailService
         {
             DelaySendEmail(GetService());
         } // End Sub DelaySendEmail 
+        
+
+        public static void SendMailWithAttachment(ExchangeService service)
+        {
+            EmailMessage email = new EmailMessage(service);
+            email.ToRecipients.Add(RedmineMailService.Trash.UserData.info);
+            email.Subject = "SUBJECT: New email message with embedded image";
+            
+            string inputFileName="logo.png";
+            using (System.IO.Stream myStream = new System.IO.FileStream(
+                    inputFileName
+                  , System.IO.FileMode.Open
+                  , System.IO.FileAccess.Read
+                  , System.IO.FileShare.Read
+              ))
+            {
+                // Add the attachment to the email message. 
+                FileAttachment fileAttach = email.Attachments.AddFileAttachment(inputFileName, myStream);
+                email.Attachments[0].IsInline = true; // Requires Exchange 2010+
+
+                email.Attachments.AddFileAttachment(@"D:\username\Desktop\Intro to Docker.pdf");
+                email.Attachments.AddFileAttachment(@"D:\username\Desktop\NET_Core-2.0-Getting_Started_Guide-en-US.pdf");
+
+                MessageBody htmlBody = new MessageBody();
+                htmlBody.BodyType = BodyType.HTML;
+                string htmlBodyTxt = @"<!DOCTYPE html>
+<html lang=""en"">
+<head>
+    <title>Title is not shown anywhere</title>
+</head>
+<body>
+<p>Here is where you will find an inline image.</p>
+<img width=""100"" height=""100"" id=""1"" src=""cid:{0}"" alt=""image alt text"">
+</body>
+</html>
+";
+
+                htmlBodyTxt = string.Format(htmlBodyTxt, inputFileName);
+                htmlBody.Text = htmlBodyTxt;
+                email.Body = htmlBody;
+
+                // email.Send();
+                email.SendAndSaveCopy();
+            } // End Using myStream 
+
+        } // End Sub SendMailWithAttachment 
+
+
+        public static void SendMailWithAttachment()
+        {
+            SendMailWithAttachment(GetService(ExchangeVersion.Exchange2010));
+        } // End Sub SendMailWithAttachment 
 
 
         public static void FindUnreadEmail(ExchangeService service)

@@ -99,71 +99,6 @@ namespace System.Configuration.ConfigurationManager
 namespace RedmineMailService
 {
 
-
-    public class MailSettings
-    {
-        public string Host;
-        public int Port;
-        public bool Ssl;
-        public string Username;
-        public string Password;
-
-
-        protected string m_FromAddress;
-        public string FromAddress
-        {
-            get
-            {
-                if (!string.IsNullOrEmpty(m_FromAddress))
-                    return this.m_FromAddress;
-
-                return "servicedesk@cor-management.ch";
-            }
-            set
-            {
-                this.m_FromAddress = value;
-            }
-        }
-
-
-        protected string m_FromName;
-        public string FromName
-        {
-            get
-            {
-                if (!string.IsNullOrEmpty(m_FromName))
-                    return this.m_FromName;
-
-                if (string.Equals(this.m_FromAddress, "servicedesk@cor-management.ch", System.StringComparison.InvariantCultureIgnoreCase))
-                    return "COR ServiceDesk";
-
-                return this.FromAddress;
-            }
-            set
-            {
-                this.m_FromName = value;
-            }
-        }
-
-
-        protected bool? m_DefaultCredentials;
-
-        public bool DefaultCredentials
-        {
-            get
-            {
-                if (m_DefaultCredentials.HasValue)
-                    return m_DefaultCredentials.Value;
-
-                return string.IsNullOrEmpty(this.Username);
-            }
-            set
-            {
-                this.m_DefaultCredentials = value;
-            }
-        }
-    }
-    
     
     // https://stackoverflow.com/questions/637866/sending-mail-without-installing-an-smtp-server
     // http://www.nullskull.com/articles/20030316.asp
@@ -233,115 +168,7 @@ namespace RedmineMailService
 
         } // End Sub Send 
 
-
-
-        // https://stackoverflow.com/questions/18358534/send-inline-image-in-email
-        private static System.Net.Mail.AlternateView GetAlternativeView(string htmlBody, string filePath)
-        {
-            System.Net.Mail.LinkedResource res = new System.Net.Mail.LinkedResource(filePath, "image/png");
-            res.ContentId = System.Guid.NewGuid().ToString();
-            htmlBody = htmlBody.Replace("{@COR_LOGO}", "cid:" + res.ContentId);
-
-            System.Net.Mail.AlternateView alternateView = System.Net.Mail.AlternateView.CreateAlternateViewFromString(htmlBody, null, System.Net.Mime.MediaTypeNames.Text.Html);
-            alternateView.LinkedResources.Add(res);
-            return alternateView;
-        }
-
-
-
         
-
-
-
-        public static void SendAttachment()
-        {
-
-            MailSettings ms = new MailSettings()
-            {
-                Host = Trash.UserData.GMailSMTP,
-                Username = Trash.UserData.GMail,
-                Password = Trash.UserData.GMailPassword,
-                FromAddress= Trash.UserData.info,
-                Port = 587, // 25,
-                Ssl = true 
-            };
-            
-
-            string json = Newtonsoft.Json.JsonConvert.SerializeObject(ms, Newtonsoft.Json.Formatting.Indented);
-            System.Console.WriteLine(json);
-
-            System.Collections.Generic.List<byte[]> attachmentBytes = new System.Collections.Generic.List<byte[]>();
-            System.Collections.Generic.List<System.IO.MemoryStream> streams = new System.Collections.Generic.List<System.IO.MemoryStream>();
-            System.Collections.Generic.List<System.Net.Mail.Attachment> attachments = new System.Collections.Generic.List<System.Net.Mail.Attachment>();
-
-
-
-
-            
-            string path = @"D:\Stefan.Steiger\Desktop\Intro to Docker.pdf";
-            string fileName = System.IO.Path.GetFileName(path);
-            attachmentBytes.Add(System.IO.File.ReadAllBytes(path));
-
-            /*
-            for (int i = 0; i < attachmentBytes.Count; ++i)
-            {
-                streams.Add(new System.IO.MemoryStream(attachmentBytes[i]));
-            }
-
-            for (int i = 0; i < streams.Count; ++i)
-            {
-                attachments.Add(new System.Net.Mail.Attachment(streams[i], fileName, "application/pdf"));
-            }
-
-            */
-
-            attachments.Add(new System.Net.Mail.Attachment(path, "application/pdf"));
-            attachments.Add(new System.Net.Mail.Attachment(@"D:\Stefan.Steiger\Desktop\NET_Core-2.0-Getting_Started_Guide-en-US.pdf", "application/pdf"));
-
-
-            using (System.Net.Mail.MailMessage mail = new System.Net.Mail.MailMessage())
-            {
-                mail.HeadersEncoding = System.Text.Encoding.UTF8;
-
-                mail.SubjectEncoding = System.Text.Encoding.UTF8;
-                mail.Subject = "Test-Mail mit Anlage 你好，世界";
-                
-                mail.BodyEncoding = System.Text.Encoding.UTF8;
-                mail.BodyTransferEncoding = System.Net.Mime.TransferEncoding.Base64;
-                mail.IsBodyHtml = true;
-                mail.Body = System.IO.File.ReadAllText("mail_template.htm");
-                mail.AlternateViews.Add(GetAlternativeView(mail.Body, "logo.png"));
-
-
-                for (int i = 0; i < attachments.Count; ++i)
-                {
-                    mail.Attachments.Add(attachments[i]);
-                }
-                
-                mail.From = new System.Net.Mail.MailAddress(ms.FromAddress, ms.FromName);
-
-                mail.To.Add(new System.Net.Mail.MailAddress(RedmineMailService.Trash.UserData.info, "A"));
-                // mail.To.Add(new System.Net.Mail.MailAddress("user1@friends.com", "B"));
-                // mail.To.Add(new System.Net.Mail.MailAddress("user2@friends.com", "B"));
-
-                mail.ReplyToList.Add(new System.Net.Mail.MailAddress(RedmineMailService.Trash.UserData.ReplyTo, "Catch22"));
-                
-                Send(ms, mail);
-            }
-
-            for (int i = 0; i < attachments.Count; ++i)
-            {
-                attachments[i].Dispose();
-            }
-
-            for (int i = 0; i < streams.Count; ++i)
-            {
-                streams[i].Dispose();
-            }
-
-        }
-
-
 
         public static void Send(MailSettings ms, System.Net.Mail.MailMessage message)
         {
@@ -375,11 +202,12 @@ namespace RedmineMailService
                         System.Console.WriteLine(System.Environment.NewLine);
                         ex = ex.InnerException;
                     } while (ex != null);
+
                 } // End Catch 
 
             } // End Using client 
 
-        } // End Sub Test 
+        } // End Sub Send 
 
 
 
