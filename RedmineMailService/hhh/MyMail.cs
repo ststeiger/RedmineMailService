@@ -33,6 +33,15 @@ namespace ABCDE
 
         public void Send()
         {
+            System.MulticastDelegate m = (System.MulticastDelegate)OnStart;
+            System.Delegate[] dlist = m.GetInvocationList();
+            foreach (System.Delegate d in dlist)
+            {
+                object[] p = { /*put your parameters here*/ };
+                object ret = d.DynamicInvoke(p);
+            }
+
+
             OnStart(this, null);
 
             foreach (System.Data.DataRow dr in Data.Rows)
