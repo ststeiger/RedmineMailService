@@ -36,7 +36,7 @@ namespace RedmineMailService.Tests
         }
 
 
-        public string lala()
+        public string TestGetName()
         {
             // return this.OnGetName();
 
@@ -54,7 +54,7 @@ namespace RedmineMailService.Tests
             return Coalesce(results);
         }
 
-        public string lalaSimple(System.Type t, string name)
+        public string TestGetName_real(System.Type t, string name)
         {
             System.MulticastDelegate m = (System.MulticastDelegate)this.OnGetName;
             System.Delegate[] dlist = m.GetInvocationList();
@@ -108,9 +108,10 @@ namespace RedmineMailService.Tests
             tc.OnGetName += fb.bar;
             // tc.OnGetName();
 
-            System.Console.WriteLine("lala: " + tc.lala());
+            System.Console.WriteLine("lala: " + tc.TestGetName());
         }
 
     }
+
 
 }

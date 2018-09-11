@@ -11,7 +11,7 @@ namespace RedmineMailService
 
 
         public Resource()
-        { }
+        { } // Constructor 
 
 
         private static string ContentTypeFromFileName(string fileName)
@@ -25,7 +25,7 @@ namespace RedmineMailService
                 return dictMimes[extension];
 
             return "application/pdf";
-        }
+        } // End Function ContentTypeFromFileName 
 
 
         public Resource(System.IO.Stream stream, string fileName, string contentType)
@@ -33,7 +33,7 @@ namespace RedmineMailService
             this.Stream = stream;
             this.FileName = fileName;
             this.ContentType = contentType;
-        }
+        } // Constructor 
 
 
         public Resource(System.IO.Stream stream, string fileName)
@@ -67,14 +67,15 @@ namespace RedmineMailService
 
         public Resource(string fileNameAndPath, string fileName)
             : this(fileNameAndPath, fileName, ContentTypeFromFileName(fileName))
-        { }
+        { } // Constructor 
 
 
         public Resource(string fileNameAndPath)
             : this(fileNameAndPath, System.IO.Path.GetFileName(fileNameAndPath), ContentTypeFromFileName(fileNameAndPath))
-        { }
-
-    }
+        { } // Constructor 
 
 
-}
+    } // End Class Resource 
+
+
+} // End Namespace RedmineMailService 

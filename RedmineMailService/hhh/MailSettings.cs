@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
 //namespace RedmineMailService.Tests
 namespace RedmineMailService
 {
+
 
     public class MailSettings
     {
@@ -23,7 +21,7 @@ namespace RedmineMailService
                 if (!string.IsNullOrEmpty(m_FromAddress))
                     return this.m_FromAddress;
 
-                return "servicedesk@cor-management.ch";
+                return "postmaster@example.com";
             }
             set
             {
@@ -68,6 +66,9 @@ namespace RedmineMailService
                 this.m_DefaultCredentials = value;
             }
         }
-    }
 
-}
+
+    } // End Class MailSettings 
+
+
+} // End Namespace RedmineMailService 

@@ -10,6 +10,7 @@ namespace RedmineMailService
     static class MailSender
     {
 
+
         public static void Test()
         {
             // http://vmstzhdb/Reports_HBD_DBH
