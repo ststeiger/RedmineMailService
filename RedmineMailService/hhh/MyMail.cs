@@ -8,16 +8,21 @@ namespace ABCDE
 
     public class MassMail 
     {
+        public MailTemplate Template;
         public System.Data.DataTable Data;
         protected MailSettings m_mailSettings;
+        
 
         public MassMail()
         { }
 
+
         public MassMail(MailSettings mailSettings)
+            :this()
         {
             this.m_mailSettings = mailSettings;
         }
+
 
         // When multiple handlers are associated with a single event in C# 
         // and the handler signature has a return type, 
