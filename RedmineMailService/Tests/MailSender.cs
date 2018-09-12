@@ -34,6 +34,18 @@ namespace RedmineMailService
                     mail.Body = "Test";
 
 
+                    mail.Headers.Add("Disposition-Notification-To", RedmineMailService.Trash.UserData.info);
+                    //for delivery receipt
+
+                    mail.DeliveryNotificationOptions = 
+                          System.Net.Mail.DeliveryNotificationOptions.OnSuccess 
+                        | System.Net.Mail.DeliveryNotificationOptions.OnFailure;
+
+
+                    
+                    
+
+
                     // mail.From = new System.Net.Mail.MailAddress("somebody@friends.com", "SomeBody");
                     mail.From = new System.Net.Mail.MailAddress(RedmineMailService.Trash.UserData.info, "COR ServiceDesk");
 
