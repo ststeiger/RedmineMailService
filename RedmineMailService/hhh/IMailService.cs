@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
 namespace RedmineMailService.hhh
 {
-
+    
+    
     public class MailSettings
     {
         public string Server;
@@ -14,9 +12,11 @@ namespace RedmineMailService.hhh
         public string ReplyToAddress;
         public string Username;
         public string Password;
-
+        public string Token;
+        
     }
-
+    
+    
     public class MailService
     {
         public MailService(MailSettings ms)
@@ -24,7 +24,7 @@ namespace RedmineMailService.hhh
 
         public void SendMail(MailTemplate mt, string[] to)
         {
-
+            MailKit.
         }
     }
 
