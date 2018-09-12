@@ -6,8 +6,12 @@ using MailKit.Security;
 
 using MimeKit;
 
+
 namespace RedmineMailService.Tests
 {
+    
+    
+    // https://www.c-sharpcorner.com/article/emailservice/
     public class SendTest
     {
         
@@ -112,7 +116,7 @@ Will you be my +1?
         }
         
         
-
+        // https://stackoverflow.com/questions/39912942/mailkit-sendmail-doubts
         public static void foo()
         {
         string emailID = "";
