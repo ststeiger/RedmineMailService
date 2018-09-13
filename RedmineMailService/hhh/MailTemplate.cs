@@ -26,6 +26,7 @@ namespace RedmineMailService
             High = 2
         }
 
+
         public System.Text.StringBuilder TemplateStringBuilder
         {
             get
