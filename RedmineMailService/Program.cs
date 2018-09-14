@@ -69,35 +69,10 @@ namespace RedmineMailService
         } // End Sub Doku 
 
 
-        /*
-[
-  "COR_FM-Suite/COR_FM-Suite",
-  "COR_FM-Suite/Portal_2014",
-  "COR-Basic/COR-Basic/Basicv3",
-  "COR-Basic/DMS",
-  "COR-Basic/DMS/Backup",
-  "COR-Basic-V4/Portal",
-  "COR-Basic-V4/Portal - Kopie",
-  "Tools/LDAPservice",
-  "Tools/TelSearch",
-  "Tools/UserManagement",
-  "Tools/xxXMLQuire",
-  "zzzzzzzzzzzzzz/MyLogParser"
-]
-        */
-
-
         [System.STAThread]
         static void Main(string[] args)
         {
-            string json = RedmineMailService.Tests.StructureInfo.GetDirectoriesAsJSON(
-                    @"C:\Users\Administrator\Documents\Visual Studio 2015\TFS"
-            );
-
-            System.Console.WriteLine(json);
-
-            return;
-            
+            // RedmineMailService.Tests.StructureInfo.Test();
             MailSender.Test();
 
             System.Configuration.ConfigurationManager.AppSettings.Get();
