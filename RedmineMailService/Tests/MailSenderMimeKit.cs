@@ -154,16 +154,16 @@ Will you be my +1?
             message.Headers.Add(
                 new MimeKit.Header(MimeKit.HeaderId.ReturnReceiptTo, "test@example.com")
             ); // Delivery report
-
-
+            
+            
             message.ReplyTo.Add (new MimeKit.MailboxAddress ("Alice", "alice@wonderland.com"));
-
+            
             message.Cc.Add (new MimeKit.MailboxAddress ("Alice", "alice@wonderland.com"));
             message.Bcc.Add (new MimeKit.MailboxAddress ("Alice", "alice@wonderland.com"));
             // message.Date = new System.DateTimeOffset(System.DateTime.Now);
             message.Date = System.DateTimeOffset.Now;
             //message.Attachments
-
+            
             message.Importance = MimeKit.MessageImportance.High;
             message.Priority = MimeKit.MessagePriority.Urgent;
             message.XPriority = MimeKit.XMessagePriority.Highest;
