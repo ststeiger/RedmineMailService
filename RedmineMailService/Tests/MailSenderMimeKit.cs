@@ -118,11 +118,11 @@ Will you be my +1?
             MimeKit.MimeMessage message = new MimeKit.MimeMessage ();
             message.From.Add (new MimeKit.MailboxAddress ("Joey", "joey@friends.com"));
             message.To.Add (new MimeKit.MailboxAddress ("Alice", "alice@wonderland.com"));
-            message.Headers.Add("Sensitivity", "Company-confidential");
 
             // https://tools.ietf.org/html/rfc2076#page-16
             // https://tools.ietf.org/html/rfc1911
             // The case-insensitive values are "Personal" and "Private" 
+            // Normal, Confidential, 
 
             // If a sensitivity header is present in the message, a conformant
             // system MUST prohibit the recipient from forwarding this message to
@@ -131,6 +131,17 @@ Will you be my +1?
             // be returned to the sender with an appropriate error code indicating
             // that privacy could not be assured and that the message was not
             // delivered [X400].
+            message.Headers.Add("Sensitivity", "Company-confidential");
+
+            string sTime = System.DateTime.Now.AddDays(-1).ToString("dd MMM yyyy") + " " +
+                       System.DateTime.Now.ToShortTimeString() + " +0100";
+
+            // Set a message expiration date
+            // When the expiration date passes, the message remains visible 
+            // in the message list with a strikethrough. 
+            // It can still be opened, but the strikethrough gives a visual clue 
+            // that the message is out of date or no longer relevant.
+            message.Headers.Add("expiry-date", sTime);
 
 
             MailKit.DeliveryStatusNotification delivery =

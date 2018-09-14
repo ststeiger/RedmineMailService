@@ -24,7 +24,7 @@ namespace RedmineMailService.hhh
 
         public void SendMail(MailTemplate mt, string[] to)
         {
-            MailKit.
+            // MailKit.
         }
     }
 

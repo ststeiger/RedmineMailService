@@ -13,7 +13,7 @@ namespace RedmineMailService
 
         public static void Test()
         {
-            // http://vmstzhdb/Reports_HBD_DBH
+
             using (System.Net.Mail.SmtpClient client = new System.Net.Mail.SmtpClient())
             {
 
@@ -30,25 +30,63 @@ namespace RedmineMailService
                     // client.EnableSsl = true;
 
                     client.Host = "COR-EXCHANGE.cor.local";
-                    mail.Subject = "this is a test email.";
+                    mail.Subject = "This is a test email.";
                     mail.Body = "Test";
 
 
+                    // https://www.iana.org/assignments/message-headers/message-headers.xhtml
+                    // https://tools.ietf.org/html/rfc4021#page-32
+                    // mail.Headers.Add("Importance", "High"); //  High, normal, or low.
+
+                    mail.Priority = System.Net.Mail.MailPriority.High;
+
+                    // for read-receipt
                     mail.Headers.Add("Disposition-Notification-To", RedmineMailService.Trash.UserData.info);
-                    //for delivery receipt
 
+                    // TimeZoneInfo.AdjustmentRule.DaylightDelta
+                    // TimeSpan delta = TimeZoneInfo.Local.GetUtcOffset();
+                    string sTime = System.DateTime.UtcNow.AddDays(-1)
+                        .ToString("dd MMM yyyy", System.Globalization.CultureInfo.InvariantCulture) 
+                        + " " 
+                        + System.DateTime.UtcNow.ToShortTimeString()
+                        //+ " +0100"; // Fixed - cannot get UtcOffset in .NET 2.0 
+                        + " +0000";
+
+
+                    // Set a message expiration date
+                    // When the expiration date passes, the message remains visible 
+                    // in the message list with a strikethrough. 
+                    // It can still be opened, but the strikethrough gives a visual clue 
+                    // that the message is out of date or no longer relevant.
+                    mail.Headers.Add("expiry-date", sTime);
+
+
+                    // https://tools.ietf.org/html/rfc2076#page-16
+                    // https://tools.ietf.org/html/rfc1911
+                    // The case-insensitive values are "Personal" and "Private" 
+                    // Normal, Confidential, 
+
+                    // If a sensitivity header is present in the message, a conformant
+                    // system MUST prohibit the recipient from forwarding this message to
+                    // any other user.  If the receiving system does not support privacy and
+                    // the sensitivity is one of "Personal" or "Private", the message MUST
+                    // be returned to the sender with an appropriate error code indicating
+                    // that privacy could not be assured and that the message was not
+                    // delivered [X400].
+                    mail.Headers.Add("Sensitivity", "Company-confidential");
+
+                   
+
+
+
+                    // for delivery receipt
                     mail.DeliveryNotificationOptions = 
-                          System.Net.Mail.DeliveryNotificationOptions.OnSuccess 
+                          System.Net.Mail.DeliveryNotificationOptions.OnSuccess
                         | System.Net.Mail.DeliveryNotificationOptions.OnFailure;
-
-
-                    
-                    
 
 
                     // mail.From = new System.Net.Mail.MailAddress("somebody@friends.com", "SomeBody");
                     mail.From = new System.Net.Mail.MailAddress(RedmineMailService.Trash.UserData.info, "COR ServiceDesk");
-
                     
 
                     mail.To.Add(new System.Net.Mail.MailAddress(RedmineMailService.Trash.UserData.Email, "A"));
@@ -81,7 +119,7 @@ namespace RedmineMailService
 
             } // End Using client 
 
-        } // End Sub Test 
+         } // End Sub Test 
 
 
     } // End Class MailSender 

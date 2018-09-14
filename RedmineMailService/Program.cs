@@ -73,6 +73,8 @@ namespace RedmineMailService
         [System.STAThread]
         static void Main(string[] args)
         {
+            MailSender.Test();
+
             System.Configuration.ConfigurationManager.AppSettings.Get();
             RedmineMailService.Exchange.SendMailWithAttachment();
             return;
