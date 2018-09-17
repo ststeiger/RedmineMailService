@@ -6,6 +6,44 @@ namespace RedmineMailService.Tests
     public class StructureInfo
     {
 
+        public static void mklink()
+        {
+            string root = @"D:\username\Documents\visual studio 2017\TFS\COR-Basic-V4\Portal";
+            root = @"D:\username\Documents\Visual Studio 2017\TFS\COR-FM-Suite\Portal_2014";
+            root = @"D:\username\Documents\Visual Studio 2017\TFS\COR-FM-Suite\COR_FM-Suite";
+
+            string linkTarget = @"D:\username\Documents\visual studio 2017\GitLab\COR-Basic-V4\Portal";
+            linkTarget = @"D:\username\Documents\Visual Studio 2017\GitLab\COR-FM-Suite\Portal_2014";
+            linkTarget = @"D:\username\Documents\Visual Studio 2017\GitLab\COR-FM-Suite\COR_FM-Suite";
+
+            mklink(root, linkTarget);
+        }
+
+        public static void mklink(string root, string linkTarget)
+        {
+            string[] dirs = System.IO.Directory.GetDirectories(root, "*", System.IO.SearchOption.TopDirectoryOnly);
+
+            foreach (string dir in dirs)
+            {
+                string dirName = new System.IO.DirectoryInfo(dir).Name;
+
+                if (dirName.StartsWith("."))
+                    continue;
+
+
+                string target = System.IO.Path.Combine(linkTarget, dirName);
+
+                string cmd = "mklink /j \"" + target + "\" \"" + dir + "\"";
+
+                using (var p = System.Diagnostics.Process.Start("cmd.exe", "/c " + cmd))
+                {
+                    p.WaitForExit();
+                }
+
+                System.Console.WriteLine(cmd);
+            }
+        }
+
 
         public static void CreateDirectoryRecursively(string path)
         {
