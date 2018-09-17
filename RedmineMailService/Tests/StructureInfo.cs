@@ -122,9 +122,10 @@ namespace RedmineMailService.Tests
 
         public static void Test()
         {
-            string json = GetDirectoriesAsJSON(
-                   @"C:\Users\Administrator\Documents\Visual Studio 2015\TFS"
-           );
+            string path = @"C:\Users\Administrator\Documents\Visual Studio 2015\TFS";
+            path = @"D:\username\Documents\Visual Studio 2017\TFS";
+
+            string json = GetDirectoriesAsJSON(path);
 
             System.Console.WriteLine(json);
         }
