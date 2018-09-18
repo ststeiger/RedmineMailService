@@ -1,6 +1,6 @@
 ﻿
 using Microsoft.Exchange.WebServices.Data;
-using System.Linq;
+
 
 namespace RedmineMailService
 {

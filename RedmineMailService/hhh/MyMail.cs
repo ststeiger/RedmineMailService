@@ -6,95 +6,7 @@ namespace ABCDE
 {
 
 
-    public class MassMail 
-    {
-        public MailTemplate Template;
-        public System.Data.DataTable Data;
-        protected MailSettings m_mailSettings;
-        
-
-        public MassMail()
-        { }
-
-
-        public MassMail(MailSettings mailSettings)
-            :this()
-        {
-            this.m_mailSettings = mailSettings;
-        }
-
-
-        // When multiple handlers are associated with a single event in C# 
-        // and the handler signature has a return type, 
-        // then the value returned by the last handler executed 
-        // will be the one returned to the event raiser.
-        public delegate bool SaveEventHandler_t(object sender, System.EventArgs e);
-        public event SaveEventHandler_t OnStart;
-        public event SaveEventHandler_t OnSuccess;
-        public event SaveEventHandler_t OnFailure;
-        public event SaveEventHandler_t OnAlways;
-        public event SaveEventHandler_t OnDone;
-
-
-        public void Send()
-        {
-            System.MulticastDelegate m = (System.MulticastDelegate)OnStart;
-            System.Delegate[] dlist = m.GetInvocationList();
-            foreach (System.Delegate d in dlist)
-            {
-                object[] p = { /*put your parameters here*/ };
-                object ret = d.DynamicInvoke(p);
-            }
-
-
-            OnStart(this, null);
-
-            foreach (System.Data.DataRow dr in Data.Rows)
-            {
-                if( object.Equals("a", "b") )
-                    OnSuccess(this, null);
-                else
-                    OnFailure(this, null);
-
-                OnAlways(this, null);
-            } // Next dr 
-
-            OnDone(this, null); 
-        } // End Sub Send 
-
-
-    } // End Class MassMail 
-
-
-
-    public class TemplateMail
-    {
-        public string Template;
-        
-        public System.Collections.Generic.List<Resource> Images;
-        public System.Collections.Generic.List<Resource> Attachments;
-        
-
-
-        public TemplateMail()
-        { }
-
-        public void foo()
-        {
-            var x = new MassMail();
-            x.OnFailure += delegate (object sender, System.EventArgs e)
-            {
-                return false;
-            };
-        }
-
-
-    }
-
-
-
-
-    class MyMail
+    public class MyMail
     {
 
 
@@ -118,20 +30,19 @@ namespace ABCDE
                 , new Resource(@"D:\username\Desktop\Intro to Docker.pdf")
                 , new Resource(@"D:\username\Desktop\NET_Core-2.0-Getting_Started_Guide-en-US.pdf")
             );
-        }
-
+        } // End Sub SendAttachment 
 
 
         public static void SendAttachment(MailSettings ms, params Resource[] att)
         {
             SendAttachment(ms, att, true);
-        }
+        } // End Sub SendAttachment 
 
 
         public static void SendAttachment(MailSettings ms, System.Collections.Generic.IEnumerable<Resource> attachments)
         {
             SendAttachment(ms, attachments, true);
-        }
+        } // End Sub SendAttachment 
 
 
         public static void SendAttachment(MailSettings ms, System.Collections.Generic.IEnumerable<Resource> attachments, bool dispose)
@@ -169,9 +80,7 @@ namespace ABCDE
             } // End if (dispose) 
 
         } // End Sub SendAttachment 
-
-
-
+        
 
 
         // https://stackoverflow.com/questions/18358534/send-inline-image-in-email
@@ -185,7 +94,7 @@ namespace ABCDE
             
             alternateView.LinkedResources.Add(res);
             return alternateView;
-        }
+        } // End Function GetAlternativeView 
 
 
         private static void SendAttachment(MailSettings ms, System.Collections.Generic.IEnumerable<System.Net.Mail.Attachment> attachments)
@@ -263,7 +172,7 @@ namespace ABCDE
         } // End Sub Send 
 
 
-    }
+    } // End Class MyMail 
 
 
-}
+} // End Namespace ABCDE 

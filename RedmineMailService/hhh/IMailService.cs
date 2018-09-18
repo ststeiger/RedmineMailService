@@ -20,16 +20,16 @@ namespace RedmineMailService.hhh
         public MailService(MailSettings ms)
         { }
         
-        public void SendMail(MailTemplate mt, string[] to)
+        public void SendMail(BaseMailTemplate mt, string[] to)
         {
             // MailKit.
         }
     }
     
     
-    class IMailService
+    interface IMailService
     {
-        public static bool SendMail(MailTemplate template)
+        bool SendMail(BaseMailTemplate template);
         
         
     }
