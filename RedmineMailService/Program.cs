@@ -74,7 +74,9 @@ namespace RedmineMailService
         {
             // RedmineMailService.Tests.StructureInfo.Test();
             MailSender.Test();
-
+            
+            
+            
             System.Configuration.ConfigurationManager.AppSettings.Get();
             RedmineMailService.Exchange.SendMailWithAttachment();
             return;

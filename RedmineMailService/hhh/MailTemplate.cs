@@ -2,8 +2,13 @@
 namespace RedmineMailService
 {
 
+    public abstract class MailTemplate
+        :BaseMailTemplate 
+    {}
+    
+    
 
-    public class MailTemplate 
+    public abstract class BaseMailTemplate 
     {
 
         public bool UseHtml;
@@ -27,7 +32,7 @@ namespace RedmineMailService
         }
 
 
-        public System.Text.StringBuilder TemplateStringBuilder
+        public virtual System.Text.StringBuilder TemplateStringBuilder
         {
             get
             {
@@ -37,7 +42,7 @@ namespace RedmineMailService
         }
 
 
-        public System.Text.StringBuilder TemplateStringForFormat
+        public virtual System.Text.StringBuilder TemplateStringForFormat
         {
             get
             {
@@ -47,7 +52,7 @@ namespace RedmineMailService
         }
 
 
-        public System.Collections.Generic.List<Resource> AllFiles
+        public virtual System.Collections.Generic.List<Resource> AllFiles
         {
             get {
                 System.Collections.Generic.List<Resource> ls = 
@@ -106,9 +111,9 @@ namespace RedmineMailService
         {
             this.UseHtml = useHtml;
         }
-
-
-        public MailTemplate Clone()
+        
+        
+        public virtual MailTemplate Clone()
         {
             return new MailTemplate(
                  this.TemplateString 
