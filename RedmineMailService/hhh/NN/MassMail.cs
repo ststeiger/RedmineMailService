@@ -11,14 +11,14 @@ namespace RedmineMailService
 
 
         public MassMail()
-        { }
+        { } // End Constructor 
 
 
         public MassMail(MailSettings mailSettings)
             : this()
         {
             this.m_mailSettings = mailSettings;
-        }
+        } // End Constructor 
 
 
         // When multiple handlers are associated with a single event in C# 
@@ -37,13 +37,12 @@ namespace RedmineMailService
         {
             System.MulticastDelegate m = (System.MulticastDelegate)OnStart;
             System.Delegate[] dlist = m.GetInvocationList();
-            foreach (System.Delegate d in dlist)
+            foreach (System.Delegate thisDelegate in dlist)
             {
                 object[] p = { /*put your parameters here*/ };
-                object ret = d.DynamicInvoke(p);
-            }
-
-
+                object ret = thisDelegate.DynamicInvoke(p);
+            } // Next thisDelegate 
+            
             OnStart(this, null);
 
             foreach (System.Data.DataRow dr in Data.Rows)
@@ -63,4 +62,4 @@ namespace RedmineMailService
     } // End Class MassMail 
 
 
-}
+} // End Namespace RedmineMailService 

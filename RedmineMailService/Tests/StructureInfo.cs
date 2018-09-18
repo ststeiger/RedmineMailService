@@ -6,6 +6,7 @@ namespace RedmineMailService.Tests
     public class StructureInfo
     {
 
+
         public static void mklink()
         {
             string root = @"D:\username\Documents\visual studio 2017\TFS\COR-Basic-V4\Portal";
@@ -17,7 +18,8 @@ namespace RedmineMailService.Tests
             linkTarget = @"D:\username\Documents\Visual Studio 2017\GitLab\COR-FM-Suite\COR_FM-Suite";
 
             mklink(root, linkTarget);
-        }
+        } // End Sub mklink 
+
 
         public static void mklink(string root, string linkTarget)
         {
@@ -35,14 +37,15 @@ namespace RedmineMailService.Tests
 
                 string cmd = "mklink /j \"" + target + "\" \"" + dir + "\"";
 
-                using (var p = System.Diagnostics.Process.Start("cmd.exe", "/c " + cmd))
+                using (System.Diagnostics.Process p = System.Diagnostics.Process.Start("cmd.exe", "/c " + cmd))
                 {
                     p.WaitForExit();
-                }
+                } // End Using p 
 
                 System.Console.WriteLine(cmd);
-            }
-        }
+            } // Next dir 
+
+        } // End Sub mklink 
 
 
         public static void CreateDirectoryRecursively(string path)
@@ -119,7 +122,7 @@ namespace RedmineMailService.Tests
         {
             string path = @"/root/github";
             GetDirectoriesAsJSON(path);
-        }
+        } // End Sub GetDirectoriesAsJSON 
 
 
         public static string GetDirectoriesByFileAsJSON(string path)
@@ -142,7 +145,7 @@ namespace RedmineMailService.Tests
                 , Newtonsoft.Json.Formatting.Indented);
 
             return json;
-        }
+        } // End Sub GetDirectoriesByFileAsJSON 
 
 
         public static string GetDirectoriesAsJSON(string path)
@@ -166,8 +169,7 @@ namespace RedmineMailService.Tests
             string json = GetDirectoriesAsJSON(path);
 
             System.Console.WriteLine(json);
-        }
-
+        } // End Sub Test 
 
 
         public static System.Collections.Generic.IEnumerable<string> 

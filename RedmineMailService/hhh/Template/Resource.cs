@@ -9,6 +9,21 @@ namespace RedmineMailService
         public string FileName;
         public string ContentType;
 
+        protected string m_uid;
+
+        public string UID
+        {
+            get
+            {
+                if (m_uid != null)
+                    return m_uid;
+
+                this.m_uid = System.Guid.NewGuid().ToString();
+                return this.m_uid;
+            }
+        }
+        
+
 
         public Resource()
         { } // Constructor 

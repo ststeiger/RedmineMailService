@@ -1,5 +1,4 @@
 ﻿
-//namespace RedmineMailService.Tests
 namespace RedmineMailService
 {
 
@@ -11,6 +10,7 @@ namespace RedmineMailService
         public bool Ssl;
         public string Username;
         public string Password;
+        public string Token;
 
 
         protected string m_FromAddress;
@@ -65,6 +65,17 @@ namespace RedmineMailService
             {
                 this.m_DefaultCredentials = value;
             }
+        }
+
+
+        public static MailSettings FromJson(string json)
+        {
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<MailSettings>(json);
+        }
+
+        public string ToJSON()
+        {
+            return Newtonsoft.Json.JsonConvert.SerializeObject(this);
         }
 
 

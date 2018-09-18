@@ -4,19 +4,7 @@ namespace RedmineMailService
 
 
     public abstract class BaseMailTemplate 
-    { 
-
-        public bool UseHtml;
-        public string TemplateString;
-        public System.Collections.Generic.List<Resource> EmbeddedImages;
-        public System.Collections.Generic.List<Resource> AttachmentFiles;
-
-        // ------
-        public System.Net.Mail.MailAddress From;
-        public System.Net.Mail.MailAddress To;
-        public System.Net.Mail.MailAddress Bcc;
-        public string Subject;
-        public MailPriority mp = MailPriority.High;
+    {
 
 
         public enum MailPriority
@@ -25,6 +13,98 @@ namespace RedmineMailService
             Low = 1,
             High = 2
         }
+
+
+        public string MailId;
+        public string Subject;
+        public string TemplateString;
+        public bool UseHtml;
+        public MailPriority mp = MailPriority.High;
+        public System.Collections.Generic.List<Resource> EmbeddedImages;
+        public System.Collections.Generic.List<Resource> AttachmentFiles;
+
+
+        public string From;
+
+        protected string m_fromName;
+
+        public string FromName
+        {
+            get
+            {
+                if (this.m_fromName != null)
+                    return this.m_fromName;
+
+                return this.From;
+            }
+            set
+            {
+                this.m_fromName = value;
+            }
+        }
+
+
+        public string To;
+
+        protected string m_toName;
+
+        public string ToName
+        {
+            get
+            {
+                if (this.m_toName != null)
+                    return this.m_toName;
+
+                return this.To;
+            }
+            set
+            {
+                this.m_toName = value;
+            }
+        }
+
+        public string Bcc;
+
+        protected string m_bccName;
+
+        public string BccName
+        {
+            get
+            {
+                if (this.m_bccName != null)
+                    return this.m_bccName;
+
+                return this.Bcc;
+            }
+            set
+            {
+                this.m_bccName = value;
+            }
+        }
+
+
+        public string ReplyTo;
+
+
+        protected string m_replyName;
+
+        public string ReplyToName
+        {
+            get
+            {
+                if (this.m_replyName != null)
+                    return this.m_replyName;
+
+                return this.ReplyTo;
+            }
+            set
+            {
+                this.m_replyName = value;
+            }
+        }
+
+
+
 
 
         public virtual System.Text.StringBuilder TemplateStringBuilder
