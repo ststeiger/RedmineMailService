@@ -3,7 +3,7 @@ namespace RedmineMailService
 {
 
 
-    public class MailService
+    public class SmtpMailService
         : IMailService
     {
 
@@ -14,15 +14,13 @@ namespace RedmineMailService
         // and the handler signature has a return type, 
         // then the value returned by the last handler executed 
         // will be the one returned to the event raiser.
-        public delegate void SaveEventHandler_t(MailSettings ms, BaseMailTemplate mail, System.DateTime tm, System.Exception exception);
         public event SaveEventHandler_t OnStart;
         public event SaveEventHandler_t OnSuccess;
         public event SaveEventHandler_t OnError;
         public event SaveEventHandler_t OnDone;
         
-
-
-        public MailService(MailSettings ms)
+        
+        public SmtpMailService(MailSettings ms)
         {
             this.m_mailSettings = ms;
         } // End Constructor 
@@ -113,10 +111,17 @@ namespace RedmineMailService
 
                     mail.From = new System.Net.Mail.MailAddress(mt.From, mt.FromName);
                     mail.To.Add(new System.Net.Mail.MailAddress(mt.To, mt.ToName));
-
-                    // mail.To.Add(new System.Net.Mail.MailAddress("user1@friends.com", "Friend 1"));
-                    // mail.To.Add(new System.Net.Mail.MailAddress("user2@friends.com", "Friend 2"));
-
+                    mail.Priority = (System.Net.Mail.MailPriority) mt.Priority;
+                    
+                    if(!string.IsNullOrEmpty(mt.ReplyTo))
+                        mail.ReplyToList.Add(new System.Net.Mail.MailAddress(mt.ReplyTo, mt.ReplyToName));
+                    
+                    if(!string.IsNullOrEmpty(mt.CC))
+                        mail.CC.Add(new System.Net.Mail.MailAddress(mt.CC, mt.CCName));
+                    
+                    if(!string.IsNullOrEmpty(mt.Bcc))
+                        mail.Bcc.Add(new System.Net.Mail.MailAddress(mt.Bcc, mt.BccName));
+                    
                     if(!string.IsNullOrEmpty(mt.ReplyTo))
                         mail.ReplyToList.Add(new System.Net.Mail.MailAddress(mt.ReplyTo, mt.ReplyToName));
 

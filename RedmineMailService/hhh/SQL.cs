@@ -19,6 +19,28 @@ namespace RedmineMailService
         }
 
 
+        public static int ExecuteNonQuery(string sql)
+        {
+            int result = 0;
+            using (var con = new System.Data.SqlClient.SqlConnection(GetConnectionString()))
+            {
+                using (var cmd = con.CreateCommand())
+                {
+                    cmd.CommandText = sql;
+                    if (con.State != System.Data.ConnectionState.Open)
+                        con.Open();
+                    
+                    result = cmd.ExecuteNonQuery();
+                    
+                    if (con.State != System.Data.ConnectionState.Closed)
+                        con.Close();
+                }
+            }
+
+            return result;
+        }
+        
+        
         public static string ExecuteScalar(string sql)
         {
             string json = "";
@@ -29,7 +51,9 @@ namespace RedmineMailService
                     cmd.CommandText = sql;
                     if (con.State != System.Data.ConnectionState.Open)
                         con.Open();
+                    
                     json = System.Convert.ToString(cmd.ExecuteScalar());
+                    
                     if (con.State != System.Data.ConnectionState.Closed)
                         con.Close();
                 }

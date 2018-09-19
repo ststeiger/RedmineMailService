@@ -7,7 +7,7 @@ namespace RedmineMailService
     {
 
 
-        public enum MailPriority
+        public enum MailPriority_t
         {
             Normal = 0,
             Low = 1,
@@ -19,11 +19,11 @@ namespace RedmineMailService
         public string Subject;
         public string TemplateString;
         public bool UseHtml;
-        public MailPriority mp = MailPriority.High;
+        public MailPriority_t Priority = MailPriority_t.Normal;
         public System.Collections.Generic.List<Resource> EmbeddedImages;
         public System.Collections.Generic.List<Resource> AttachmentFiles;
-
-
+        
+        
         public string From;
 
         protected string m_fromName;
@@ -63,6 +63,27 @@ namespace RedmineMailService
             }
         }
 
+        public string CC;
+
+        protected string m_ccName;
+        
+        public string CCName
+        {
+            get
+            {
+                if (this.m_ccName != null)
+                    return this.m_ccName;
+
+                return this.CC;
+            }
+            set
+            {
+                this.m_ccName = value;
+            }
+        }
+        
+        
+        
         public string Bcc;
 
         protected string m_bccName;

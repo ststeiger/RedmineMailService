@@ -4,16 +4,19 @@ BEGIN
 CREATE TABLE dbo.T_EML_Delivery 
 ( 
 	 EML_UID uniqueidentifier NULL 
+	,EML_Template_UID uniqueidentifier NULL 
 	,EML_Module national character varying(500) NULL 
 	,EML_From character varying(255) NULL 
 	,EML_ReplyTo character varying(255) NULL 
 	,EML_To character varying(MAX) NULL 
 	,EML_CC character varying(MAX) NULL 
 	,EML_BCC character varying(MAX) NULL 
-	,EML_Sent datetime NULL 
+	,EML_Body national character varying(MAX) NULL 
+	,EML_SendStart datetime NULL 
+	,EML_SendSuccess datetime NULL 
+	,EML_SendError datetime NULL 
+	,EML_SendEnd datetime NULL 
 	,EML_Exception national character varying(MAX) NULL 
-	,EML_SendDate datetime NULL 
-	,EML_SendStatus bit NULL 
 ); 
 END 
 
