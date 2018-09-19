@@ -75,11 +75,10 @@ namespace RedmineMailService
         static void Main(string[] args)
         {
             RedmineMailService.SendMail.Test();
-
-
+            
+            
             // RedmineMailService.Tests.StructureInfo.Test();
             MailSender.Test();
-            
             
             
             System.Configuration.ConfigurationManager.AppSettings.Get();
@@ -87,15 +86,14 @@ namespace RedmineMailService
             return;
             // https://github.com/dasMulli/dotnet-win32-service
             // ServiceStarter.Start(args);
-
+            
             // MailSender.Test();
-
+            
             CertificateCallback.Initialize();
             Titanium.Web.Proxy.Examples.Basic.ProxyTestController controller = Titanium.Web.Proxy.Examples.Basic.ProxyServerProgram.Start();
-
+            
             // TestMailReader.Test();
             
-
             controller.Stop();
             System.Console.WriteLine(System.Environment.NewLine);
             System.Console.WriteLine(" --- Press any key to continue --- ");

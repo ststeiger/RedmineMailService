@@ -46,7 +46,7 @@ Nos salutations distinguées,
 Votre équipe de support MAGIX ...
 lists.gnu.org/archive/html/ bug-ghostscript/2004-03/msg01553.html - 9k
 
-";
+".Replace("\r\n", "\n").Replace("\n","<br />");
                     
                     
                 mt.Subject = "This is a test";
@@ -83,19 +83,18 @@ VALUES ( @in_mail_id, @in_modul, @in_send_start );
                             SQL.ExecuteNonQuery(cmd);
                         }
                     }
-
-
-
+                    
+                    
                     if (string.IsNullOrEmpty(mail.CC))
                         mail.CC = "";
                     
                     if (string.IsNullOrEmpty(mail.Bcc))
                         mail.Bcc = "";
-
+                    
                     if (string.IsNullOrEmpty(mail.ReplyTo))
                         mail.ReplyTo = "";
-
-
+                    
+                    
                     using (System.Data.IDbCommand cmd = SQL.CreateCommand(@"
 UPDATE T_EML_Delivery  
     SET  EML_From = @in_from 
@@ -134,7 +133,7 @@ WHERE EML_UID = @in_mail_id
                         SQL.AddParameter(cmd, "in_mail_id", mail.MailId);
                         SQL.ExecuteNonQuery(cmd);
                     }
-
+                    
                     System.Console.WriteLine("Success ! ");
                 };
                 
@@ -143,7 +142,7 @@ WHERE EML_UID = @in_mail_id
                     string exString = exception.ToString();
                     if(string.IsNullOrEmpty(exString))
                         exString = "";
-
+                    
                     using (System.Data.IDbCommand cmd = SQL.CreateCommand(@"
 UPDATE T_EML_Delivery  
     SET  EML_SendError = @in_error_time 
@@ -158,7 +157,7 @@ WHERE EML_UID = @in_mail_id
                         SQL.AddParameter(cmd, "in_mail_id", mail.MailId);
                         SQL.ExecuteNonQuery(cmd);
                     }
-
+                    
                     System.Console.WriteLine("Error ! ");
                 };
                 
@@ -175,7 +174,7 @@ WHERE EML_UID = @in_mail_id
                         SQL.AddParameter(cmd, "in_mail_id", mail.MailId);
                         SQL.ExecuteNonQuery(cmd);
                     }
-
+                    
                     System.Console.WriteLine("Done ! ");
                 };
                 

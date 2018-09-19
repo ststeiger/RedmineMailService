@@ -1,11 +1,20 @@
 ﻿
+using WebContext = Microsoft.AspNetCore.Http.HttpContext ;
+
+
+
 namespace RedmineMailService
 {
     
     public delegate void SaveEventHandler_t(MailSettings ms, BaseMailTemplate mail, System.DateTime tm, System.Exception exception);
+
+    public interface IMailHandler
+    {    
+        void ProcessRequest(WebContext context);
+    }
     
     
-    interface IMailService
+    public interface IMailService
     {
         void SendMail(BaseMailTemplate template, System.Data.DataRow dr);
         
