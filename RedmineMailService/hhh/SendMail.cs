@@ -46,7 +46,7 @@ Nos salutations distinguées,
 Votre équipe de support MAGIX ...
 lists.gnu.org/archive/html/ bug-ghostscript/2004-03/msg01553.html - 9k
 
-"
+";
                     
                     
                 mt.Subject = "This is a test";
@@ -71,16 +71,20 @@ lists.gnu.org/archive/html/ bug-ghostscript/2004-03/msg01553.html - 9k
                 
                 ms.OnStart += delegate (MailSettings mset, BaseMailTemplate mail, System.DateTime tm, System.Exception exception)
                 {
-                    string sql = @"
-INSERT INTO T_EML_Delivery ( EML_UID, EML_Module, EML_SendStart) VALUES 
-(
-     '" + mail.MailId + @"'
-    ,N'Schlüsselbestandeskontrolle SwissLife'
-    ,'"+ System.DateTime.Now.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss") + @"'
-);
-";
-                    
-                    SQL.ExecuteNonQuery(sql);
+                    {
+                        using (System.Data.IDbCommand cmd = SQL.CreateCommand(@"
+INSERT INTO T_EML_Delivery ( EML_UID, EML_Module, EML_SendStart ) 
+VALUES ( @in_mail_id, @in_modul, @in_send_start ); 
+"))
+                        {
+                            SQL.AddParameter(cmd, "in_mail_id", mail.MailId);
+                            SQL.AddParameter(cmd, "in_modul", "Schlüsselbestandeskontrolle SwissLife");
+                            SQL.AddParameter(cmd, "in_send_start", System.DateTime.Now);
+                            SQL.ExecuteNonQuery(cmd);
+                        }
+                    }
+
+
 
                     if (string.IsNullOrEmpty(mail.CC))
                         mail.CC = "";
@@ -90,32 +94,48 @@ INSERT INTO T_EML_Delivery ( EML_UID, EML_Module, EML_SendStart) VALUES
 
                     if (string.IsNullOrEmpty(mail.ReplyTo))
                         mail.ReplyTo = "";
-                    
-                    sql = @"
+
+
+                    using (System.Data.IDbCommand cmd = SQL.CreateCommand(@"
 UPDATE T_EML_Delivery  
-    SET  EML_From = N'"+ mail.From.Replace("'","''") + @"' 
-        ,EML_ReplyTo = N'"+ mail.ReplyTo.Replace("'","''") + @"' 
-        ,EML_To = N'"+ mail.To.Replace("'","''") + @"' 
-        ,EML_CC = N'"+ mail.CC.Replace("'","''") + @"' 
-        ,EML_BCC = N'"+ mail.Bcc.Replace("'","''") + @"' 
-        ,EML_Body = N'"+ mail.TemplateString.Replace("'","''") + @"' 
-WHERE EML_UID = '" + mail.MailId + @"' 
-;";
-                    
+    SET  EML_From = @in_from 
+        ,EML_ReplyTo = @in_reply_to 
+        ,EML_To = @in_to 
+        ,EML_CC = @in_cc 
+        ,EML_BCC = @in_bcc 
+        ,EML_Body = @in_body 
+WHERE EML_UID = @in_mail_id
+"))
+                    {
+                        SQL.AddParameter(cmd, "in_from", mail.From);
+                        SQL.AddParameter(cmd, "in_reply_to", mail.ReplyTo);
+                        SQL.AddParameter(cmd, "in_to", mail.To);
+                        SQL.AddParameter(cmd, "in_cc", mail.CC);
+                        SQL.AddParameter(cmd, "in_bcc", mail.Bcc);
+                        SQL.AddParameter(cmd, "in_body", mail.TemplateString);
+                        SQL.AddParameter(cmd, "in_mail_id", mail.MailId);
+                        SQL.ExecuteNonQuery(cmd);
+                    }
+
                     System.Console.WriteLine("Start ! ");
-                    SQL.ExecuteNonQuery(sql);
+                    
                 };
                 
                 ms.OnSuccess += delegate (MailSettings mset, BaseMailTemplate mail, System.DateTime tm, System.Exception exception)
                 {
-                    string sql = @"
+
+                    using (System.Data.IDbCommand cmd = SQL.CreateCommand(@"
 UPDATE T_EML_Delivery  
-    SET  EML_SendSuccess ='"+ System.DateTime.Now.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss") + @"' 
-WHERE EML_UID = '" + mail.MailId + @"' 
-;";
-                    
+    SET  EML_SendSuccess = @in_success_time 
+WHERE EML_UID = @in_mail_id
+"))
+                    {
+                        SQL.AddParameter(cmd, "in_success_time", System.DateTime.Now);
+                        SQL.AddParameter(cmd, "in_mail_id", mail.MailId);
+                        SQL.ExecuteNonQuery(cmd);
+                    }
+
                     System.Console.WriteLine("Success ! ");
-                    SQL.ExecuteNonQuery(sql);
                 };
                 
                 ms.OnError += delegate (MailSettings mset, BaseMailTemplate mail, System.DateTime tm, System.Exception exception)
@@ -123,27 +143,39 @@ WHERE EML_UID = '" + mail.MailId + @"'
                     string exString = exception.ToString();
                     if(string.IsNullOrEmpty(exString))
                         exString = "";
-                    
-                    string sql = @"
+
+                    using (System.Data.IDbCommand cmd = SQL.CreateCommand(@"
 UPDATE T_EML_Delivery  
-    SET  EML_SendError ='"+ System.DateTime.Now.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss") + @"' 
-        ,EML_Exception = N'"+ exString.Replace("'","''") +@"' 
-WHERE EML_UID = '" + mail.MailId + @"' 
-;";
-                    
-                    SQL.ExecuteNonQuery(sql);
+    SET  EML_SendError = @in_error_time 
+        ,EML_Exception = @in_error_message
+        ,EML_ExceptionDetails = @in_exception
+WHERE EML_UID = @in_mail_id
+"))
+                    {
+                        SQL.AddParameter(cmd, "in_error_time", System.DateTime.Now);
+                        SQL.AddParameter(cmd, "in_error_message", exception.Message);
+                        SQL.AddParameter(cmd, "in_exception", exception.ToString());
+                        SQL.AddParameter(cmd, "in_mail_id", mail.MailId);
+                        SQL.ExecuteNonQuery(cmd);
+                    }
+
                     System.Console.WriteLine("Error ! ");
                 };
                 
                 ms.OnDone += delegate (MailSettings mset, BaseMailTemplate mail, System.DateTime tm, System.Exception exception)
                 {
-                    string sql = @"
+
+                    using (System.Data.IDbCommand cmd = SQL.CreateCommand(@"
 UPDATE T_EML_Delivery  
-    SET  EML_SendEnd = '"+ System.DateTime.Now.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss") + @"'
-WHERE EML_UID = '" + mail.MailId + @"' 
-;";                    
-                    
-                    SQL.ExecuteNonQuery(sql);
+    SET  EML_SendEnd = @in_done_time 
+WHERE EML_UID = @in_mail_id
+"))
+                    {
+                        SQL.AddParameter(cmd, "in_done_time", System.DateTime.Now);
+                        SQL.AddParameter(cmd, "in_mail_id", mail.MailId);
+                        SQL.ExecuteNonQuery(cmd);
+                    }
+
                     System.Console.WriteLine("Done ! ");
                 };
                 

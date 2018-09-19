@@ -16,6 +16,9 @@ namespace RedmineMailService
 
 
         public string MailId;
+        public string TemplateId;
+
+
         public string Subject;
         public string TemplateString;
         public bool UseHtml;
@@ -165,6 +168,7 @@ namespace RedmineMailService
 
         public BaseMailTemplate()
         {
+            this.MailId = System.Guid.NewGuid().ToString();
             this.UseHtml = true;
             this.TemplateString = "";
             this.EmbeddedImages = new System.Collections.Generic.List<Resource>();
