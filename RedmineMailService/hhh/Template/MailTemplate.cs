@@ -4,7 +4,7 @@ namespace RedmineMailService
 
 
     public class MailTemplate
-        : BaseMailTemplate 
+        : BaseMailTemplate, System.IDisposable 
     {
 
 
@@ -39,6 +39,33 @@ namespace RedmineMailService
             : base(template, images, attachments, useHtml)
         { }
 
+
+        void System.IDisposable.Dispose()
+        {
+            if (this.EmbeddedImages != null)
+            {
+                foreach (Resource thisResource in this.EmbeddedImages)
+                {
+                    if (thisResource != null)
+                        ((System.IDisposable)thisResource).Dispose();
+                }
+
+                this.EmbeddedImages.Clear();
+                this.EmbeddedImages = null;
+            }
+
+            if (this.AttachmentFiles != null)
+            {
+                foreach (Resource thisResource in this.AttachmentFiles)
+                {
+                    if (thisResource != null)
+                        ((System.IDisposable)thisResource).Dispose();
+                }
+
+                this.AttachmentFiles.Clear();
+                this.AttachmentFiles = null;
+            }
+        }
 
         public virtual MailTemplate Clone()
         {

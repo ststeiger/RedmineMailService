@@ -76,18 +76,39 @@ namespace RedmineMailService
                     mail.BodyTransferEncoding = System.Net.Mime.TransferEncoding.Base64;
                     mail.IsBodyHtml = true;
                     mail.Body = mt.TemplateString;
-                    
-                    if(mt.EmbeddedImages.Count > 0)
+
+                    System.Text.StringBuilder sb = mt.TemplateStringBuilder;
+
+                    if (dr != null)
+                    {
+                        foreach (System.Data.DataColumn dc in dr.Table.Columns)
+                        {
+                            string value = System.Convert.ToString(dr[dc.ColumnName], System.Globalization.CultureInfo.InvariantCulture);
+                            value = System.Web.HttpUtility.HtmlEncode(value);
+                            sb.Replace("{@" + dc.ColumnName + "}", value);
+                        } // Next dc 
+
+                    } // if (dr != null)
+
+
+
+                    mail.Body = sb.ToString();
+                    sb.Clear();
+                    sb = null;
+
+
+                    if (mt.EmbeddedImages.Count > 0)
                         mail.AlternateViews.Add(GetAlternativeView(mail.Body, mt.EmbeddedImages));
 
                     foreach (Resource thisAttachment in mt.AttachmentFiles)
                     {
-                        new System.Net.Mail.Attachment(
-                              thisAttachment.Stream
-                            , thisAttachment.FileName
-                            , thisAttachment.ContentType
+                        mail.Attachments.Add(
+                            new System.Net.Mail.Attachment(
+                                  thisAttachment.Stream
+                                , thisAttachment.FileName
+                                , thisAttachment.ContentType
+                            )
                         );
-
                     } // Next i 
 
                     mail.From = new System.Net.Mail.MailAddress(mt.From, mt.FromName);
@@ -96,7 +117,8 @@ namespace RedmineMailService
                     // mail.To.Add(new System.Net.Mail.MailAddress("user1@friends.com", "Friend 1"));
                     // mail.To.Add(new System.Net.Mail.MailAddress("user2@friends.com", "Friend 2"));
 
-                    mail.ReplyToList.Add(new System.Net.Mail.MailAddress(mt.ReplyTo, mt.ReplyToName));
+                    if(!string.IsNullOrEmpty(mt.ReplyTo))
+                        mail.ReplyToList.Add(new System.Net.Mail.MailAddress(mt.ReplyTo, mt.ReplyToName));
 
                     Send(mail);
 

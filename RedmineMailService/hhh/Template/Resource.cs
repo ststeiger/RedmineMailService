@@ -4,6 +4,7 @@ namespace RedmineMailService
 
 
     public class Resource
+        : System.IDisposable
     {
         public System.IO.Stream Stream;
         public string FileName;
@@ -22,7 +23,7 @@ namespace RedmineMailService
                 return this.m_uid;
             }
         }
-        
+
 
 
         public Resource()
@@ -42,6 +43,15 @@ namespace RedmineMailService
             return "application/pdf";
         } // End Function ContentTypeFromFileName 
 
+        void System.IDisposable.Dispose()
+        {
+            if (this.Stream != null)
+            {
+                this.Stream.Dispose();
+                this.Stream = null;
+            }
+
+        }
 
         public Resource(System.IO.Stream stream, string fileName, string contentType)
         {
