@@ -44,7 +44,6 @@ Svp n'y répondez pas.
 
 Nos salutations distinguées, 
 Votre équipe de support MAGIX ...
-lists.gnu.org/archive/html/ bug-ghostscript/2004-03/msg01553.html - 9k
 
 ".Replace("\r\n", "\n").Replace("\n","<br />");
                     
