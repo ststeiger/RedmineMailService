@@ -1,7 +1,4 @@
 ﻿
-using Microsoft.SqlServer.Management.Smo;
-
-
 namespace RedmineMailService
 {
 
@@ -81,10 +78,15 @@ namespace RedmineMailService
             var csb = new System.Data.SqlClient.SqlConnectionStringBuilder();
             csb.DataSource = GetDefaultInstance();
             csb.InitialCatalog = "COR_Basic_Demo_V4";
+            csb.InitialCatalog = "COR_Basic_SwissLife_UAT";
+
+            csb.DataSource = @"SQL05\SWL,2138";
+            csb.InitialCatalog = "COR_Basic_SwissLife_UAT";
 
 
-            // csb.IntegratedSecurity = true;
-            csb.IntegratedSecurity = false;
+
+            csb.IntegratedSecurity = true;
+            // csb.IntegratedSecurity = false;
 
             if (!csb.IntegratedSecurity)
             {

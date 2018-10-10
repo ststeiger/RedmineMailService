@@ -53,7 +53,9 @@ WHERE KT_UID = @kt_uid
 	        string dataDir = System.IO.Path.GetDirectoryName(typeof(MailGender).Assembly.Location);
 	        dataDir = System.IO.Path.Combine(dataDir, "..", "..", "..", "Data");
 	        dataDir = System.IO.Path.GetFullPath(dataDir);
-	        
+            dataDir = @"C:\Users\stefan.steiger.RZ\Desktop\Data\Data";
+
+
             using (System.Data.DataTable dt = SQL.GetDataTable(sql))
             {
                 foreach (System.Data.DataRow dr in dt.Rows)
