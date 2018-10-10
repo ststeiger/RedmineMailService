@@ -1,0 +1,1 @@
+﻿{"name":"Janos","gender":"male","probability":0.95,"count":19}

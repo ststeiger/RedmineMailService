@@ -47,7 +47,7 @@ WHERE KT_UID = @kt_uid
         // RedmineMailService.MailGender.GetGenders();
         public static void GetGenders()
         {
-            string sql = "SELECT KT_UID, KT_Vorname FROM T_AP_Kontakte WHERE KT_KG_UID IS NULL AND KT_Vorname <> '' ";
+            string sql = "SELECT KT_UID, KT_Vorname FROM T_AP_Kontakte WHERE KT_KG_UID IS NULL AND KT_Vorname <> '' ORDER BY KT_Vorname DESC";
             string baseUrl = "https://api.genderize.io/?name=";
 	        
 	        string dataDir = System.IO.Path.GetDirectoryName(typeof(MailGender).Assembly.Location);
@@ -58,6 +58,15 @@ WHERE KT_UID = @kt_uid
 
             using (System.Data.DataTable dt = SQL.GetDataTable(sql))
             {
+
+                // public WebProxy(string Host, int Port);
+                //System.Net.WebProxy wp = new System.Net.WebProxy("http://193.109.47.193", 41083);
+                System.Net.WebProxy wp = new System.Net.WebProxy("186.178.10.158", 8888);
+                // wp.UseDefaultCredentials = true;
+                // wp.UseDefaultCredentials = false;
+                // wp.Credentials = new System.Net.NetworkCredential("usernameHere", "pa****rdHere");  //These can be replaced by user input
+                wp.BypassProxyOnLocal = false;  //still use the proxy for local addresses
+
                 foreach (System.Data.DataRow dr in dt.Rows)
                 {
 	                string uid = System.Convert.ToString(dr["KT_UID"]);
@@ -77,6 +86,8 @@ WHERE KT_UID = @kt_uid
 	                
                     using (System.Net.WebClient wc = new System.Net.WebClient())
                     {
+                        wc.Proxy = wp;
+
                         string json = wc.DownloadString(url);
 	                    
                         System.IO.File.WriteAllText(fileName, json, System.Text.Encoding.UTF8);

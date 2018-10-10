@@ -80,8 +80,9 @@ namespace RedmineMailService
             csb.InitialCatalog = "COR_Basic_Demo_V4";
             csb.InitialCatalog = "COR_Basic_SwissLife_UAT";
 
-            csb.DataSource = @"SQL05\SWL,2138";
-            csb.InitialCatalog = "COR_Basic_SwissLife_UAT";
+            if("rz".Equals(System.Environment.UserDomainName, System.StringComparison.InvariantCultureIgnoreCase))
+                csb.DataSource = @"SQL05\SWL,2138";
+            
 
 
 
