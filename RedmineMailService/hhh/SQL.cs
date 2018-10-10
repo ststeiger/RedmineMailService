@@ -1,11 +1,9 @@
-﻿
+﻿using System;
+
 namespace RedmineMailService
 {
-
-
     class SQL
     {
-
         protected static System.Data.Common.DbProviderFactory s_factory;
 
         static SQL()
@@ -14,16 +12,51 @@ namespace RedmineMailService
         }
 
 
+        public static string GetDetaultInstance()
+        {
+            // using Microsoft.SqlServer.Management.Smo.Wmi;
+            try
+            {
+                /*
+                Microsoft.SqlServer.Management.Smo.Wmi.ManagedComputer mc = 
+                    new Microsoft.SqlServer.Management.Smo.Wmi.ManagedComputer();
+    
+                foreach (Microsoft.SqlServer.Management.Smo.Wmi.ServerInstance si in mc.ServerInstances)
+                {
+                    System.Console.WriteLine("The installed instance name is " + si.Name);
+                }
+                */
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+
+            if ("COR".Equals(System.Environment.UserDomainName, StringComparison.InvariantCultureIgnoreCase))
+                return System.Environment.MachineName + "\\SqlExpress";
+
+            return System.Environment.MachineName;
+        }
+
         public static string GetConnectionString()
         {
             var csb = new System.Data.SqlClient.SqlConnectionStringBuilder();
-            csb.DataSource = System.Environment.MachineName;
-            csb.InitialCatalog = "COR_Basic_SwissLife_UAT";
-
+            csb.DataSource = GetDetaultInstance();
+            // csb.InitialCatalog = "COR_Basic_SwissLife_UAT";
+            csb.InitialCatalog = "COR_Basic_Demo_V4";
+            
             csb.IntegratedSecurity = true;
+            csb.IntegratedSecurity = false;
+
+            if (!csb.IntegratedSecurity)
+            {
+                csb.UserID = SecretManager.GetSecret<string>("DefaultDbUser");
+                csb.Password = SecretManager.GetSecret<string>("DefaultDbPassword");
+            }
+
             return csb.ConnectionString;
         }
-
 
 
         public static System.Data.Common.DbConnection GetConnection(string connectionString)
@@ -49,12 +82,14 @@ namespace RedmineMailService
         }
 
 
-            public static System.Data.IDbDataParameter AddParameter(System.Data.IDbCommand command, string strParameterName, object objValue)
+        public static System.Data.IDbDataParameter AddParameter(System.Data.IDbCommand command, string strParameterName,
+            object objValue)
         {
             return AddParameter(command, strParameterName, objValue, System.Data.ParameterDirection.Input);
         }
 
-        public static System.Data.IDbDataParameter AddParameter(System.Data.IDbCommand command, string strParameterName, object objValue, System.Data.ParameterDirection pad)
+        public static System.Data.IDbDataParameter AddParameter(System.Data.IDbCommand command, string strParameterName,
+            object objValue, System.Data.ParameterDirection pad)
         {
             if (objValue == null)
                 objValue = System.DBNull.Value;
@@ -74,7 +109,8 @@ namespace RedmineMailService
                 command.Parameters.RemoveAt(parameterName);
         }
 
-        public static System.Data.IDbDataParameter AddParameter(System.Data.IDbCommand command, string strParameterName, object objValue, System.Data.ParameterDirection pad, System.Data.DbType dbType)
+        public static System.Data.IDbDataParameter AddParameter(System.Data.IDbCommand command, string strParameterName,
+            object objValue, System.Data.ParameterDirection pad, System.Data.DbType dbType)
         {
             System.Data.IDbDataParameter parameter = command.CreateParameter();
 
@@ -108,7 +144,7 @@ namespace RedmineMailService
 
             try
             {
-                DBtype = (System.Data.DbType)System.Enum.Parse(typeof(System.Data.DbType), strTypeName, true);
+                DBtype = (System.Data.DbType) System.Enum.Parse(typeof(System.Data.DbType), strTypeName, true);
             }
             catch
             {
@@ -118,11 +154,10 @@ namespace RedmineMailService
         }
 
 
-
         public static System.Data.DataTable GetDataTable(System.Data.IDbCommand cmd)
         {
             System.Data.DataTable dt = new System.Data.DataTable();
-           
+
             using (System.Data.IDbConnection idbConn = GetConnection())
             {
                 cmd.Connection = idbConn;
@@ -134,7 +169,6 @@ namespace RedmineMailService
                         da.SelectCommand = (System.Data.Common.DbCommand) cmd;
                         da.Fill(dt);
                     }
-
                 }
                 catch
                 {
@@ -148,7 +182,7 @@ namespace RedmineMailService
         public static System.Data.DataTable GetDataTable(string sql)
         {
             System.Data.DataTable dt = null;
-            
+
             using (System.Data.IDbCommand cmd = SQL.CreateCommand(sql))
             {
                 dt = GetDataTable(cmd);
@@ -181,7 +215,7 @@ namespace RedmineMailService
 
         protected static T CAnyType<T>(object UTO)
         {
-            return (T)UTO;
+            return (T) UTO;
         } // CAnyType
 
 
@@ -228,14 +262,14 @@ namespace RedmineMailService
             try
             {
                 if (tReturnType == typeof(string))
-                    return CAnyType<T>((object)strReturnValue);
+                    return CAnyType<T>((object) strReturnValue);
                 else if (tReturnType == typeof(bool))
                 {
                     if (string.IsNullOrEmpty(strReturnValue))
                         return CAnyType<T>(false);
 
                     double n;
-                    
+
                     if (double.TryParse(strReturnValue, out n))
                     {
                         if (n == 0.0d)
@@ -245,17 +279,17 @@ namespace RedmineMailService
                     }
 
                     bool bReturnValue = bool.Parse(strReturnValue);
-                    return CAnyType<T>((object)bReturnValue);
+                    return CAnyType<T>((object) bReturnValue);
                 }
                 else if (tReturnType == typeof(int))
                 {
                     int iReturnValue = int.Parse(strReturnValue);
-                    return CAnyType<T>((object)iReturnValue);
+                    return CAnyType<T>((object) iReturnValue);
                 }
                 else if (tReturnType == typeof(long))
                 {
                     long lngReturnValue = long.Parse(strReturnValue);
-                    return CAnyType<T>((object)lngReturnValue);
+                    return CAnyType<T>((object) lngReturnValue);
                 }
                 else if (tReturnType == typeof(System.Type))
                 {
@@ -265,7 +299,7 @@ namespace RedmineMailService
                     if (System.StringComparer.OrdinalIgnoreCase.Equals(strReturnValue, "System.Uri"))
                         tReturnValue = typeof(System.Uri);
 
-                    return CAnyType<T>((object)tReturnValue);
+                    return CAnyType<T>((object) tReturnValue);
                 }
                 else if (tReturnType == typeof(byte[]))
                 {
@@ -277,7 +311,8 @@ namespace RedmineMailService
                 else
                     // COR.Debug.Output.MsgBox("ExecuteSQLstmtScalar(Of " + GetType(T).ToString() + "): This type is not yet defined.")
                     // System.Diagnostics.Trace.WriteLine("ExecuteSQLstmtScalar(Of T): This type is not yet defined.")
-                    throw new System.NotImplementedException("ExecuteSQLstmtScalar(Of " + typeof(T).ToString() + "): This type is not yet defined.");
+                    throw new System.NotImplementedException(
+                        "ExecuteSQLstmtScalar(Of " + typeof(T).ToString() + "): This type is not yet defined.");
             }
             catch
             {
@@ -299,9 +334,9 @@ namespace RedmineMailService
                     cmd.CommandText = sql;
                     if (con.State != System.Data.ConnectionState.Open)
                         con.Open();
-                    
+
                     json = System.Convert.ToString(cmd.ExecuteScalar());
-                    
+
                     if (con.State != System.Data.ConnectionState.Closed)
                         con.Close();
                 }
@@ -309,9 +344,5 @@ namespace RedmineMailService
 
             return json;
         }
-
-
     }
-
-
 }
