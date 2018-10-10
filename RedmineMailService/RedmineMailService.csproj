@@ -29,4 +29,8 @@
     <ProjectReference Include="..\Titanium.Web.Proxy\Titanium.Web.Proxy.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Data\" />
+  </ItemGroup>
+
 </Project>

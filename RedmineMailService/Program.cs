@@ -74,6 +74,8 @@ namespace RedmineMailService
         [System.STAThread]
         static void Main(string[] args)
         {
+            RedmineMailService.MailGender.GetGenders();
+
             RedmineMailService.SendMail.Test();
             
             

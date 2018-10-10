@@ -116,7 +116,47 @@ namespace RedmineMailService
 
             return DBtype;
         }
-        
+
+
+
+        public static System.Data.DataTable GetDataTable(System.Data.IDbCommand cmd)
+        {
+            System.Data.DataTable dt = new System.Data.DataTable();
+           
+            using (System.Data.IDbConnection idbConn = GetConnection())
+            {
+                cmd.Connection = idbConn;
+
+                try
+                {
+                    using (System.Data.Common.DbDataAdapter da = s_factory.CreateDataAdapter())
+                    {
+                        da.SelectCommand = (System.Data.Common.DbCommand) cmd;
+                        da.Fill(dt);
+                    }
+
+                }
+                catch
+                {
+                    throw;
+                }
+            }
+
+            return dt;
+        }
+
+        public static System.Data.DataTable GetDataTable(string sql)
+        {
+            System.Data.DataTable dt = null;
+            
+            using (System.Data.IDbCommand cmd = SQL.CreateCommand(sql))
+            {
+                dt = GetDataTable(cmd);
+            }
+
+            return dt;
+        }
+
 
         public static void ExecuteNonQuery(System.Data.IDbCommand cmd)
         {
