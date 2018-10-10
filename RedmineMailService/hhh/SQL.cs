@@ -1,10 +1,15 @@
-﻿using System;
+﻿
+using Microsoft.SqlServer.Management.Smo;
+
 
 namespace RedmineMailService
 {
+
+
     class SQL
     {
         protected static System.Data.Common.DbProviderFactory s_factory;
+
 
         static SQL()
         {
@@ -14,10 +19,44 @@ namespace RedmineMailService
 
         public static string GetDetaultInstance()
         {
-            // using Microsoft.SqlServer.Management.Smo.Wmi;
+
             try
             {
+
+                if (System.Environment.OSVersion.Platform != System.PlatformID.Unix)
+                {
+                    Microsoft.Win32.RegistryView registryView = System.Environment.Is64BitOperatingSystem ?
+                        Microsoft.Win32.RegistryView.Registry64 :
+                        Microsoft.Win32.RegistryView.Registry32;
+
+                    using (Microsoft.Win32.RegistryKey hklm = Microsoft.Win32.RegistryKey.OpenBaseKey(Microsoft.Win32.RegistryHive.LocalMachine, registryView))
+                    {
+                        Microsoft.Win32.RegistryKey instanceKey = hklm.OpenSubKey(@"SOFTWARE\Microsoft\Microsoft SQL Server\Instance Names\SQL", false);
+                        if (instanceKey != null)
+                        {
+                            foreach (string instanceName in instanceKey.GetValueNames())
+                            {
+                                return System.Environment.MachineName + @"\" + instanceName;
+                            } // Next instanceName 
+
+                        } // End if (instanceKey != null) 
+
+                    } // End Using hklm 
+
+                } // End if (System.Environment.OSVersion.Platform != System.PlatformID.Unix) 
+
                 /*
+                // using Microsoft.SqlServer.Management.Smo.Wmi;
+                System.Data.Common.DbDataSourceEnumerator 
+                System.Data.DataTable dt = System.Data.SqlDataSourceEnumerator.Instance.GetDataSources();
+                foreach (System.Data.DataRow row in dt.Rows)
+                {
+                    foreach (System.Data.DataColumn col in dt.Columns)
+                    {
+                        System.Console.WriteLine("{0} = {1}", col.ColumnName, row[col]);
+                    }
+                }
+                
                 Microsoft.SqlServer.Management.Smo.Wmi.ManagedComputer mc = 
                     new Microsoft.SqlServer.Management.Smo.Wmi.ManagedComputer();
     
@@ -27,14 +66,11 @@ namespace RedmineMailService
                 }
                 */
             }
-            catch (Exception e)
+            catch (System.Exception e)
             {
-                Console.WriteLine(e);
+                System.Console.WriteLine(e);
                 throw;
             }
-
-            if ("COR".Equals(System.Environment.UserDomainName, StringComparison.InvariantCultureIgnoreCase))
-                return System.Environment.MachineName + "\\SqlExpress";
 
             return System.Environment.MachineName;
         }
@@ -43,9 +79,10 @@ namespace RedmineMailService
         {
             var csb = new System.Data.SqlClient.SqlConnectionStringBuilder();
             csb.DataSource = GetDetaultInstance();
-            // csb.InitialCatalog = "COR_Basic_SwissLife_UAT";
             csb.InitialCatalog = "COR_Basic_Demo_V4";
             
+
+
             csb.IntegratedSecurity = true;
             csb.IntegratedSecurity = false;
 
