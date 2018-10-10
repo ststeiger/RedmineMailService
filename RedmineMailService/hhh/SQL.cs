@@ -14,10 +14,10 @@ namespace RedmineMailService
         static SQL()
         {
             s_factory = System.Data.SqlClient.SqlClientFactory.Instance;
-        }
+        } // End Static Constructor 
 
 
-        public static string GetDetaultInstance()
+        public static string GetDefaultInstance()
         {
 
             try
@@ -73,17 +73,17 @@ namespace RedmineMailService
             }
 
             return System.Environment.MachineName;
-        }
+        } // End Function GetDefaultInstance 
+
 
         public static string GetConnectionString()
         {
             var csb = new System.Data.SqlClient.SqlConnectionStringBuilder();
-            csb.DataSource = GetDetaultInstance();
+            csb.DataSource = GetDefaultInstance();
             csb.InitialCatalog = "COR_Basic_Demo_V4";
-            
 
 
-            csb.IntegratedSecurity = true;
+            // csb.IntegratedSecurity = true;
             csb.IntegratedSecurity = false;
 
             if (!csb.IntegratedSecurity)
@@ -93,7 +93,7 @@ namespace RedmineMailService
             }
 
             return csb.ConnectionString;
-        }
+        } // End Function GetConnectionString 
 
 
         public static System.Data.Common.DbConnection GetConnection(string connectionString)
