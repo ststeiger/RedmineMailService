@@ -87,7 +87,9 @@ namespace AnySqlWebAdmin
             certGenerator.SetNotBefore(System.DateTime.UtcNow);
             certGenerator.SetPublicKey(subjectPublic);
 
-            
+
+            // https://www.programcreek.com/java-api-examples/?class=org.bouncycastle.x509.X509V3CertificateGenerator&method=setSubjectDN
+            certGenerator.AddExtension(Org.BouncyCastle.Asn1.X509.X509Name.C.Id, true, new X509Name("CH"));
 
 
 

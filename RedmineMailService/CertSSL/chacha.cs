@@ -34,6 +34,32 @@ namespace RedmineMailService.CertSSL
                 //Org.BouncyCastle.Crypto.Tls.TlsContext
                 //var ccp = new Org.BouncyCastle.Crypto.Tls.Chacha20Poly1305(null);
 
+
+
+                var cc = Org.BouncyCastle.Asn1.X509.X509Name.CountryOfCitizenship;
+                var cr = Org.BouncyCastle.Asn1.X509.X509Name.CountryOfResidence;
+                var coi = Org.BouncyCastle.Asn1.X509.X509Name.OrganizationIdentifier;
+
+                // https://deliciousbrains.com/ssl-certificate-authority-for-local-https-development/
+                // https://dzone.com/articles/creating-self-signed-certificate
+                // https://stackoverflow.com/questions/10175812/how-to-create-a-self-signed-certificate-with-openssl
+                // https://www.akadia.com/services/ssh_test_certificate.html
+                // https://coderanch.com/how-to/javadoc/itext-2.1.7/com/lowagie/text/pdf/PdfPKCS7.X509Name.html#CN
+
+
+                var oc = Org.BouncyCastle.Asn1.X509.X509Name.C; // Country code
+                var oST = Org.BouncyCastle.Asn1.X509.X509Name.ST; // State or Province
+                var ol = Org.BouncyCastle.Asn1.X509.X509Name.L; // Locality
+                var oo = Org.BouncyCastle.Asn1.X509.X509Name.O; // Organization name
+                var ou = Org.BouncyCastle.Asn1.X509.X509Name.OU; // Organizational Unit Name 
+                var ocn = Org.BouncyCastle.Asn1.X509.X509Name.CN; // Common name
+                var oce = Org.BouncyCastle.Asn1.X509.X509Name.E; // email address in Verisign certificates
+                var ocee = Org.BouncyCastle.Asn1.X509.X509Name.EmailAddress; // Email address (RSA PKCS#9 extension) - IA5String
+
+
+                var a = new Org.BouncyCastle.Asn1.X509.X509Name("ou");
+
+
                 throw new System.NotImplementedException();
             }
         }
