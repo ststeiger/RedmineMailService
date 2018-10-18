@@ -74,20 +74,20 @@ namespace Titanium.Web.Proxy.Network.Certificate
             AsymmetricKeyParameter issuerPrivateKey = null)
         {
             // Generating Random Numbers
-            var randomGenerator = new CryptoApiRandomGenerator();
-            var secureRandom = new SecureRandom(randomGenerator);
+            CryptoApiRandomGenerator randomGenerator = new CryptoApiRandomGenerator();
+            SecureRandom secureRandom = new SecureRandom(randomGenerator);
 
             // The Certificate Generator
-            var certificateGenerator = new X509V3CertificateGenerator();
+            X509V3CertificateGenerator certificateGenerator = new X509V3CertificateGenerator();
 
             // Serial Number
-            var serialNumber =
+            BigInteger serialNumber =
                 BigIntegers.CreateRandomInRange(BigInteger.One, BigInteger.ValueOf(long.MaxValue), secureRandom);
             certificateGenerator.SetSerialNumber(serialNumber);
 
             // Issuer and Subject Name
-            var subjectDn = new X509Name(subjectName);
-            var issuerDn = new X509Name(issuerName);
+            X509Name subjectDn = new X509Name(subjectName);
+            X509Name issuerDn = new X509Name(issuerName);
             certificateGenerator.SetIssuerDN(issuerDn);
             certificateGenerator.SetSubjectDN(subjectDn);
 
@@ -97,18 +97,18 @@ namespace Titanium.Web.Proxy.Network.Certificate
             if (hostName != null)
             {
                 // add subject alternative names
-                var subjectAlternativeNames = new Asn1Encodable[] { new GeneralName(GeneralName.DnsName, hostName) };
+                Asn1Encodable[] subjectAlternativeNames = new Asn1Encodable[] { new GeneralName(GeneralName.DnsName, hostName) };
 
-                var subjectAlternativeNamesExtension = new DerSequence(subjectAlternativeNames);
+                DerSequence subjectAlternativeNamesExtension = new DerSequence(subjectAlternativeNames);
                 certificateGenerator.AddExtension(X509Extensions.SubjectAlternativeName.Id, false,
                     subjectAlternativeNamesExtension);
             }
 
             // Subject Public Key
-            var keyGenerationParameters = new KeyGenerationParameters(secureRandom, keyStrength);
-            var keyPairGenerator = new RsaKeyPairGenerator();
+            KeyGenerationParameters keyGenerationParameters = new KeyGenerationParameters(secureRandom, keyStrength);
+            RsaKeyPairGenerator keyPairGenerator = new RsaKeyPairGenerator();
             keyPairGenerator.Init(keyGenerationParameters);
-            var subjectKeyPair = keyPairGenerator.GenerateKeyPair();
+            AsymmetricCipherKeyPair subjectKeyPair = keyPairGenerator.GenerateKeyPair();
 
             certificateGenerator.SetPublicKey(subjectKeyPair.Public);
 
@@ -120,33 +120,33 @@ namespace Titanium.Web.Proxy.Network.Certificate
                 certificateGenerator.AddExtension(X509Extensions.BasicConstraints.Id, true, new BasicConstraints(true));
             }
 
-            var signatureFactory = new Asn1SignatureFactory(signatureAlgorithm,
+            Asn1SignatureFactory signatureFactory = new Asn1SignatureFactory(signatureAlgorithm,
                 issuerPrivateKey ?? subjectKeyPair.Private, secureRandom);
 
             // Self-sign the certificate
-            var certificate = certificateGenerator.Generate(signatureFactory);
+            X509Certificate certificate = certificateGenerator.Generate(signatureFactory);
 
             // Corresponding private key
-            var privateKeyInfo = PrivateKeyInfoFactory.CreatePrivateKeyInfo(subjectKeyPair.Private);
+            PrivateKeyInfo privateKeyInfo = PrivateKeyInfoFactory.CreatePrivateKeyInfo(subjectKeyPair.Private);
 
-            var seq = (Asn1Sequence)Asn1Object.FromByteArray(privateKeyInfo.ParsePrivateKey().GetDerEncoded());
+            Asn1Sequence seq = (Asn1Sequence)Asn1Object.FromByteArray(privateKeyInfo.ParsePrivateKey().GetDerEncoded());
 
             if (seq.Count != 9)
             {
                 throw new PemException("Malformed sequence in RSA private key");
             }
 
-            var rsa = RsaPrivateKeyStructure.GetInstance(seq);
-            var rsaparams = new RsaPrivateCrtKeyParameters(rsa.Modulus, rsa.PublicExponent, rsa.PrivateExponent,
+            RsaPrivateKeyStructure rsa = RsaPrivateKeyStructure.GetInstance(seq);
+            RsaPrivateCrtKeyParameters rsaparams = new RsaPrivateCrtKeyParameters(rsa.Modulus, rsa.PublicExponent, rsa.PrivateExponent,
                 rsa.Prime1, rsa.Prime2, rsa.Exponent1,
                 rsa.Exponent2, rsa.Coefficient);
 
 #if NET45
             // Set private key onto certificate instance
-            var x509Certificate = new X509Certificate2(certificate.GetEncoded());
+            X509Certificate2 x509Certificate = new X509Certificate2(certificate.GetEncoded());
             x509Certificate.PrivateKey = DotNetUtilities.ToRSA(rsaparams);
 #else
-            var x509Certificate = withPrivateKey(certificate, rsaparams);
+            X509Certificate2 x509Certificate = withPrivateKey(certificate, rsaparams);
             if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 x509Certificate.FriendlyName = subjectName;    
@@ -174,12 +174,12 @@ namespace Titanium.Web.Proxy.Network.Certificate
         private static X509Certificate2 withPrivateKey(X509Certificate certificate, AsymmetricKeyParameter privateKey)
         {
             const string password = "password";
-            var store = new Pkcs12Store();
-            var entry = new X509CertificateEntry(certificate);
+            Pkcs12Store store = new Pkcs12Store();
+            X509CertificateEntry entry = new X509CertificateEntry(certificate);
             store.SetCertificateEntry(certificate.SubjectDN.ToString(), entry);
 
             store.SetKeyEntry(certificate.SubjectDN.ToString(), new AsymmetricKeyEntry(privateKey), new[] { entry });
-            using (var ms = new MemoryStream())
+            using (System.IO.MemoryStream ms = new System.IO.MemoryStream())
             {
                 store.Save(ms, password.ToCharArray(), new SecureRandom(new CryptoApiRandomGenerator()));
 
@@ -217,7 +217,7 @@ namespace Titanium.Web.Proxy.Network.Certificate
                 return generateCertificate(null, subjectName, subjectName, validFrom, validTo);
             }
 
-            var kp = DotNetUtilities.GetKeyPair(signingCertificate.PrivateKey);
+            AsymmetricCipherKeyPair kp = DotNetUtilities.GetKeyPair(signingCertificate.PrivateKey);
             return generateCertificate(hostName, subjectName, signingCertificate.Subject, validFrom, validTo,
                 issuerPrivateKey: kp.Private);
         }
@@ -239,7 +239,7 @@ namespace Titanium.Web.Proxy.Network.Certificate
             if (switchToMtaIfNeeded && Thread.CurrentThread.GetApartmentState() != ApartmentState.MTA)
             {
                 X509Certificate2 certificate = null;
-                using (var manualResetEvent = new ManualResetEventSlim(false))
+                using (ManualResetEventSlim manualResetEvent = new ManualResetEventSlim(false))
                 {
                     ThreadPool.QueueUserWorkItem(o =>
                     {

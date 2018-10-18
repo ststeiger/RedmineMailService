@@ -25,8 +25,8 @@ namespace Org.BouncyCastle.Crypto.Operators
         private static readonly IDictionary algorithms = Platform.CreateHashtable();
 		private static readonly IDictionary exParams = Platform.CreateHashtable();
 		private static readonly ISet        noParams = new HashSet();
-
-		static X509Utilities()
+        
+        static X509Utilities()
 		{
 			algorithms.Add("MD2WITHRSAENCRYPTION", PkcsObjectIdentifiers.MD2WithRsaEncryption);
 			algorithms.Add("MD2WITHRSA", PkcsObjectIdentifiers.MD2WithRsaEncryption);
