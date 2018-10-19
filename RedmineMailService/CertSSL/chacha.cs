@@ -1,4 +1,7 @@
 ﻿
+// https://gunnarpeipman.com/aspnet/aspnet-core-websocket-chart/
+// https://www.codetinkerer.com/2018/06/05/aspnet-core-websockets.html
+// https://www.limilabs.com/blog/import-certificate-private-public-keys-pem-cer-pfx
 namespace RedmineMailService.CertSSL
 {
 
@@ -31,9 +34,10 @@ namespace RedmineMailService.CertSSL
             public System.IO.Stream Stream => throw new System.NotImplementedException();
 
 
+            // https://github.com/bcgit/bc-csharp/tree/096c4894f62b7f4178ab869ec342e9351bd198dd/crypto/src/crypto/digests
             public static byte[] Keccak(string text)
             {
-                byte[] encData = System.Text.Encoding.UTF8.GetBytes("TESTHASH");
+                byte[] encData = System.Text.Encoding.UTF8.GetBytes(text);
                 Org.BouncyCastle.Crypto.Digests.KeccakDigest myHash = new Org.BouncyCastle.Crypto.Digests.KeccakDigest();
 
                 myHash.BlockUpdate(encData, 0, encData.Length);
@@ -44,9 +48,10 @@ namespace RedmineMailService.CertSSL
             }
 
 
+            // https://github.com/bcgit/bc-csharp/tree/096c4894f62b7f4178ab869ec342e9351bd198dd/crypto/src/crypto/digests
             public static byte[] Sha3(string text)
             {
-                byte[] encData = System.Text.Encoding.UTF8.GetBytes("TESTHASH");
+                byte[] encData = System.Text.Encoding.UTF8.GetBytes(text);
                 Org.BouncyCastle.Crypto.Digests.Sha3Digest myHash = new Org.BouncyCastle.Crypto.Digests.Sha3Digest();
 
                 myHash.BlockUpdate(encData, 0, encData.Length);
@@ -59,14 +64,14 @@ namespace RedmineMailService.CertSSL
 
             public object GetResult()
             {
-                //Org.BouncyCastle.Crypto.Tls.TlsContext
-                //var ccp = new Org.BouncyCastle.Crypto.Tls.Chacha20Poly1305(null);
+                // Org.BouncyCastle.Crypto.Tls.TlsContext
+                // https://github.com/bcgit/bc-csharp/blob/master/crypto/src/crypto/tls/Chacha20Poly1305.cs
+                // var ccp = new Org.BouncyCastle.Crypto.Tls.Chacha20Poly1305(null);
 
 
-
-                var cc = Org.BouncyCastle.Asn1.X509.X509Name.CountryOfCitizenship;
-                var cr = Org.BouncyCastle.Asn1.X509.X509Name.CountryOfResidence;
-                var coi = Org.BouncyCastle.Asn1.X509.X509Name.OrganizationIdentifier;
+                Org.BouncyCastle.Asn1.DerObjectIdentifier cc = Org.BouncyCastle.Asn1.X509.X509Name.CountryOfCitizenship;
+                Org.BouncyCastle.Asn1.DerObjectIdentifier cr = Org.BouncyCastle.Asn1.X509.X509Name.CountryOfResidence;
+                Org.BouncyCastle.Asn1.DerObjectIdentifier coi = Org.BouncyCastle.Asn1.X509.X509Name.OrganizationIdentifier;
 
                 // https://deliciousbrains.com/ssl-certificate-authority-for-local-https-development/
                 // https://dzone.com/articles/creating-self-signed-certificate
@@ -85,7 +90,7 @@ namespace RedmineMailService.CertSSL
                 var ocee = Org.BouncyCastle.Asn1.X509.X509Name.EmailAddress; // Email address (RSA PKCS#9 extension) - IA5String
 
 
-                var a = new Org.BouncyCastle.Asn1.X509.X509Name("ou");
+                Org.BouncyCastle.Asn1.X509.X509Name a = new Org.BouncyCastle.Asn1.X509.X509Name("ou");
 
 
                 throw new System.NotImplementedException();
