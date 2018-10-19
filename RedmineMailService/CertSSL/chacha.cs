@@ -24,10 +24,38 @@ namespace RedmineMailService.CertSSL
     {
         public object AlgorithmDetails => throw new System.NotImplementedException();
 
+
         public class MyStreamCalculator
             : Org.BouncyCastle.Crypto.IStreamCalculator
         {
             public System.IO.Stream Stream => throw new System.NotImplementedException();
+
+
+            public static byte[] Keccak(string text)
+            {
+                byte[] encData = System.Text.Encoding.UTF8.GetBytes("TESTHASH");
+                Org.BouncyCastle.Crypto.Digests.KeccakDigest myHash = new Org.BouncyCastle.Crypto.Digests.KeccakDigest();
+
+                myHash.BlockUpdate(encData, 0, encData.Length);
+                byte[] compArr = new byte[myHash.GetDigestSize()];
+                myHash.DoFinal(compArr, 0);
+
+                return compArr;
+            }
+
+
+            public static byte[] Sha3(string text)
+            {
+                byte[] encData = System.Text.Encoding.UTF8.GetBytes("TESTHASH");
+                Org.BouncyCastle.Crypto.Digests.Sha3Digest myHash = new Org.BouncyCastle.Crypto.Digests.Sha3Digest();
+
+                myHash.BlockUpdate(encData, 0, encData.Length);
+                byte[] compArr = new byte[myHash.GetDigestSize()];
+                myHash.DoFinal(compArr, 0);
+
+                return compArr;
+            }
+
 
             public object GetResult()
             {
