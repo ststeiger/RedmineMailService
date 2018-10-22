@@ -1,5 +1,4 @@
 ﻿
-using System.IO;
 using Org.BouncyCastle.Asn1.Pkcs;
 using Org.BouncyCastle.Asn1.Sec;
 using Org.BouncyCastle.Asn1.X509;

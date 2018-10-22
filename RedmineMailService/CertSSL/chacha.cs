@@ -34,34 +34,6 @@ namespace RedmineMailService.CertSSL
             public System.IO.Stream Stream => throw new System.NotImplementedException();
 
 
-            // https://github.com/bcgit/bc-csharp/tree/096c4894f62b7f4178ab869ec342e9351bd198dd/crypto/src/crypto/digests
-            public static byte[] Keccak(string text)
-            {
-                byte[] encData = System.Text.Encoding.UTF8.GetBytes(text);
-                Org.BouncyCastle.Crypto.Digests.KeccakDigest myHash = new Org.BouncyCastle.Crypto.Digests.KeccakDigest();
-
-                myHash.BlockUpdate(encData, 0, encData.Length);
-                byte[] compArr = new byte[myHash.GetDigestSize()];
-                myHash.DoFinal(compArr, 0);
-
-                return compArr;
-            }
-
-
-            // https://github.com/bcgit/bc-csharp/tree/096c4894f62b7f4178ab869ec342e9351bd198dd/crypto/src/crypto/digests
-            public static byte[] Sha3(string text)
-            {
-                byte[] encData = System.Text.Encoding.UTF8.GetBytes(text);
-                Org.BouncyCastle.Crypto.Digests.Sha3Digest myHash = new Org.BouncyCastle.Crypto.Digests.Sha3Digest();
-
-                myHash.BlockUpdate(encData, 0, encData.Length);
-                byte[] compArr = new byte[myHash.GetDigestSize()];
-                myHash.DoFinal(compArr, 0);
-
-                return compArr;
-            }
-
-
             public object GetResult()
             {
                 // Org.BouncyCastle.Crypto.Tls.TlsContext
@@ -97,10 +69,13 @@ namespace RedmineMailService.CertSSL
             }
         }
 
+
         public Org.BouncyCastle.Crypto.IStreamCalculator CreateCalculator()
         {
             return new MyStreamCalculator(); ;
         }
+
+
     }
 
 

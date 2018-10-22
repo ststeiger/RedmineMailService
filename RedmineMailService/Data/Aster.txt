@@ -1,0 +1,1 @@
+﻿{"name":"Aster","gender":"female","probability":0.67,"count":6}

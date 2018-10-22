@@ -53,7 +53,9 @@ WHERE KT_UID = @kt_uid
 	        string dataDir = System.IO.Path.GetDirectoryName(typeof(MailGender).Assembly.Location);
 	        dataDir = System.IO.Path.Combine(dataDir, "..", "..", "..", "Data");
 	        dataDir = System.IO.Path.GetFullPath(dataDir);
-            dataDir = @"C:\Users\stefan.steiger.RZ\Desktop\Data\Data";
+
+            if("RZ".Equals(System.Environment.UserDomainName, System.StringComparison.OrdinalIgnoreCase))
+                dataDir = @"C:\Users\stefan.steiger.RZ\Desktop\Data\Data";
 
 
             using (System.Data.DataTable dt = SQL.GetDataTable(sql))
@@ -71,8 +73,36 @@ WHERE KT_UID = @kt_uid
                 {
 	                string uid = System.Convert.ToString(dr["KT_UID"]);
 	                string name = System.Convert.ToString(dr["KT_Vorname"]);
+
+                    if (string.IsNullOrEmpty(name) || name.Trim() == string.Empty)
+                        continue;
+
+                    int multiname1 = name.IndexOf(" ");
+                    int multiname2 = name.IndexOf("-");
+
+                    if (multiname1 != -1 || multiname2 != -1)
+                    {
+                        try
+                        {
+                            string[] names = name.Split(' ', '-');
+                            name = names[names.Length - 1];
+                            // name = names[0];
+                            if (string.IsNullOrEmpty(name) || name.Trim() == string.Empty)
+                                continue;
+                        }
+                        catch (System.Exception ex)
+                        {
+                            System.Console.WriteLine(ex.Message);
+                            continue;
+                        }
+                        
+                    }
+                    
                     string url = baseUrl + System.Uri.EscapeUriString(name);
 	                
+
+
+
 	                string fileName = System.IO.Path.Combine(dataDir, name + ".txt");
 	                
 	                if (System.IO.File.Exists(fileName))
@@ -86,7 +116,7 @@ WHERE KT_UID = @kt_uid
 	                
                     using (System.Net.WebClient wc = new System.Net.WebClient())
                     {
-                        wc.Proxy = wp;
+                        // wc.Proxy = wp;
 
                         string json = wc.DownloadString(url);
 	                    
