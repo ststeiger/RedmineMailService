@@ -1,19 +1,14 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
-
   <ItemGroup>
     <Compile Remove="Code\SqlDataSourceEnumerator.cs" />
   </ItemGroup>
-
-
   <ItemGroup>
     <PackageReference Include="MailKit" Version="2.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.1.1" />
@@ -26,7 +21,6 @@
     <PackageReference Include="System.Data.Common" Version="4.3.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.5.1" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\DasMulli.Win32.ServiceUtils\DasMulli.Win32.ServiceUtils.csproj" />
     <ProjectReference Include="..\Html2Textile\Html2Textile.csproj" />
@@ -34,9 +28,7 @@
     <ProjectReference Include="..\RedmineAPI\RedmineAPI.csproj" />
     <ProjectReference Include="..\Titanium.Web.Proxy\Titanium.Web.Proxy.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <Folder Include="Data\" />
   </ItemGroup>
-
 </Project>

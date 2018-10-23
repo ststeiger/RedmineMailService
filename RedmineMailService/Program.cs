@@ -74,8 +74,8 @@ namespace RedmineMailService
         [System.STAThread]
         static void Main(string[] args)
         {
-            // AnySqlWebAdmin.CerGenerator.Test();
-            RedmineMailService.MailGender.GetGenders();
+            AnySqlWebAdmin.CerGenerator.Test();
+            // RedmineMailService.MailGender.GetGenders();
 
             RedmineMailService.SendMail.Test();
             
