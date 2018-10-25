@@ -1,0 +1,65 @@
+https://knowledge.digicert.com/generalinformation/INFO1909.html
+
+cd /d D:\Programme\LessPortableApps\Git
+set PATH=%PATH%;D:\Programme\LessPortableApps\Git\usr\bin
+
+
+https://wiki.openssl.org/index.php/Command_Line_Elliptic_Curve_Operations
+openssl version
+openssl list
+openssl ciphers
+openssl ecparam -list_curves
+
+
+openssl ecparam -out privatekey.key -name prime256v1 -genkey
+openssl req -new -key privatekey.key -out request.csr -sha256
+
+
+NOTE: Please do not enter an email address, challenge password 
+or an optional company name when generating the CSR.
+
+
+
+
+http://blog.differentpla.net/blog/2013/04/17/how-do-i-use-bouncy-castle-from-powershell
+
+Type in: %APPDATA%\Mozilla\Firefox\Profiles\
+"C:\Users\Stefan.Steiger\AppData\Local\Firefox Developer Edition\firefox.exe"
+
+
+https://stackoverflow.com/questions/10175812/how-to-create-a-self-signed-certificate-with-openssl
+
+openssl x509 -req -sha256 -days 365 -in request.csr -signkey privatekey.key -out server.crt
+
+
+subject=/C=CH/ST=EuropenAlliance/L=NeutralZone/O=SkyNet mbH/OU=Skynet Earth Inc./CN=Skynet/emailAddress=root@sky.net
+
+
+
+// openssl req -x509 -sha256 -newkey rsa:2048 -keyout key.pem -out cert.pem -days XXX
+
+
+
+openssl genpkey -algorithm RSA -out private_key_RSA_2048.key -pkeyopt rsa_keygen_bits:2048
+
+
+openssl genrsa -des3 -out private.pem 2048
+https://rietta.com/blog/2012/01/27/openssl-generating-rsa-key-from-command/
+
+
+openssl ecparam -out privatekey_X25519.key -name curve25519 -genkey
+openssl ecparam -out privatekey_X25519.key -name X25519 -genkey
+
+
+https://gist.github.com/briansmith/2ee42439923d8e65a266994d0f70180b
+
+
+https://codereview.stackexchange.com/questions/84752/net-bouncycastle-csr-and-private-key-generation
+https://stackoverflow.com/questions/9592516/net-programmatically-sign-pkcs10-request-with-bouncy-castle
+
+https://stackoverflow.com/questions/10175812/how-to-create-a-self-signed-certificate-with-openssl
+
+
+https://superuser.com/questions/1319218/how-to-match-a-private-key-with-a-provided-certificate
+https://stackoverflow.com/questions/22963581/reading-elliptic-curve-private-key-from-file-with-bouncycastle
+http://www.it-asks.com/articles/2Eviiy/reading-elliptic-curve-private-key-from-file-with-bouncycastle

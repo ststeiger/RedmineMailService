@@ -1,18 +1,11 @@
-﻿using Org.BouncyCastle.Asn1.X509;
-using Org.BouncyCastle.Crypto;
-using Org.BouncyCastle.Math;
+﻿
+using Org.BouncyCastle.Asn1.X509;
 using Org.BouncyCastle.Pkcs;
 using Org.BouncyCastle.Pkix;
-using Org.BouncyCastle.Security;
-using Org.BouncyCastle.Utilities.Collections;
 using Org.BouncyCastle.X509;
 using Org.BouncyCastle.X509.Extension;
 using Org.BouncyCastle.X509.Store;
 
-
-using System.Collections.Generic;
-
-using System.Linq;
 using System.Security.Cryptography;
 
 
@@ -21,10 +14,7 @@ using System.Security.Cryptography;
 // https://github.com/KimikoMuffin/bc-csharp
 // https://github.com/bcgit/bc-csharp/blob/master/crypto/test/src/pkcs/test/PKCS12StoreTest.cs
 
-
 // https://csharp.hotexamples.com/examples/Org.BouncyCastle.Pkcs/Pkcs12StoreBuilder/Load/php-pkcs12storebuilder-load-method-examples.html
-
-
 namespace RedmineMailService.CertSSL
 {
 
@@ -35,14 +25,20 @@ namespace RedmineMailService.CertSSL
 
 
 
-        static IEnumerable<Org.BouncyCastle.X509.X509Certificate> BuildCertificateChainBC(byte[] primary, IEnumerable<byte[]> additional)
+        static System.Collections.Generic.IEnumerable<Org.BouncyCastle.X509.X509Certificate> 
+            BuildCertificateChainBC(
+            byte[] primary,
+            System.Collections.Generic.IEnumerable<byte[]> additional)
         {
             X509CertificateParser parser = new X509CertificateParser();
             PkixCertPathBuilder builder = new PkixCertPathBuilder();
 
             // Separate root from itermediate
-            List<Org.BouncyCastle.X509.X509Certificate> intermediateCerts = new List<Org.BouncyCastle.X509.X509Certificate>();
-            HashSet rootCerts = new HashSet();
+            System.Collections.Generic.List<Org.BouncyCastle.X509.X509Certificate> intermediateCerts = 
+                new System.Collections.Generic.List<Org.BouncyCastle.X509.X509Certificate>();
+
+            Org.BouncyCastle.Utilities.Collections.HashSet rootCerts = 
+                new Org.BouncyCastle.Utilities.Collections.HashSet();
 
             foreach (byte[] cert in additional)
             {
@@ -73,14 +69,16 @@ namespace RedmineMailService.CertSSL
 
             PkixCertPathBuilderResult result = builder.Build(builderParams);
 
-            return result.CertPath.Certificates.Cast<Org.BouncyCastle.X509.X509Certificate>();
+            return System.Linq.Enumerable.Cast<Org.BouncyCastle.X509.X509Certificate>(result.CertPath.Certificates);
         }
 
-        private static AsymmetricCipherKeyPair GenerateDsaKeys()
+        private static Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair GenerateDsaKeys()
         {
             DSACryptoServiceProvider DSA = new DSACryptoServiceProvider();
             DSAParameters dsaParams = DSA.ExportParameters(true);
-            AsymmetricCipherKeyPair keys = Org.BouncyCastle.Security.DotNetUtilities.GetDsaKeyPair(dsaParams);
+
+            Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair keys = 
+                Org.BouncyCastle.Security.DotNetUtilities.GetDsaKeyPair(dsaParams);
             return keys;
         }
 
@@ -102,7 +100,7 @@ namespace RedmineMailService.CertSSL
                 Pkcs12Store store = new Pkcs12StoreBuilder().Build();
                 store.Load(caCertFile, caPass);
                 Org.BouncyCastle.X509.X509Certificate caCert = store.GetCertificate(caCn).Certificate;
-                AsymmetricKeyParameter caPrivKey = store.GetKey(caCn).Key;
+                Org.BouncyCastle.Crypto.AsymmetricKeyParameter caPrivKey = store.GetKey(caCn).Key;
 
                 byte[] clientCert = GenerateDsaCertificateAsPkcs12(
                     "My Client FriendlyName",
@@ -128,9 +126,9 @@ namespace RedmineMailService.CertSSL
             System.DateTime validEndDate,
             string password,
             Org.BouncyCastle.X509.X509Certificate caCert,
-            AsymmetricKeyParameter caPrivateKey)
+            Org.BouncyCastle.Crypto.AsymmetricKeyParameter caPrivateKey)
         {
-            AsymmetricCipherKeyPair keys = GenerateDsaKeys();
+            Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair keys = GenerateDsaKeys();
 
             #region build certificate
             X509V3CertificateGenerator certGen = new X509V3CertificateGenerator();
@@ -148,7 +146,7 @@ namespace RedmineMailService.CertSSL
             X509Name subjectDN = new X509Name(nameOids, nameValues);
 
             // certificate fields
-            certGen.SetSerialNumber(BigInteger.ValueOf(1));
+            certGen.SetSerialNumber(Org.BouncyCastle.Math.BigInteger.ValueOf(1));
             certGen.SetIssuerDN(caCert.SubjectDN);
             certGen.SetNotBefore(validStartDate);
             certGen.SetNotAfter(validEndDate);
@@ -165,7 +163,8 @@ namespace RedmineMailService.CertSSL
             X509Certificate cert = certGen.Generate(caPrivateKey);
             //ert.Verify(caCert.GetPublicKey());
 
-            Dictionary<string, Org.BouncyCastle.X509.X509Certificate> chain = new Dictionary<string, Org.BouncyCastle.X509.X509Certificate>();
+            System.Collections.Generic.Dictionary<string, Org.BouncyCastle.X509.X509Certificate> chain = 
+                new System.Collections.Generic.Dictionary<string, Org.BouncyCastle.X509.X509Certificate>();
             //chain.Add("CertiFirmas CA", caCert);
 
             // string caCn = caCert.SubjectDN.GetValues(X509Name.CN)[0].ToString();
@@ -176,10 +175,15 @@ namespace RedmineMailService.CertSSL
             return GeneratePkcs12(keys, cert, friendlyName, password, chain);
         }
 
-        private static byte[] GeneratePkcs12(AsymmetricCipherKeyPair keys, Org.BouncyCastle.X509.X509Certificate cert, string friendlyName, string password,
-            Dictionary<string, Org.BouncyCastle.X509.X509Certificate> chain)
+        private static byte[] GeneratePkcs12(
+            Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair keys, 
+            Org.BouncyCastle.X509.X509Certificate cert, 
+            string friendlyName, 
+            string password,
+            System.Collections.Generic.Dictionary<string, Org.BouncyCastle.X509.X509Certificate> chain)
         {
-            List<X509CertificateEntry> chainCerts = new List<X509CertificateEntry>();
+            System.Collections.Generic.List<X509CertificateEntry> chainCerts = 
+                new System.Collections.Generic.List<X509CertificateEntry>();
 
             // Create the PKCS12 store
             Pkcs12Store store = new Pkcs12StoreBuilder().Build();
@@ -190,10 +194,11 @@ namespace RedmineMailService.CertSSL
                                                                 //chainCerts.Add(certEntry);
 
             // Add chain entries
-            List<byte[]> additionalCertsAsBytes = new List<byte[]>();
+            System.Collections.Generic.List<byte[]> additionalCertsAsBytes = 
+                new System.Collections.Generic.List<byte[]>();
             if (chain != null && chain.Count > 0)
             {
-                foreach (KeyValuePair<string, X509Certificate> additionalCert in chain)
+                foreach (System.Collections.Generic.KeyValuePair<string, X509Certificate> additionalCert in chain)
                 {
                     additionalCertsAsBytes.Add(additionalCert.Value.GetEncoded());
                 }
@@ -201,7 +206,8 @@ namespace RedmineMailService.CertSSL
 
             if (chain != null && chain.Count > 0)
             {
-                IEnumerable<X509Certificate> addicionalCertsAsX09Chain = BuildCertificateChainBC(cert.GetEncoded(), additionalCertsAsBytes);
+                System.Collections.Generic.IEnumerable<X509Certificate> addicionalCertsAsX09Chain = 
+                    BuildCertificateChainBC(cert.GetEncoded(), additionalCertsAsBytes);
 
                 foreach (X509Certificate addCertAsX09 in addicionalCertsAsX09Chain)
                 {
@@ -217,7 +223,7 @@ namespace RedmineMailService.CertSSL
 
             using (System.IO.MemoryStream memoryStream = new System.IO.MemoryStream())
             {
-                store.Save(memoryStream, password.ToCharArray(), new SecureRandom());
+                store.Save(memoryStream, password.ToCharArray(), new Org.BouncyCastle.Security.SecureRandom());
                 return memoryStream.ToArray();
             }
         }
