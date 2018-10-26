@@ -153,18 +153,87 @@ namespace AnySqlWebAdmin
             return signer.VerifySignature(sig);
         } // End Function ValidateSelfSignedCert 
 
+        public static void foo()
+        {
+            Org.BouncyCastle.Crypto.ISignatureFactory signatureFactory;
+            
+            Org.BouncyCastle.Crypto.AsymmetricKeyParameter publicKey;
+            Org.BouncyCastle.Crypto.AsymmetricKeyParameter signingKey;
+
+            
+            signatureFactory = new Org.BouncyCastle.Crypto.Operators.Asn1SignatureFactory(
+                X9ObjectIdentifiers.ECDsaWithSha256.ToString(),
+                publicKey);
+            
+            Asn1Set attributes;
+            
+            
+            System.Collections.IDictionary attrs = new System.Collections.Hashtable();
+            
+            // https://codereview.stackexchange.com/questions/84752/net-bouncycastle-csr-and-private-key-generation
+            string domainName = "";
+            string companyName = "";
+            string city = "";
+            string state = "";
+            string countryIso2Characters = "";
+            string division = "";
+            string email = "";
+            
+            attrs.Add(X509Name.CN, domainName);
+            attrs.Add(X509Name.O, companyName);
+            attrs.Add(X509Name.L, city);
+            attrs.Add(X509Name.ST, state);
+            attrs.Add(X509Name.C, countryIso2Characters);
+
+            if (division != null)
+            {
+                attrs.Add(X509Name.OU, division);
+            }
+
+            if (email != null)
+            {
+                attrs.Add(X509Name.EmailAddress, email);
+            }
+
+            X509Name subject = new X509Name(new System.Collections.ArrayList(attrs.Keys), attrs);
+
+            Asn1Encodable foo = null;
+            Asn1Encodable bar = null;
+            
+            DerSequence subjectAlternativeNames = new DerSequence(new Asn1Encodable[] {
+                new GeneralName(GeneralName.DnsName, "localhost"),
+                new GeneralName(GeneralName.DnsName, System.Environment.MachineName),
+                new GeneralName(GeneralName.DnsName, "127.0.0.1")
+            });
+            
+            
+            Asn1Set derSet = new DerSet(foo, bar, subjectAlternativeNames);
+            
+            
+            Org.BouncyCastle.Pkcs.Pkcs10CertificationRequest req = 
+                new Org.BouncyCastle.Pkcs.Pkcs10CertificationRequest(
+                    signatureFactory,
+                    subject,
+                    publicKey,
+                    attributes,
+                    signingKey
+            );
+            
+            //req.GetDerEncoded();
+        }
+
 
         public static void Test()
         {
             X509Name caName = new X509Name("CN=TestCA");
             X509Name eeName = new X509Name("CN=TestEE");
             X509Name eeName25519 = new X509Name("CN=TestEE25519");
-
-
+            
+            
             // Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair caKey25519 = GenerateEcKeyPair("curve25519");
             Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair caKey25519  = GenerateEcKeyPair(
                 Org.BouncyCastle.Crypto.EC.CustomNamedCurves.GetByName("curve25519")
-                );
+            );
             
             Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair caKey = GenerateEcKeyPair("secp256r1");
             Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair eeKey = GenerateRsaKeyPair(2048);
@@ -199,6 +268,8 @@ namespace AnySqlWebAdmin
             X509Certificate caCert = GenerateCertificate(caName, caName, caKey.Private, caKey.Public);
             X509Certificate eeCert = GenerateCertificate(caName, eeName, caKey.Private, eeKey.Public);
             X509Certificate ee25519Cert = GenerateCertificate(caName, eeName25519, caKey25519.Private, caKey25519.Public);
+            
+            
             
             bool caOk = ValidateSelfSignedCert(caCert, caKey.Public);
             bool eeOk = ValidateSelfSignedCert(eeCert, caKey.Public);

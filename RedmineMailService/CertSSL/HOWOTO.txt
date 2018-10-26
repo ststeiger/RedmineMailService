@@ -15,6 +15,7 @@ openssl ecparam -out privatekey.key -name prime256v1 -genkey
 openssl req -new -key privatekey.key -out request.csr -sha256
 
 
+
 NOTE: Please do not enter an email address, challenge password 
 or an optional company name when generating the CSR.
 
@@ -32,7 +33,10 @@ https://stackoverflow.com/questions/10175812/how-to-create-a-self-signed-certifi
 openssl x509 -req -sha256 -days 365 -in request.csr -signkey privatekey.key -out server.crt
 
 
-subject=/C=CH/ST=EuropenAlliance/L=NeutralZone/O=SkyNet mbH/OU=Skynet Earth Inc./CN=Skynet/emailAddress=root@sky.net
+subject=/C=EA/ST=EuropenAlliance/L=NeutralZone/O=SkyNet mbH/OU=Skynet Earth Inc./CN=Skynet/emailAddress=root@sky.net
+
+
+subject=/C=EA/ST=EuropenAlliance/L=NeutralZone/O=SkyNet mbH/OU=Skynet Earth Inc./CN=localhost/emailAddress=root@sky.net
 
 
 
