@@ -67,9 +67,9 @@ namespace RedmineMailService
             // don't explode on any step
             // How to ensure text-only email ? 
         } // End Sub Doku 
-        
-        
-        
+
+
+        // https://twitter.com/gitlost
         // https://badhtml.com/
         [System.STAThread]
         static void Main(string[] args)
