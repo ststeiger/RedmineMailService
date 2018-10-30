@@ -1,10 +1,10 @@
 ﻿
-using Org.BouncyCastle.Asn1;
-using Org.BouncyCastle.Asn1.Pkcs;
-using Org.BouncyCastle.Asn1.Sec;
-using Org.BouncyCastle.Asn1.X509;
-using Org.BouncyCastle.Asn1.X9;
-using Org.BouncyCastle.X509;
+// using Org.BouncyCastle.Asn1;
+// using Org.BouncyCastle.Asn1.Pkcs;
+// using Org.BouncyCastle.Asn1.Sec;
+// using Org.BouncyCastle.Asn1.X509;
+// using Org.BouncyCastle.Asn1.X9;
+// using Org.BouncyCastle.X509;
 
 
 
@@ -38,13 +38,14 @@ namespace AnySqlWebAdmin
 
         static Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair GenerateEcKeyPair(string curveName)
         {
-            X9ECParameters ecParam = SecNamedCurves.GetByName(curveName);
+            Org.BouncyCastle.Asn1.X9.X9ECParameters ecParam = Org.BouncyCastle.Asn1.Sec.SecNamedCurves.GetByName(curveName);
 
             return GenerateEcKeyPair(ecParam);
         } // End Function GenerateEcKeyPair 
 
 
-        static Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair GenerateEcKeyPair(X9ECParameters ecParam)
+        static Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair GenerateEcKeyPair(
+            Org.BouncyCastle.Asn1.X9.X9ECParameters ecParam)
         {
             Org.BouncyCastle.Crypto.Parameters.ECDomainParameters ecDomain = 
                 new Org.BouncyCastle.Crypto.Parameters.ECDomainParameters(ecParam.Curve, ecParam.G, ecParam.N);
@@ -60,43 +61,46 @@ namespace AnySqlWebAdmin
         } // End Function GenerateEcKeyPair 
         
 
-        static X509Certificate GenerateCertificate(
-            X509Name issuer, X509Name subject,
+        static Org.BouncyCastle.X509.X509Certificate GenerateCertificate(
+            Org.BouncyCastle.Asn1.X509.X509Name issuer,
+            Org.BouncyCastle.Asn1.X509.X509Name subject,
             Org.BouncyCastle.Crypto.AsymmetricKeyParameter issuerPrivate,
             Org.BouncyCastle.Crypto.AsymmetricKeyParameter subjectPublic)
         {
             Org.BouncyCastle.Crypto.ISignatureFactory signatureFactory;
             if (issuerPrivate is Org.BouncyCastle.Crypto.Parameters.ECPrivateKeyParameters)
             {
-
-                // var names = Org.BouncyCastle.Crypto.Operators.Asn1SignatureFactory.SignatureAlgNames;
+                // System.Collections.IEnumerable names = Org.BouncyCastle.Crypto.Operators.Asn1SignatureFactory.SignatureAlgNames;
                 // System.Console.WriteLine(names);
-                // string x9 = X9ObjectIdentifiers.ECDsaWithSha256.ToString();
+                // string x9 = Org.BouncyCastle.Asn1.X9.X9ObjectIdentifiers.ECDsaWithSha256.ToString();
                 // System.Console.WriteLine(x9);
 
-                // X9ObjectIdentifiers.ECDsaWithSha512
+                // Org.BouncyCastle.Asn1.X9.X9ObjectIdentifiers.ECDsaWithSha512
                 signatureFactory = new Org.BouncyCastle.Crypto.Operators.Asn1SignatureFactory(
-                    X9ObjectIdentifiers.ECDsaWithSha256.ToString(),
+                    Org.BouncyCastle.Asn1.X9.X9ObjectIdentifiers.ECDsaWithSha256.ToString(),
                     issuerPrivate);
             }
             else
             {
-                // PkcsObjectIdentifiers.Sha512WithRsaEncryption
+                // Org.BouncyCastle.Asn1.Pkcs.PkcsObjectIdentifiers.Sha512WithRsaEncryption
                 
                 signatureFactory = new Org.BouncyCastle.Crypto.Operators.Asn1SignatureFactory(
-                    PkcsObjectIdentifiers.Sha256WithRsaEncryption.ToString(),
+                    Org.BouncyCastle.Asn1.Pkcs.PkcsObjectIdentifiers.Sha256WithRsaEncryption.ToString(),
                     issuerPrivate);
             }
 
-            var serialNumber = Org.BouncyCastle.Utilities.BigIntegers.CreateRandomInRange(
+            Org.BouncyCastle.Math.BigInteger serialNumber = 
+                Org.BouncyCastle.Utilities.BigIntegers.CreateRandomInRange(
                 Org.BouncyCastle.Math.BigInteger.One, 
                 Org.BouncyCastle.Math.BigInteger.ValueOf(System.Int64.MaxValue), secureRandom
             );
-            
-            
+
+
             // X509Name subjectDN = new X509Name("CN=" + commonNameValue);
-            
-            X509V3CertificateGenerator certGenerator = new X509V3CertificateGenerator();
+
+            Org.BouncyCastle.X509.X509V3CertificateGenerator certGenerator = 
+                new Org.BouncyCastle.X509.X509V3CertificateGenerator();
+
             certGenerator.SetIssuerDN(issuer);
             certGenerator.SetSubjectDN(subject);
             
@@ -119,10 +123,12 @@ namespace AnySqlWebAdmin
             // certGenerator.AddExtension(Org.BouncyCastle.Asn1.X509.X509Extensions.SubjectAlternativeName, false, subjectAltName);
 
             // https://www.programcreek.com/java-api-examples/?api=org.bouncycastle.cert.X509v3CertificateBuilder
-            DerSequence subjectAlternativeNames = new DerSequence(new Asn1Encodable[] {
-                new GeneralName(GeneralName.DnsName, "localhost"),
-                 new GeneralName(GeneralName.DnsName, System.Environment.MachineName),
-                new GeneralName(GeneralName.DnsName, "127.0.0.1")
+            Org.BouncyCastle.Asn1.DerSequence subjectAlternativeNames = 
+                new Org.BouncyCastle.Asn1.DerSequence(
+                    new Org.BouncyCastle.Asn1.Asn1Encodable[] {
+                new Org.BouncyCastle.Asn1.X509.GeneralName(Org.BouncyCastle.Asn1.X509.GeneralName.DnsName, "localhost"),
+                 new Org.BouncyCastle.Asn1.X509.GeneralName(Org.BouncyCastle.Asn1.X509.GeneralName.DnsName, System.Environment.MachineName),
+                new Org.BouncyCastle.Asn1.X509.GeneralName(Org.BouncyCastle.Asn1.X509.GeneralName.DnsName, "127.0.0.1")
             });
 
             certGenerator.AddExtension(
@@ -132,22 +138,31 @@ namespace AnySqlWebAdmin
             );
             
             // https://security.stackexchange.com/questions/169217/certificate-chain-is-broken
-            // certGenerator.AddExtension(X509Extensions.BasicConstraints.Id, true, new BasicConstraints(3));
+            // certGenerator.AddExtension(Org.BouncyCastle.Asn1.X509.X509Extensions.BasicConstraints.Id, true, new Org.BouncyCastle.Asn1.X509.BasicConstraints(3));
 
 
             //Key Usage
-            // certGenerator.AddExtension(X509Extensions.KeyUsage, true, new KeyUsage(KeyUsage.DigitalSignature | KeyUsage.KeyEncipherment));
-            // certGenerator.AddExtension(X509Extensions.ExtendedKeyUsage.Id, false, new ExtendedKeyUsage(new[] { KeyPurposeID.IdKPClientAuth, KeyPurposeID.IdKPServerAuth }));
+            certGenerator.AddExtension(Org.BouncyCastle.Asn1.X509.X509Extensions.KeyUsage, true
+                , new Org.BouncyCastle.Asn1.X509.KeyUsage(
+                      Org.BouncyCastle.Asn1.X509.KeyUsage.DigitalSignature 
+                    | Org.BouncyCastle.Asn1.X509.KeyUsage.KeyEncipherment)
+            );
 
-
-            // certGenerator.AddExtension(Org.BouncyCastle.Asn1.X509.X509Name.C, false, new GeneralName(GeneralName.Rfc822Name, "CH"));
+            certGenerator.AddExtension(Org.BouncyCastle.Asn1.X509.X509Extensions.ExtendedKeyUsage.Id, false
+                , new Org.BouncyCastle.Asn1.X509.ExtendedKeyUsage(
+                    new[] { Org.BouncyCastle.Asn1.X509.KeyPurposeID.IdKPClientAuth
+                , Org.BouncyCastle.Asn1.X509.KeyPurposeID.IdKPServerAuth
+                })
+            );
 
             return certGenerator.Generate(signatureFactory);
         } // End Function GenerateCertificate 
 
 
-        static bool ValidateSelfSignedCert(X509Certificate cert,
-            Org.BouncyCastle.Crypto.ICipherParameters pubKey)
+        static bool ValidateSelfSignedCert(
+            Org.BouncyCastle.X509.X509Certificate cert,
+            Org.BouncyCastle.Crypto.ICipherParameters pubKey
+            )
         {
             cert.CheckValidity(System.DateTime.UtcNow);
             byte[] tbsCert = cert.GetTbsCertificate(); // (TBS is short for To Be Signed), See RFC5280 for all the gory details.
@@ -177,12 +192,12 @@ namespace AnySqlWebAdmin
 
             // signatureFactory = new Org.BouncyCastle.Crypto.Operators.Asn1SignatureFactory( PkcsObjectIdentifiers.Sha256WithRsaEncryption.ToString(), issuerPrivate);
             signatureFactory = new Org.BouncyCastle.Crypto.Operators.Asn1SignatureFactory(
-                X9ObjectIdentifiers.ECDsaWithSha256.ToString(),
+                Org.BouncyCastle.Asn1.X9.X9ObjectIdentifiers.ECDsaWithSha256.ToString(),
                 signingKey);
             
             
             System.Collections.IDictionary attrs = 
-                new System.Collections.Generic.Dictionary<DerObjectIdentifier, string>();
+                new System.Collections.Generic.Dictionary<Org.BouncyCastle.Asn1.DerObjectIdentifier, string>();
             
             // https://codereview.stackexchange.com/questions/84752/net-bouncycastle-csr-and-private-key-generation
             string domainName = "foo.com";
@@ -193,61 +208,71 @@ namespace AnySqlWebAdmin
             string division = "Skynet Eearth";
             string email = "root@sky.net";
             
-            attrs.Add(X509Name.CN, domainName);
-            attrs.Add(X509Name.O, companyName);
-            attrs.Add(X509Name.L, city);
-            attrs.Add(X509Name.ST, state);
-            attrs.Add(X509Name.C, countryIso2Characters);
+            attrs.Add(Org.BouncyCastle.Asn1.X509.X509Name.CN, domainName);
+            attrs.Add(Org.BouncyCastle.Asn1.X509.X509Name.O, companyName);
+            attrs.Add(Org.BouncyCastle.Asn1.X509.X509Name.L, city);
+            attrs.Add(Org.BouncyCastle.Asn1.X509.X509Name.ST, state);
+            attrs.Add(Org.BouncyCastle.Asn1.X509.X509Name.C, countryIso2Characters);
 
             if (division != null)
             {
-                attrs.Add(X509Name.OU, division);
+                attrs.Add(Org.BouncyCastle.Asn1.X509.X509Name.OU, division);
             }
 
             if (email != null)
             {
-                attrs.Add(X509Name.EmailAddress, email);
+                attrs.Add(Org.BouncyCastle.Asn1.X509.X509Name.EmailAddress, email);
             }
 
-            X509Name subject = new X509Name(new System.Collections.ArrayList(attrs.Keys), attrs);
+            Org.BouncyCastle.Asn1.X509.X509Name subject = 
+                new Org.BouncyCastle.Asn1.X509.X509Name(new System.Collections.ArrayList(attrs.Keys), attrs);
 
 
 
-            var extensions = new System.Collections.Generic.Dictionary<
-                DerObjectIdentifier, X509Extension>()
+            System.Collections.Generic.Dictionary<Org.BouncyCastle.Asn1.DerObjectIdentifier, Org.BouncyCastle.Asn1.X509.X509Extension> extensions = 
+                new System.Collections.Generic.Dictionary<Org.BouncyCastle.Asn1.DerObjectIdentifier, Org.BouncyCastle.Asn1.X509.X509Extension>()
             {
                 {
-                    X509Extensions.BasicConstraints, 
-                    new X509Extension(true, new DerOctetString(new BasicConstraints(false)))
+                    Org.BouncyCastle.Asn1.X509.X509Extensions.BasicConstraints, 
+                    new Org.BouncyCastle.Asn1.X509.X509Extension(true
+                    , new Org.BouncyCastle.Asn1.DerOctetString(new Org.BouncyCastle.Asn1.X509.BasicConstraints(false))
+                    )
                     
                 },
                 {
-                    X509Extensions.KeyUsage, 
-                    new X509Extension(true, 
-                        new DerOctetString(
-                            new KeyUsage(KeyUsage.DigitalSignature 
-                                     | KeyUsage.KeyEncipherment 
-                                     | KeyUsage.DataEncipherment 
-                                     | KeyUsage.NonRepudiation)
+                    Org.BouncyCastle.Asn1.X509.X509Extensions.KeyUsage, 
+                    new Org.BouncyCastle.Asn1.X509.X509Extension(true, 
+                        new Org.BouncyCastle.Asn1.DerOctetString(
+                            new Org.BouncyCastle.Asn1.X509.KeyUsage(
+                                       Org.BouncyCastle.Asn1.X509.KeyUsage.DigitalSignature 
+                                     | Org.BouncyCastle.Asn1.X509.KeyUsage.KeyEncipherment 
+                                     | Org.BouncyCastle.Asn1.X509.KeyUsage.DataEncipherment 
+                                     | Org.BouncyCastle.Asn1.X509.KeyUsage.NonRepudiation)
                         )
                     )
                 },
                 {
-                    X509Extensions.ExtendedKeyUsage, 
-                    new X509Extension(false, 
-                        new DerOctetString(
-                            new ExtendedKeyUsage(KeyPurposeID.IdKPServerAuth, KeyPurposeID.IdKPClientAuth)
+                    Org.BouncyCastle.Asn1.X509.X509Extensions.ExtendedKeyUsage, 
+                    new Org.BouncyCastle.Asn1.X509.X509Extension(false, 
+                        new Org.BouncyCastle.Asn1.DerOctetString(
+                            new Org.BouncyCastle.Asn1.X509.ExtendedKeyUsage(
+                                Org.BouncyCastle.Asn1.X509.KeyPurposeID.IdKPServerAuth,
+                                Org.BouncyCastle.Asn1.X509.KeyPurposeID.IdKPClientAuth
+                                )
                         )
                     )
                     
                 },
             };
-            
-            
+
+
             // Asn1Set attributes = null;
-            Asn1Set attributes = new DerSet(
-                new AttributePkcs(PkcsObjectIdentifiers.Pkcs9AtExtensionRequest
-                    , new DerSet(new X509Extensions(extensions))
+            Org.BouncyCastle.Asn1.Asn1Set attributes = new Org.BouncyCastle.Asn1.DerSet(
+                new Org.BouncyCastle.Asn1.Pkcs.AttributePkcs(
+                    Org.BouncyCastle.Asn1.Pkcs.PkcsObjectIdentifiers.Pkcs9AtExtensionRequest
+                    , new Org.BouncyCastle.Asn1.DerSet(
+                        new Org.BouncyCastle.Asn1.X509.X509Extensions(extensions)
+                        )
                     )
             );
             
@@ -267,18 +292,20 @@ namespace AnySqlWebAdmin
             
             csrPemWriter.WriteObject(csr);
             csrPemWriter.Writer.Flush();
-            string foo = csrPem.ToString();
-            System.Console.WriteLine(foo);
-            
+            string signingRequest = csrPem.ToString();
+            System.Console.WriteLine(signingRequest);
+
+            // System.IO.File.WriteAllText("request.csr", signingRequest, System.Text.Encoding.ASCII);
+
             //req.GetDerEncoded();
-        }
-        
-        
+        } // End Sub CreateSignatureRequest 
+
+
         public static void Test()
         {
-            X509Name caName = new X509Name("CN=TestCA");
-            X509Name eeName = new X509Name("CN=TestEE");
-            X509Name eeName25519 = new X509Name("CN=TestEE25519");
+            Org.BouncyCastle.Asn1.X509.X509Name caName = new Org.BouncyCastle.Asn1.X509.X509Name("CN=TestCA");
+            Org.BouncyCastle.Asn1.X509.X509Name eeName = new Org.BouncyCastle.Asn1.X509.X509Name("CN=TestEE");
+            Org.BouncyCastle.Asn1.X509.X509Name eeName25519 = new Org.BouncyCastle.Asn1.X509.X509Name("CN=TestEE25519");
             
             
             // Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair caKey25519 = GenerateEcKeyPair("curve25519");
@@ -316,9 +343,9 @@ namespace AnySqlWebAdmin
             RedmineMailService.CertSSL.KeyImportExport.WritePrivatePublic(caKey25519);
 
 
-            X509Certificate caCert = GenerateCertificate(caName, caName, caKey.Private, caKey.Public);
-            X509Certificate eeCert = GenerateCertificate(caName, eeName, caKey.Private, eeKey.Public);
-            X509Certificate ee25519Cert = GenerateCertificate(caName, eeName25519, caKey25519.Private, caKey25519.Public);
+            Org.BouncyCastle.X509.X509Certificate caCert = GenerateCertificate(caName, caName, caKey.Private, caKey.Public);
+            Org.BouncyCastle.X509.X509Certificate eeCert = GenerateCertificate(caName, eeName, caKey.Private, eeKey.Public);
+            Org.BouncyCastle.X509.X509Certificate ee25519Cert = GenerateCertificate(caName, eeName25519, caKey25519.Private, caKey25519.Public);
             
             
             
@@ -390,14 +417,14 @@ namespace AnySqlWebAdmin
 
             } // End Using fs 
 
-            X509Name subject = eeName25519;
+            Org.BouncyCastle.Asn1.X509.X509Name subject = eeName25519;
             DumpPfx(ee25519Cert, subject, caKey25519);
         } // End Sub Test 
 
 
         public static void DumpPfx(
-              X509Certificate bouncyCert
-            , X509Name subject
+              Org.BouncyCastle.X509.X509Certificate bouncyCert
+            , Org.BouncyCastle.Asn1.X509.X509Name subject
             , Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair pair)
         {
             Org.BouncyCastle.Pkcs.Pkcs12Store store = new Org.BouncyCastle.Pkcs.Pkcs12Store();
@@ -408,12 +435,13 @@ namespace AnySqlWebAdmin
 
             store.SetKeyEntry(subject.ToString(),
                   new Org.BouncyCastle.Pkcs.AsymmetricKeyEntry(pair.Private)
-                , new[] { certificateEntry });
+                , new[] { certificateEntry }
+            );
 
             Org.BouncyCastle.Security.SecureRandom random =
                 new Org.BouncyCastle.Security.SecureRandom(
                 new Org.BouncyCastle.Crypto.Prng.CryptoApiRandomGenerator()
-                );
+            );
 
             using (System.IO.MemoryStream stream = new System.IO.MemoryStream())
             {
@@ -438,12 +466,14 @@ namespace AnySqlWebAdmin
 
                     // PFX
                     //builder.ToString().Dump("Self-signed Certificate");
-                }
-            }
-        }
-        
-        
-        
+                } // End Using cert 
+
+            } // End Using stream 
+
+        } // End Sub DumpPfx 
+
+
+
         // Most systems accept both formats, but if you need to you can convert one to the other via openssl 
         // Certificate file should be PEM-encoded X.509 Certificate file:
         // openssl x509 -inform DER -in certificate.cer -out certificate.pem
