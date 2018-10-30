@@ -1,0 +1,169 @@
+
+
+RedmineMailService\Titanium.Web.Proxy\Network\CertificateManager.cs
+RedmineMailService\Titanium.Web.Proxy\Network\Certificate\BCCertificateMaker.cs
+
+
+CertificateManager.cs
+string RootCertificateName = "Titanium Root Certificate Authority";
+RootCertificate = CreateCertificate(RootCertificateName, true);
+
+isRootCertificate = true;
+ certificate = makeCertificate(certificateName, isRootCertificate);
+
+ certEngine.MakeCertificate(certificateName="Titanium Root Certificate Authority", isRootCertificate=true, RootCertificate=null);
+ return makeCertificateInternal(sSubjectCN="Titanium Root Certificate Authority", isRoot=true, true, signingCert=null);
+  string fullSubject = "CN=Titanium Root Certificate Authority";
+
+
+WinCertificateMaker.cs
+            var certificate = makeCertificate(isRoot, sSubjectCN, fullSubject, keyLength, hashAlgo, graceTime,
+                now.AddDays(validDays), isRoot ? null : signingCert);
+
+   const string hashAlgo = "SHA256";
+
+Task.Run(() => uninstallCertificate(StoreName.My, StoreLocation.CurrentUser, certificate));
+
+private void uninstallCertificate(StoreName storeName, StoreLocation storeLocation,
+            X509Certificate2 certificate)
+
+
+CertificateManager.cs =>
+   public X509Certificate2 RootCertificate
+
+            proxyServer.CertificateManager.TrustRootCertificate();
+
+public void TrustRootCertificate(bool machineTrusted = false)
+
+installCertificate(StoreName.My, StoreLocation.CurrentUser);
+
+       if (!machineTrusted)
+            {
+                // currentUser\Root
+                installCertificate(StoreName.Root, StoreLocation.CurrentUser);
+            }
+            else
+            {
+                // current system
+                installCertificate(StoreName.My, StoreLocation.LocalMachine);
+
+                // this adds to both currentUser\Root & currentMachine\Root
+                installCertificate(StoreName.Root, StoreLocation.LocalMachine);
+            }
+
+
+private void installCertificate(StoreName storeName, StoreLocation storeLocation)
+
+
+
+                if (certEngine == null)
+                {
+                    certEngine = engine == CertificateEngine.BouncyCastle
+                        ? (ICertificateMaker)new BCCertificateMaker(ExceptionFunc)
+                        : new WinCertificateMaker(ExceptionFunc);
+                }
+
+
+
+    proxyServer = new ProxyServer();
+certificateCache = new ConcurrentDictionary<string, CachedCertificate>();
+
+var certificate = certEngine.MakeCertificate(certificateName, isRootCertificate, RootCertificate);
+        if (CertificateEngine == CertificateEngine.DefaultWindows)
+            {
+                Task.Run(() => uninstallCertificate(StoreName.My, StoreLocation.CurrentUser, certificate));
+            }
+
+
+BCCCertificateMaker.cs => 
+   public X509Certificate2 MakeCertificate(string sSubjectCn, bool isRoot, X509Certificate2 signingCert = null)
+        {
+            return makeCertificateInternal(sSubjectCn, isRoot, true, signingCert);
+        }
+
+
+            return makeCertificateInternal(isRoot, subject, $"CN={subject}",
+                DateTime.UtcNow.AddDays(-certificateGraceDays), DateTime.UtcNow.AddDays(certificateValidDays),
+                isRoot ? null : signingCert);
+
+
+string subjectName = "CN=Titanium Root Certificate Authority";
+return generateCertificate(null, subjectName, subjectName, validFrom, validTo); // 5 years
+
+
+
+issuerName =subjectName,
+issuerPrivateKey = null;
+hostName = null;
+      private static X509Certificate2 generateCertificate(string hostName,
+            string subjectName,
+            string issuerName, DateTime validFrom,
+            DateTime validTo, int keyStrength = 2048,
+            string signatureAlgorithm = "SHA256WithRSA",
+            AsymmetricKeyParameter issuerPrivateKey = null)
+        {
+
+
+
+            // Set certificate intended purposes to only Server Authentication
+            certificateGenerator.AddExtension(X509Extensions.ExtendedKeyUsage.Id, false,
+                new ExtendedKeyUsage(KeyPurposeID.IdKPServerAuth));
+
+
+certificateGenerator.AddExtension(X509Extensions.ExtendedKeyUsage.Id, false,
+certificateGenerator.AddExtension(X509Extensions.BasicConstraints.Id, true, new BasicConstraints(true));
+
+AsymmetricCipherKeyPair subjectKeyPair = keyPairGenerator.GenerateKeyPair();
+issuerPrivateKey =null;
+password="password";
+new  Asn1SignatureFactory(signatureAlgorithm,
+                issuerPrivateKey ?? subjectKeyPair.Private, secureRandom);
+
+return generateCertificate(null, subjectName, subjectName, validFrom, validTo);
+
+      private static X509Certificate2Collection findCertificates(StoreName storeName, StoreLocation storeLocation,
+            string findValue)
+            string value = RootCertificate.Issuer;
+
+
+
+
+        private static X509Certificate2Collection findCertificates(StoreName storeName, StoreLocation storeLocation,
+            string findValue)
+        {
+            var x509Store = new X509Store(storeName, storeLocation);
+            try
+            {
+                x509Store.Open(OpenFlags.OpenExistingOnly);
+                return x509Store.Certificates.Find(X509FindType.FindBySubjectDistinguishedName, findValue, false);
+            }
+            finally
+            {
+                x509Store.Close();
+            }
+        }
+
+
+
+
+         AsymmetricCipherKeyPair kp = DotNetUtilities.GetKeyPair(signingCertificate.PrivateKey);
+            return generateCertificate(hostName, subjectName, signingCertificate.Subject, validFrom, validTo,
+                issuerPrivateKey: kp.Private);
+
+// Non-root certificate
+      return generateCertificate(hostName, subjectName, signingCertificate.Subject, validFrom, validTo,
+                issuerPrivateKey: kp.Private);
+
+// root-certificate
+return generateCertificate(null, subjectName, subjectName, validFrom, validTo);
+
+
+   if (issuerPrivateKey == null) // true if root certificate is generated
+            {
+                certificateGenerator.AddExtension(X509Extensions.BasicConstraints.Id, true, new BasicConstraints(true));
+            }
+
+// Self-sign the certificate
+X509Certificate certificate = certificateGenerator.Generate(signatureFactory);
+
+

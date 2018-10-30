@@ -69,12 +69,25 @@ namespace RedmineMailService
         } // End Sub Doku 
 
 
+        public static void TestRootCertificateGeneration()
+        {
+            // Watch for static variables ! 
+            CertificateCallback.Initialize();
+            Titanium.Web.Proxy.Examples.Basic.ProxyTestController controller1 = Titanium.Web.Proxy.Examples.Basic.ProxyServerProgram.Start();
+
+            // TestMailReader.Test();
+
+            controller1.Stop();
+        }
+
+
+
         // https://twitter.com/gitlost
         // https://badhtml.com/
         [System.STAThread]
         static void Main(string[] args)
         {
-            AnySqlWebAdmin.CerGenerator.CreateSignatureRequest();
+            // AnySqlWebAdmin.CerGenerator.CreateSignatureRequest();
             AnySqlWebAdmin.CerGenerator.Test();
             // RedmineMailService.MailGender.GetGenders();
 
