@@ -89,15 +89,17 @@ namespace AnySqlWebAdmin
             }
 
             var serialNumber = Org.BouncyCastle.Utilities.BigIntegers.CreateRandomInRange(
-                Org.BouncyCastle.Math.BigInteger.One, Org.BouncyCastle.Math.BigInteger.ValueOf(System.Int64.MaxValue), secureRandom);
-
-
+                Org.BouncyCastle.Math.BigInteger.One, 
+                Org.BouncyCastle.Math.BigInteger.ValueOf(System.Int64.MaxValue), secureRandom
+            );
+            
+            
             // X509Name subjectDN = new X509Name("CN=" + commonNameValue);
-
+            
             X509V3CertificateGenerator certGenerator = new X509V3CertificateGenerator();
             certGenerator.SetIssuerDN(issuer);
             certGenerator.SetSubjectDN(subject);
-
+            
             // The certificate needs a serial number. 
             // This is used for revocation, and usually should be an incrementing index 
             // (which makes it easier to revoke a range of certificates).
@@ -123,8 +125,12 @@ namespace AnySqlWebAdmin
                 new GeneralName(GeneralName.DnsName, "127.0.0.1")
             });
 
-            certGenerator.AddExtension(Org.BouncyCastle.Asn1.X509.X509Extensions.SubjectAlternativeName, false, subjectAlternativeNames);
-
+            certGenerator.AddExtension(
+                  Org.BouncyCastle.Asn1.X509.X509Extensions.SubjectAlternativeName
+                , false
+                , subjectAlternativeNames
+            );
+            
             // https://security.stackexchange.com/questions/169217/certificate-chain-is-broken
             // certGenerator.AddExtension(X509Extensions.BasicConstraints.Id, true, new BasicConstraints(3));
 
@@ -147,7 +153,10 @@ namespace AnySqlWebAdmin
             byte[] tbsCert = cert.GetTbsCertificate(); // (TBS is short for To Be Signed), See RFC5280 for all the gory details.
             byte[] sig = cert.GetSignature();
 
-            Org.BouncyCastle.Crypto.ISigner signer = Org.BouncyCastle.Security.SignerUtilities.GetSigner(cert.SigAlgName);
+            Org.BouncyCastle.Crypto.ISigner signer = Org.BouncyCastle.Security.SignerUtilities.GetSigner(
+                cert.SigAlgName
+            );
+            
             signer.Init(false, pubKey);
             signer.BlockUpdate(tbsCert, 0, tbsCert.Length);
             return signer.VerifySignature(sig);
@@ -172,7 +181,8 @@ namespace AnySqlWebAdmin
                 signingKey);
             
             
-            System.Collections.IDictionary attrs = new System.Collections.Generic.Dictionary<DerObjectIdentifier, string>();
+            System.Collections.IDictionary attrs = 
+                new System.Collections.Generic.Dictionary<DerObjectIdentifier, string>();
             
             // https://codereview.stackexchange.com/questions/84752/net-bouncycastle-csr-and-private-key-generation
             string domainName = "foo.com";
@@ -203,17 +213,44 @@ namespace AnySqlWebAdmin
 
 
 
-            var extensions = new System.Collections.Generic.Dictionary<DerObjectIdentifier, X509Extension>()
+            var extensions = new System.Collections.Generic.Dictionary<
+                DerObjectIdentifier, X509Extension>()
             {
-                {X509Extensions.BasicConstraints, new X509Extension(true, new DerOctetString(new BasicConstraints(false)))},
-                {X509Extensions.KeyUsage, new X509Extension(true, new DerOctetString(new KeyUsage(KeyUsage.DigitalSignature | KeyUsage.KeyEncipherment | KeyUsage.DataEncipherment | KeyUsage.NonRepudiation)))},
-                {X509Extensions.ExtendedKeyUsage, new X509Extension(false, new DerOctetString(new ExtendedKeyUsage(KeyPurposeID.IdKPServerAuth, KeyPurposeID.IdKPClientAuth)))},
+                {
+                    X509Extensions.BasicConstraints, 
+                    new X509Extension(true, new DerOctetString(new BasicConstraints(false)))
+                    
+                },
+                {
+                    X509Extensions.KeyUsage, 
+                    new X509Extension(true, 
+                        new DerOctetString(
+                            new KeyUsage(KeyUsage.DigitalSignature 
+                                     | KeyUsage.KeyEncipherment 
+                                     | KeyUsage.DataEncipherment 
+                                     | KeyUsage.NonRepudiation)
+                        )
+                    )
+                },
+                {
+                    X509Extensions.ExtendedKeyUsage, 
+                    new X509Extension(false, 
+                        new DerOctetString(
+                            new ExtendedKeyUsage(KeyPurposeID.IdKPServerAuth, KeyPurposeID.IdKPClientAuth)
+                        )
+                    )
+                    
+                },
             };
-
-
+            
+            
             // Asn1Set attributes = null;
-            Asn1Set attributes = new DerSet(new AttributePkcs(PkcsObjectIdentifiers.Pkcs9AtExtensionRequest, new DerSet(new X509Extensions(extensions))));
-
+            Asn1Set attributes = new DerSet(
+                new AttributePkcs(PkcsObjectIdentifiers.Pkcs9AtExtensionRequest
+                    , new DerSet(new X509Extensions(extensions))
+                    )
+            );
+            
             Org.BouncyCastle.Pkcs.Pkcs10CertificationRequest csr = 
                 new Org.BouncyCastle.Pkcs.Pkcs10CertificationRequest(
                     signatureFactory,
@@ -222,21 +259,21 @@ namespace AnySqlWebAdmin
                     attributes,
                     signingKey
             );
-
-
-
+            
+            
             System.Text.StringBuilder csrPem = new System.Text.StringBuilder();
             Org.BouncyCastle.OpenSsl.PemWriter csrPemWriter = 
                 new Org.BouncyCastle.OpenSsl.PemWriter(new System.IO.StringWriter(csrPem));
             
             csrPemWriter.WriteObject(csr);
             csrPemWriter.Writer.Flush();
-
+            string foo = csrPem.ToString();
+            System.Console.WriteLine(foo);
+            
             //req.GetDerEncoded();
         }
         
-
-
+        
         public static void Test()
         {
             X509Name caName = new X509Name("CN=TestCA");
@@ -291,7 +328,7 @@ namespace AnySqlWebAdmin
 
 
             // System.IO.File.WriteAllBytes("fileName", caCert.Export(X509ContentType.Pkcs12, PfxPassword));
-
+            
             // https://info.ssl.com/how-to-der-vs-crt-vs-cer-vs-pem-certificates-and-how-to-conver-them/
             // The file extensions .CRT and .CER are interchangeable. 
             // If your server requires that you use the .CER file extension, you can change the extension 
@@ -301,7 +338,7 @@ namespace AnySqlWebAdmin
             // Windows by default treats double - clicking a.crt file as a request to import the certificate 
             // So, they're different in that sense, at least, that Windows has some inherent different meaning 
             // for what happens when you double click each type of file.
-
+            
             // One is a "binary" X.509 encoding, and the other is a "text" base64 encoding that usually starts with "-----BEGIN CERTIFICATE-----". 
             // into the Windows Root Certificate store, but treats a.cer file as a request just to view the certificate. 
             // CER is an X.509 certificate in binary form, DER encoded
@@ -314,19 +351,19 @@ namespace AnySqlWebAdmin
                 byte[] buf = caCert.GetEncoded();
                 f.Write(buf, 0, buf.Length);
             }
-
+            
             using (System.IO.Stream fs = System.IO.File.OpenWrite("ee.cer"))
             {
                 byte[] buf = eeCert.GetEncoded();
                 fs.Write(buf, 0, buf.Length);
             } // End Using fs 
-
+            
             using (System.IO.Stream fs = System.IO.File.OpenWrite("ee25519.cer"))
             {
                 byte[] buf = ee25519Cert.GetEncoded();
                 fs.Write(buf, 0, buf.Length);
             } // End Using fs 
-
+            
             // new System.Text.ASCIIEncoding(false)
             // new System.Text.UTF8Encoding(false)
             using (System.IO.Stream fs = System.IO.File.OpenWrite("ee.crt"))
@@ -358,7 +395,10 @@ namespace AnySqlWebAdmin
         } // End Sub Test 
 
 
-        public static void DumpPfx(X509Certificate bouncyCert, X509Name subject, Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair pair)
+        public static void DumpPfx(
+              X509Certificate bouncyCert
+            , X509Name subject
+            , Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair pair)
         {
             Org.BouncyCastle.Pkcs.Pkcs12Store store = new Org.BouncyCastle.Pkcs.Pkcs12Store();
             Org.BouncyCastle.Pkcs.X509CertificateEntry certificateEntry =
@@ -401,9 +441,9 @@ namespace AnySqlWebAdmin
                 }
             }
         }
-
-
-
+        
+        
+        
         // Most systems accept both formats, but if you need to you can convert one to the other via openssl 
         // Certificate file should be PEM-encoded X.509 Certificate file:
         // openssl x509 -inform DER -in certificate.cer -out certificate.pem
@@ -426,9 +466,9 @@ namespace AnySqlWebAdmin
             string pemCert = cert_begin + pem + end_cert;
             return pemCert;
         } // End Function ToPem 
-
-
+        
+        
     } // End Class CerGenerator 
-
-
+    
+    
 } // End Namespace AnySqlWebAdmin 
