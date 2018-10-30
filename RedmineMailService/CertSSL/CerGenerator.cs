@@ -25,8 +25,9 @@ namespace AnySqlWebAdmin
 
         // https://stackoverflow.com/questions/19270507/correct-way-to-use-random-in-multithread-application
         // static Org.BouncyCastle.Security.SecureRandom s_secureRandom = new Org.BouncyCastle.Security.SecureRandom();
-        static readonly System.Threading.ThreadLocal<Org.BouncyCastle.Security.SecureRandom> s_secureRandom =
-            new System.Threading.ThreadLocal<Org.BouncyCastle.Security.SecureRandom>(() => new Org.BouncyCastle.Security.SecureRandom());
+        private static readonly System.Threading.ThreadLocal<Org.BouncyCastle.Security.SecureRandom> s_secureRandom =
+            new System.Threading.ThreadLocal<Org.BouncyCastle.Security.SecureRandom>(
+                () => new Org.BouncyCastle.Security.SecureRandom());
 
 
         static Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair GenerateRsaKeyPair(
@@ -295,16 +296,17 @@ namespace AnySqlWebAdmin
         // https://stackoverflow.com/questions/21912390/decode-read-a-csr-certificate-signing-request-using-java-or-bouncycastle
         private static string GetX509Field(string asn1ObjectIdentifier, Org.BouncyCastle.Asn1.X509.X509Name x500Name)
         {
-            System.Collections.IList  rdnArray = x500Name.GetValueList(new Org.BouncyCastle.Asn1.DerObjectIdentifier(asn1ObjectIdentifier));
-
             string retVal = null;
-
+            
+            System.Collections.IList rdnArray = x500Name.GetValueList(
+                new Org.BouncyCastle.Asn1.DerObjectIdentifier(asn1ObjectIdentifier)
+            );
+            
             System.Collections.IList oids = x500Name.GetOidList();
             System.Collections.IList foo = x500Name.GetValueList();
             System.Console.WriteLine(oids);
             System.Console.WriteLine(foo);
-
-
+            
             foreach (Org.BouncyCastle.Asn1.DerObjectIdentifier thisOID in oids)
             {
                 string oidName = System.Convert.ToString(Org.BouncyCastle.Asn1.X509.X509Name.DefaultSymbols[thisOID]);
@@ -312,14 +314,14 @@ namespace AnySqlWebAdmin
                 System.Collections.IList values = x500Name.GetValueList(thisOID);
                 System.Console.WriteLine(values);
             }
-
+            
             foreach (object x in rdnArray)
             {
                 // System.Console.WriteLine(x);
                 retVal = System.Convert.ToString(x);
                 return retVal;
             }
-
+            
             return retVal;
         }
 
@@ -362,7 +364,9 @@ namespace AnySqlWebAdmin
                         new Org.BouncyCastle.Asn1.Cms.Attribute(sequence);
 
                     // Check if the `Extension Request` attribute is present.
-                    if (attribute.AttrType.Equals(Org.BouncyCastle.Asn1.Pkcs.PkcsObjectIdentifiers.Pkcs9AtExtensionRequest))
+                    if (attribute.AttrType.Equals(
+                        Org.BouncyCastle.Asn1.Pkcs.PkcsObjectIdentifiers.Pkcs9AtExtensionRequest)
+                    )
                     {
                         Org.BouncyCastle.Asn1.Asn1Set attributeValues = attribute.AttrValues;
 
@@ -370,7 +374,9 @@ namespace AnySqlWebAdmin
                         // Assume that it is the first value of the set.
                         if (attributeValues.Count >= 1)
                         {
-                            certificateRequestExtensions = Org.BouncyCastle.Asn1.X509.X509Extensions.GetInstance(attributeValues[0]);
+                            certificateRequestExtensions = Org.BouncyCastle.Asn1.X509.X509Extensions.GetInstance(
+                                attributeValues[0]
+                            );
                             // No need to search any more.
                             break;
                         }
@@ -380,7 +386,8 @@ namespace AnySqlWebAdmin
 
             if (null == certificateRequestExtensions)
             {
-                throw new Org.BouncyCastle.Security.Certificates.CertificateException("Could not obtain X509 Extensions from the CSR");
+                throw new Org.BouncyCastle.Security.Certificates.CertificateException(
+                    "Could not obtain X509 Extensions from the CSR");
             }
 
             return certificateRequestExtensions;
@@ -445,14 +452,23 @@ namespace AnySqlWebAdmin
             string domainName = "sky.net";
             string email = "root@sky.net";
 
-            return CreateSubject(countryIso2Characters, stateOrProvince, localityOrCity, companyName, division, domainName, email);
+            return CreateSubject(
+                  countryIso2Characters, stateOrProvince
+                , localityOrCity, companyName
+                , division, domainName, email);
         }
 
 
 
         // https://codereview.stackexchange.com/questions/84752/net-bouncycastle-csr-and-private-key-generation
-        public static Org.BouncyCastle.Asn1.X509.X509Name CreateSubject(string countryIso2Characters, string stateOrProvince, string localityOrCity
-            , string companyName, string division, string domainName, string email)
+        public static Org.BouncyCastle.Asn1.X509.X509Name CreateSubject(
+              string countryIso2Characters
+            , string stateOrProvince
+            , string localityOrCity
+            , string companyName
+            , string division
+            , string domainName
+            , string email)
         {
             KeyValuePairList<Org.BouncyCastle.Asn1.DerObjectIdentifier, string> attrs =
                 new KeyValuePairList<Org.BouncyCastle.Asn1.DerObjectIdentifier, string>();
@@ -489,16 +505,16 @@ namespace AnySqlWebAdmin
             Org.BouncyCastle.Asn1.X509.X509Name caName = new Org.BouncyCastle.Asn1.X509.X509Name("CN=TestCA");
             Org.BouncyCastle.Asn1.X509.X509Name eeName = new Org.BouncyCastle.Asn1.X509.X509Name("CN=TestEE");
             Org.BouncyCastle.Asn1.X509.X509Name eeName25519 = new Org.BouncyCastle.Asn1.X509.X509Name("CN=TestEE25519");
-
+            
             Org.BouncyCastle.Asn1.X509.X509Name subj = CreateSubject();
             System.Console.WriteLine(subj);
 
             
-            Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair caKey25519 = GenerateEcKeyPair("curve25519", s_secureRandom);
+            Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair caKey25519 = GenerateEcKeyPair("curve25519", s_secureRandom.Value);
             
             
-            Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair caKey = GenerateEcKeyPair("secp256r1", s_secureRandom);
-            Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair eeKey = GenerateRsaKeyPair(2048, s_secureRandom);
+            Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair caKey = GenerateEcKeyPair("secp256r1", s_secureRandom.Value);
+            Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair eeKey = GenerateRsaKeyPair(2048, s_secureRandom.Value);
 
 
             string publicKey = null;
@@ -527,19 +543,17 @@ namespace AnySqlWebAdmin
             RedmineMailService.CertSSL.KeyImportExport.WritePrivatePublic(caKey25519);
 
 
-            Org.BouncyCastle.X509.X509Certificate caCert = GenerateCertificate(caName, caName, caKey.Private, caKey.Public, s_secureRandom);
-            Org.BouncyCastle.X509.X509Certificate eeCert = GenerateCertificate(caName, eeName, caKey.Private, eeKey.Public, s_secureRandom);
-            Org.BouncyCastle.X509.X509Certificate ee25519Cert = GenerateCertificate(caName, eeName25519, caKey25519.Private, caKey25519.Public, s_secureRandom);
+            Org.BouncyCastle.X509.X509Certificate caCert = GenerateCertificate(caName, caName, caKey.Private, caKey.Public, s_secureRandom.Value);
+            Org.BouncyCastle.X509.X509Certificate eeCert = GenerateCertificate(caName, eeName, caKey.Private, eeKey.Public, s_secureRandom.Value);
+            Org.BouncyCastle.X509.X509Certificate ee25519Cert = GenerateCertificate(caName, eeName25519, caKey25519.Private, caKey25519.Public, s_secureRandom.Value);
             
-
-
+            
             bool caOk = ValidateSelfSignedCert(caCert, caKey.Public);
             bool eeOk = ValidateSelfSignedCert(eeCert, caKey.Public);
             bool ee25519 = ValidateSelfSignedCert(eeCert, caKey.Public);
-
+            
             PfxGenerator.CreatePfxFile(caCert, caKey.Private, null, "mykey");
-
-
+            
             // System.IO.File.WriteAllBytes("fileName", caCert.Export(X509ContentType.Pkcs12, PfxPassword));
 
             // https://info.ssl.com/how-to-der-vs-crt-vs-cer-vs-pem-certificates-and-how-to-conver-them/
@@ -551,7 +565,7 @@ namespace AnySqlWebAdmin
             // Windows by default treats double - clicking a.crt file as a request to import the certificate 
             // So, they're different in that sense, at least, that Windows has some inherent different meaning 
             // for what happens when you double click each type of file.
-
+            
             // One is a "binary" X.509 encoding, and the other is a "text" base64 encoding that usually starts with "-----BEGIN CERTIFICATE-----". 
             // into the Windows Root Certificate store, but treats a.cer file as a request just to view the certificate. 
             // CER is an X.509 certificate in binary form, DER encoded
@@ -585,32 +599,32 @@ namespace AnySqlWebAdmin
                 {
                     byte[] buf = eeCert.GetEncoded();
                     string pem = ToPem(buf);
-
+                    
                     sw.Write(pem);
                 } // End Using sw 
-
+                
             } // End Using fs 
-
+            
             using (System.IO.Stream fs = System.IO.File.OpenWrite("ee25519.crt"))
             {
                 using (System.IO.StreamWriter sw = new System.IO.StreamWriter(fs, System.Text.Encoding.ASCII))
                 {
                     byte[] buf = ee25519Cert.GetEncoded();
                     string pem = ToPem(buf);
-
+                    
                     sw.Write(pem);
                 } // End Using sw 
-
+                
             } // End Using fs 
-
+            
             Org.BouncyCastle.Asn1.X509.X509Name subject = eeName25519;
         } // End Sub Test 
-
-
+        
+        
         // Most systems accept both formats, but if you need to you can convert one to the other via openssl 
         // Certificate file should be PEM-encoded X.509 Certificate file:
         // openssl x509 -inform DER -in certificate.cer -out certificate.pem
-
+        
         // Note: The PEM format is the most common format used for certificates. 
         // Extensions used for PEM certificates are cer, crt, and pem. 
         // They are Base64 encoded ASCII files.The DER format is the binary form of the certificate. 
@@ -625,7 +639,7 @@ namespace AnySqlWebAdmin
             string cert_begin = "-----BEGIN CERTIFICATE-----\n";
             string end_cert = "-----END CERTIFICATE-----";
             string pem = System.Convert.ToBase64String(buf);
-
+            
             string pemCert = cert_begin + pem + end_cert;
             return pemCert;
         } // End Function ToPem 
