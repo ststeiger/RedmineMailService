@@ -327,7 +327,7 @@ namespace Titanium.Web.Proxy.Network
             }
 
             var x509Store = new X509Store(storeName, storeLocation);
-
+            
             // todo
             // also it should do not duplicate if certificate already exists
             try

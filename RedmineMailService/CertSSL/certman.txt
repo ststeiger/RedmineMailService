@@ -11,27 +11,26 @@ RootCertificate = CreateCertificate(RootCertificateName, true);
 isRootCertificate = true;
  certificate = makeCertificate(certificateName, isRootCertificate);
 
- certEngine.MakeCertificate(certificateName="Titanium Root Certificate Authority", isRootCertificate=true, RootCertificate=null);
- return makeCertificateInternal(sSubjectCN="Titanium Root Certificate Authority", isRoot=true, true, signingCert=null);
-  string fullSubject = "CN=Titanium Root Certificate Authority";
+certEngine.MakeCertificate(certificateName="Titanium Root Certificate Authority", isRootCertificate=true, RootCertificate=null);
+return makeCertificateInternal(sSubjectCN="Titanium Root Certificate Authority", isRoot=true, true, signingCert=null);
+string fullSubject = "CN=Titanium Root Certificate Authority";
 
 
 WinCertificateMaker.cs
-            var certificate = makeCertificate(isRoot, sSubjectCN, fullSubject, keyLength, hashAlgo, graceTime,
-                now.AddDays(validDays), isRoot ? null : signingCert);
+var certificate = makeCertificate(isRoot, sSubjectCN, fullSubject, keyLength, hashAlgo, graceTime,
+now.AddDays(validDays), isRoot ? null : signingCert);
 
-   const string hashAlgo = "SHA256";
+const string hashAlgo = "SHA256";
 
 Task.Run(() => uninstallCertificate(StoreName.My, StoreLocation.CurrentUser, certificate));
 
 private void uninstallCertificate(StoreName storeName, StoreLocation storeLocation,
-            X509Certificate2 certificate)
+X509Certificate2 certificate)
 
 
-CertificateManager.cs =>
-   public X509Certificate2 RootCertificate
+CertificateManager.cs => public X509Certificate2 RootCertificate
 
-            proxyServer.CertificateManager.TrustRootCertificate();
+proxyServer.CertificateManager.TrustRootCertificate();
 
 public void TrustRootCertificate(bool machineTrusted = false)
 
