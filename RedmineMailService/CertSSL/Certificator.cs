@@ -1,12 +1,4 @@
 
-using System;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Diagnostics;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Collections.Concurrent;
 using System.Security.Cryptography.X509Certificates;
 
 
@@ -23,15 +15,23 @@ namespace RedmineMailService.CertSSL
         public static string GetPath(X509Store store )
         {
             System.Type t = typeof(X509Store);
-            System.Reflection.FieldInfo fi = t.GetField("_storePal", BindingFlags.Instance | BindingFlags.NonPublic);
+            System.Reflection.FieldInfo fi = t.GetField("_storePal"
+                , System.Reflection.BindingFlags.Instance 
+                | System.Reflection.BindingFlags.NonPublic);
             object obj = fi.GetValue(store);
+            // System.Console.WriteLine(obj);
 
             // System.Type tt = System.Type.GetType("Internal.Cryptography.Pal.DirectoryBasedStoreProvider, System.Security.Cryptography.X509Certificates");
             System.Type tt = obj.GetType();
             // System.Console.WriteLine(obj);
             
             // private readonly string _storePath;
-            System.Reflection.FieldInfo fi2 = tt.GetField("_storePath", BindingFlags.Instance | BindingFlags.NonPublic| BindingFlags.FlattenHierarchy);
+            System.Reflection.FieldInfo fi2 = tt.GetField("_storePath"
+                , System.Reflection.BindingFlags.Instance 
+                | System.Reflection.BindingFlags.NonPublic 
+                | System.Reflection.BindingFlags.FlattenHierarchy);
+
+
             if (fi2 != null)
             {
                 // object obj2 = fi2.GetValue(System.Convert.ChangeType(obj, tt));
@@ -43,38 +43,51 @@ namespace RedmineMailService.CertSSL
             return null;
         }
 
+
         // CurrentUser.My:/root/.dotnet/corefx/cryptography/x509stores/my
         // CurrentUser.Root:/root/.dotnet/corefx/cryptography/x509stores/root
         public static void ListCertificates()
         {
-            Console.WriteLine("\r\nExists Certs Name and Location");
-            Console.WriteLine("------ ----- -------------------------");
+            System.Console.WriteLine("\r\nExists Certs Name and Location");
+            System.Console.WriteLine("------ ----- -------------------------");
             
             foreach (StoreLocation storeLocation in (StoreLocation[]) 
-                Enum.GetValues(typeof(StoreLocation)))
+                System.Enum.GetValues(typeof(StoreLocation)))
             {
-                foreach (StoreName storeName in (StoreName[]) 
-                    Enum.GetValues(typeof(StoreName)))
+                foreach (StoreName storeName in (StoreName[])
+                    System.Enum.GetValues(typeof(StoreName)))
                 {
-                    X509Store store = new X509Store(storeName, storeLocation);
-                    
-                    try
-                    {
-                        store.Open(OpenFlags.OpenExistingOnly);
-                        string path = GetPath(store);
-                        System.Console.WriteLine("{0}.{1}:{2}", storeLocation, storeName, path);
-                        // Console.WriteLine("Yes {0,4}  {1}, {2}", store.Certificates.Count, store.Name, store.Location);
-                    }   
-                    catch (System.Security.Cryptography.CryptographicException)
-                    {
-                        // Console.WriteLine("No {0}, {1}", store.Name, store.Location);
-                    }
-                }
-                Console.WriteLine();
-            }
+                    using (X509Store store = new X509Store(storeName, storeLocation))
+                    { 
+
+                        try
+                        {
+                            store.Open(OpenFlags.OpenExistingOnly);
+                            string path = GetPath(store);
+                            System.Console.WriteLine("{0}.{1}:{2}", storeLocation, storeName, path);
+                            // Console.WriteLine("Yes {0,4}  {1}, {2}", store.Certificates.Count, store.Name, store.Location);
+                        }
+                        catch (System.Security.Cryptography.CryptographicException)
+                        {
+                            // Console.WriteLine("No {0}, {1}", store.Name, store.Location);
+                        }
+
+                    } // End Using store 
+
+                } // Next storeName 
+
+                System.Console.WriteLine();
+            } // Next storeLocation 
+
+        } // End Sub ListCertificates 
+
+
+        public static X509Certificate2 CreateRootCertificate()
+        {
+            return null;
         }
-        
-        
+
+
         /// <summary>
         ///     Ensure certificates are setup (creates root if required).
         ///     Also makes root certificate trusted based on initial setup from proxy constructor for user/machine trust.
@@ -90,12 +103,7 @@ namespace RedmineMailService.CertSSL
             }
 
             TrustRootCertificate(rootCertificate, machineTrustRoot);
-        }
-
-        public static X509Certificate2 CreateRootCertificate()
-        {
-            return null;
-        }
+        } // End Sub EnsureRootCertificate 
 
 
         /// <summary>
@@ -120,7 +128,7 @@ namespace RedmineMailService.CertSSL
                 // this adds to both currentUser\Root & currentMachine\Root
                 InstallCertificate(cert, StoreName.Root, StoreLocation.LocalMachine);
             }
-        }
+        } // End Sub TrustRootCertificate 
 
 
         private static X509Certificate Find(string serialNumber, StoreLocation location)
@@ -129,8 +137,16 @@ namespace RedmineMailService.CertSSL
             {
                 store.Open(OpenFlags.OpenExistingOnly);
                 X509Certificate2Collection certs = store.Certificates.Find(X509FindType.FindBySerialNumber, serialNumber, true);
-                return certs.OfType<X509Certificate>().FirstOrDefault();
+                //return certs.OfType<X509Certificate>().FirstOrDefault();
+
+                foreach (X509Certificate2 thisCertificate in certs)
+                {
+                    return thisCertificate;
+                }
+
             }
+
+            return null;
         }
 
         public static bool certExists()
@@ -160,16 +176,16 @@ namespace RedmineMailService.CertSSL
 
         public static void PrintCertificateInfo(X509Certificate2 certificate)
         {
-            Console.WriteLine("Name: {0}", certificate.FriendlyName);
-            Console.WriteLine("Issuer: {0}", certificate.IssuerName.Name);
-            Console.WriteLine("Subject: {0}", certificate.SubjectName.Name);
-            Console.WriteLine("Version: {0}", certificate.Version);
-            Console.WriteLine("Valid from: {0}", certificate.NotBefore);
-            Console.WriteLine("Valid until: {0}", certificate.NotAfter);
-            Console.WriteLine("Serial number: {0}", certificate.SerialNumber);
-            Console.WriteLine("Signature Algorithm: {0}", certificate.SignatureAlgorithm.FriendlyName);
-            Console.WriteLine("Thumbprint: {0}", certificate.Thumbprint);
-            Console.WriteLine();
+            System.Console.WriteLine("Name: {0}", certificate.FriendlyName);
+            System.Console.WriteLine("Issuer: {0}", certificate.IssuerName.Name);
+            System.Console.WriteLine("Subject: {0}", certificate.SubjectName.Name);
+            System.Console.WriteLine("Version: {0}", certificate.Version);
+            System.Console.WriteLine("Valid from: {0}", certificate.NotBefore);
+            System.Console.WriteLine("Valid until: {0}", certificate.NotAfter);
+            System.Console.WriteLine("Serial number: {0}", certificate.SerialNumber);
+            System.Console.WriteLine("Signature Algorithm: {0}", certificate.SignatureAlgorithm.FriendlyName);
+            System.Console.WriteLine("Thumbprint: {0}", certificate.Thumbprint);
+            System.Console.WriteLine();
         }
 
         public static void EnumCertificates(StoreName name, StoreLocation location)
@@ -279,9 +295,9 @@ namespace RedmineMailService.CertSSL
                     success = WriteFile(data, path);
                 }
             }
-            catch (Exception ex)
+            catch (System.Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                System.Console.WriteLine(ex.Message);
             }
             finally
             {
@@ -313,9 +329,9 @@ namespace RedmineMailService.CertSSL
                         success = WriteFile(data, path);
                     }
                 }
-                catch (Exception ex)
+                catch (System.Exception ex)
                 {
-                    Console.WriteLine(ex.Message);
+                    System.Console.WriteLine(ex.Message);
                 }
                 finally
                 {
@@ -331,7 +347,7 @@ namespace RedmineMailService.CertSSL
             bool ret = false;
             try
             {
-                using (FileStream f = new FileStream(filename, FileMode.Create, FileAccess.Write))
+                using (System.IO.FileStream f = new System.IO.FileStream(filename, System.IO.FileMode.Create, System.IO.FileAccess.Write))
                 {
                     f.Write(data, 0, data.Length);
                     f.Flush();
@@ -340,9 +356,9 @@ namespace RedmineMailService.CertSSL
                 
                 ret = true;
             }
-            catch (Exception ex)
+            catch (System.Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                System.Console.WriteLine(ex.Message);
             }
 
             return ret;
@@ -379,7 +395,7 @@ namespace RedmineMailService.CertSSL
             {
                 return new X509Certificate2(fileName, pfxPassword, StorageFlag);
             }
-            catch (Exception e)
+            catch (System.Exception e)
             {
                 throw e;
             }
@@ -401,7 +417,7 @@ namespace RedmineMailService.CertSSL
         {
             if (certificate == null)
             {
-                throw new Exception("Could not remove certificate as it is null or empty.");
+                throw new System.Exception("Could not remove certificate as it is null or empty.");
             }
 
             using (X509Store x509Store = new X509Store(storeName, storeLocation))
@@ -411,9 +427,9 @@ namespace RedmineMailService.CertSSL
                     x509Store.Open(OpenFlags.ReadWrite);
                     x509Store.Remove(certificate);
                 }
-                catch (Exception e)
+                catch (System.Exception e)
                 {
-                    throw new Exception("Failed to remove root certificate trust "
+                    throw new System.Exception("Failed to remove root certificate trust "
                                       + $" for {storeLocation} store location. You may need admin rights.", e);
                 }
                 finally
@@ -442,7 +458,7 @@ namespace RedmineMailService.CertSSL
             
             if (certificate == null)
             {
-                throw new Exception("Could not install certificate as it is null or empty.");
+                throw new System.Exception("Could not install certificate as it is null or empty.");
             }
 
             using (X509Store x509Store = new X509Store(storeName, storeLocation))
@@ -454,9 +470,9 @@ namespace RedmineMailService.CertSSL
                     x509Store.Open(OpenFlags.ReadWrite);
                     x509Store.Add(certificate);
                 }
-                catch (Exception e)
+                catch (System.Exception e)
                 {
-                    throw new Exception("Failed to make system trust root certificate "
+                    throw new System.Exception("Failed to make system trust root certificate "
                                       + $" for {storeName}\\{storeLocation} store location. You may need admin rights.",
                             e);
                 }
@@ -469,7 +485,7 @@ namespace RedmineMailService.CertSSL
         } // End Sub InstallCertificate 
 
 
-    }
+    } // End Class Certificator 
     
-    
-}
+
+} // End Namespace RedmineMailService.CertSSL 

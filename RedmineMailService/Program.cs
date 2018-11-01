@@ -155,9 +155,7 @@ namespace RedmineMailService
         [System.STAThread]
         static void Main(string[] args)
         {
-            Certificator.ListCertificates();
-            
-            ToCertUtil();
+
 
             // AnySqlWebAdmin.CerGenerator.CreateSignatureRequest();
             AnySqlWebAdmin.CerGenerator.Test();
