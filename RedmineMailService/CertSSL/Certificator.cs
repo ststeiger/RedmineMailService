@@ -19,6 +19,62 @@ namespace RedmineMailService.CertSSL
     public class Certificator
     {
 
+
+        public static string GetPath(X509Store store )
+        {
+            System.Type t = typeof(X509Store);
+            System.Reflection.FieldInfo fi = t.GetField("_storePal", BindingFlags.Instance | BindingFlags.NonPublic);
+            object obj = fi.GetValue(store);
+
+            // System.Type tt = System.Type.GetType("Internal.Cryptography.Pal.DirectoryBasedStoreProvider, System.Security.Cryptography.X509Certificates");
+            System.Type tt = obj.GetType();
+            // System.Console.WriteLine(obj);
+            
+            // private readonly string _storePath;
+            System.Reflection.FieldInfo fi2 = tt.GetField("_storePath", BindingFlags.Instance | BindingFlags.NonPublic| BindingFlags.FlattenHierarchy);
+            if (fi2 != null)
+            {
+                // object obj2 = fi2.GetValue(System.Convert.ChangeType(obj, tt));
+                object obj2 = fi2.GetValue(obj);
+                string path = System.Convert.ToString(obj2);
+                return path;
+            }
+
+            return null;
+        }
+
+        // CurrentUser.My:/root/.dotnet/corefx/cryptography/x509stores/my
+        // CurrentUser.Root:/root/.dotnet/corefx/cryptography/x509stores/root
+        public static void ListCertificates()
+        {
+            Console.WriteLine("\r\nExists Certs Name and Location");
+            Console.WriteLine("------ ----- -------------------------");
+            
+            foreach (StoreLocation storeLocation in (StoreLocation[]) 
+                Enum.GetValues(typeof(StoreLocation)))
+            {
+                foreach (StoreName storeName in (StoreName[]) 
+                    Enum.GetValues(typeof(StoreName)))
+                {
+                    X509Store store = new X509Store(storeName, storeLocation);
+                    
+                    try
+                    {
+                        store.Open(OpenFlags.OpenExistingOnly);
+                        string path = GetPath(store);
+                        System.Console.WriteLine("{0}.{1}:{2}", storeLocation, storeName, path);
+                        // Console.WriteLine("Yes {0,4}  {1}, {2}", store.Certificates.Count, store.Name, store.Location);
+                    }   
+                    catch (System.Security.Cryptography.CryptographicException)
+                    {
+                        // Console.WriteLine("No {0}, {1}", store.Name, store.Location);
+                    }
+                }
+                Console.WriteLine();
+            }
+        }
+        
+        
         /// <summary>
         ///     Ensure certificates are setup (creates root if required).
         ///     Also makes root certificate trusted based on initial setup from proxy constructor for user/machine trust.

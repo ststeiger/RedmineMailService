@@ -216,7 +216,7 @@ namespace Titanium.Web.Proxy.Network.Certificate
             {
                 return generateCertificate(null, subjectName, subjectName, validFrom, validTo);
             }
-
+            
             AsymmetricCipherKeyPair kp = DotNetUtilities.GetKeyPair(signingCertificate.PrivateKey);
             return generateCertificate(hostName, subjectName, signingCertificate.Subject, validFrom, validTo,
                 issuerPrivateKey: kp.Private);
