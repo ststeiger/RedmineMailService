@@ -6,6 +6,27 @@ namespace RedmineMailService.CertSSL
     public class KeyGenerator
     {
 
+        public static void foo()
+        {
+            Org.BouncyCastle.Crypto.IAsymmetricCipherKeyPairGenerator gen = Org.BouncyCastle.Security.GeneratorUtilities.GetKeyPairGenerator("");
+        }
+
+
+
+        public static Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair GenerateGhostKeyPair(
+            int length
+           , Org.BouncyCastle.Security.SecureRandom secureRandom
+           )
+        {
+            Org.BouncyCastle.Crypto.KeyGenerationParameters keygenParam =
+                new Org.BouncyCastle.Crypto.KeyGenerationParameters(secureRandom, length);
+
+            Org.BouncyCastle.Crypto.Generators.Gost3410KeyPairGenerator keyGenerator =
+                new Org.BouncyCastle.Crypto.Generators.Gost3410KeyPairGenerator();
+            keyGenerator.Init(keygenParam);
+            return keyGenerator.GenerateKeyPair();
+        } // End Function GenerateRsaKeyPair 
+
 
         public static Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair GenerateRsaKeyPair(
              int length

@@ -9,13 +9,14 @@
 // using Org.BouncyCastle.X509;
 
 
-
 // https://github.com/rlipscombe/bouncy-castle-csharp/blob/master/CreateCertificate/Program.cs
 // https://github.com/rlipscombe/bouncy-castle-csharp
 // http://blog.differentpla.net/blog/2013/03/18/using-bouncy-castle-from-net
 // http://blog.differentpla.net/blog/2013/03/18/how-do-i-create-a-self-signed-certificate-using-bouncy-castle
 // http://blog.differentpla.net/blog/2013/03/18/how-do-i-convert-a-bouncy-castle-certificate-to-a-net-certificate
 // https://code-examples.net/en/q/398779
+
+
 using RedmineMailService.CertSSL;
 
 
@@ -32,7 +33,65 @@ namespace AnySqlWebAdmin
             new System.Threading.ThreadLocal<Org.BouncyCastle.Security.SecureRandom>(
                 () => new Org.BouncyCastle.Security.SecureRandom(NonBackdooredPrng.Create()));
         
-        
+
+        public static Org.BouncyCastle.Crypto.ISignatureFactory CreateSignatureFactory(Org.BouncyCastle.Crypto.AsymmetricKeyParameter privateKey)
+        {
+            // https://github.com/bcgit/bc-csharp/blob/master/crypto/src/crypto/operators/Asn1Signature.cs
+            // https://github.com/kerryjiang/BouncyCastle.Crypto/blob/master/Crypto/x509/X509Utilities.cs
+            Org.BouncyCastle.Crypto.ISignatureFactory signatureFactory = null;
+            // Org.BouncyCastle.X509.X509Utilities.GetAlgorithmOid("algorithm");
+
+            // new Asn1SignatureFactory("SHA512WITHRSA", issuerKeyPair.Private, rand
+            // erObjectIdentifier sigOid = X509Utilities.GetAlgorithmOid(algorithm);
+            // this.algID = X509Utilities.GetSigAlgID(sigOid, algorithm);
+
+            if (privateKey is Org.BouncyCastle.Crypto.Parameters.ECPrivateKeyParameters)
+            {
+                // Org.BouncyCastle.Asn1.X9.X9ObjectIdentifiers.ECDsaWithSha512
+                signatureFactory = new Org.BouncyCastle.Crypto.Operators.Asn1SignatureFactory(
+                     Org.BouncyCastle.Asn1.X9.X9ObjectIdentifiers.ECDsaWithSha256.ToString()
+                    ,privateKey
+                );
+            }
+            else if (privateKey is Org.BouncyCastle.Crypto.Parameters.DsaPrivateKeyParameters)
+            {
+                signatureFactory = new Org.BouncyCastle.Crypto.Operators.Asn1SignatureFactory(
+                     Org.BouncyCastle.Asn1.Nist.NistObjectIdentifiers.DsaWithSha256.ToString()
+                    ,privateKey
+                );
+            }
+            else if (privateKey is Org.BouncyCastle.Crypto.Parameters.RsaPrivateCrtKeyParameters)
+            {
+                // Org.BouncyCastle.Asn1.Pkcs.PkcsObjectIdentifiers.Sha512WithRsaEncryption
+                signatureFactory = new Org.BouncyCastle.Crypto.Operators.Asn1SignatureFactory(
+                     Org.BouncyCastle.Asn1.Pkcs.PkcsObjectIdentifiers.Sha256WithRsaEncryption.ToString()
+                    ,privateKey
+                ); 
+            }
+
+            return signatureFactory;
+        }
+
+
+        public static void AddExtensions(Org.BouncyCastle.X509.X509V3CertificateGenerator certificateGenerator
+            , CertificateInfo certificateInfo)
+        {
+            foreach (System.Collections.Generic.KeyValuePair<string, Org.BouncyCastle.Asn1.Asn1Encodable> kvp
+                     in certificateInfo.CriticalExtensions)
+            {
+                certificateGenerator.AddExtension(kvp.Key, true, kvp.Value);
+            }
+
+
+            foreach (System.Collections.Generic.KeyValuePair<string, Org.BouncyCastle.Asn1.Asn1Encodable> kvp 
+                in certificateInfo.NonCriticalExtensions)
+            {
+                certificateGenerator.AddExtension(kvp.Key, false, kvp.Value);
+            }
+
+        }
+
+
         public static Org.BouncyCastle.X509.X509Certificate GenerateRootCertificate(
               CertificateInfo certificateInfo
             , Org.BouncyCastle.Security.SecureRandom secureRandom
@@ -55,67 +114,37 @@ namespace AnySqlWebAdmin
             
             Org.BouncyCastle.Crypto.AsymmetricKeyParameter privateKey = 
                 KeyImportExport.ReadPrivateKey(certificateInfo.SubjectKeyPair.PrivateKey);
-            
 
-            
+
+
             // rootCertificate.GetPublicKey():
             // rootCertificate.GetEncoded()
-            var srp = new System.Security.Cryptography.X509Certificates.X509Certificate2(rootCertificate.GetEncoded());
+            System.Security.Cryptography.X509Certificates.X509Certificate2 srp = 
+                new System.Security.Cryptography.X509Certificates.X509Certificate2(rootCertificate.GetEncoded());
+
             // srp.PrivateKey
             // srp.HasPrivateKey
-            // var Akp = Org.BouncyCastle.Security.DotNetUtilities.GetKeyPair(srp.PrivateKey).Private;
-            
-            // vvar algorithm = DigestAlgorithms.GetDigest(bouncyCertificate.SigAlgOid);
+            // Org.BouncyCastle.Crypto.AsymmetricKeyParameter Akp = Org.BouncyCastle.Security.DotNetUtilities.GetKeyPair(srp.PrivateKey).Private;
+
+            // Org.BouncyCastle.Crypto.IDigest algorithm = Org.BouncyCastle.Security.DigestUtilities.GetDigest(rootCertificate.SigAlgOid);
             // var signature = new X509Certificate2Signature(cert, algorithm);
-            
+
             // rootCertificate.SigAlgOid
             // rootCertificate.GetSignature();
             // srp.GetRawCertData()
-            
+
             // X509CertificateParser certParser = new X509CertificateParser();
             // X509Certificate privateCertBouncy = certParser.ReadCertificate(mycert.GetRawCertData());
             // AsymmetricKeyParameter pubKey = privateCertBouncy.GetPublicKey();
-            
-            
-            
-            foreach (var kvp in certificateInfo.CriticalExtensions)
-            {
-                certificateGenerator.AddExtension(kvp.Key, true, kvp.Value);
-            }
-            
-            
-            foreach (var kvp in certificateInfo.NonCriticalExtensions)
-            {
-                certificateGenerator.AddExtension(kvp.Key, false, kvp.Value);
-            }
-            
-            
-            
 
-                
-                
-            Org.BouncyCastle.Crypto.ISignatureFactory signatureFactory;
-            if (privateKey is Org.BouncyCastle.Crypto.Parameters.ECPrivateKeyParameters)
-            {
-                // Org.BouncyCastle.Asn1.X9.X9ObjectIdentifiers.ECDsaWithSha512
-                signatureFactory = new Org.BouncyCastle.Crypto.Operators.Asn1SignatureFactory(
-                    Org.BouncyCastle.Asn1.X9.X9ObjectIdentifiers.ECDsaWithSha256.ToString(),
-                    privateKey);
-            }
-            else
-            {
-                // Org.BouncyCastle.Asn1.Pkcs.PkcsObjectIdentifiers.Sha512WithRsaEncryption
-                signatureFactory = new Org.BouncyCastle.Crypto.Operators.Asn1SignatureFactory(
-                    Org.BouncyCastle.Asn1.Pkcs.PkcsObjectIdentifiers.Sha256WithRsaEncryption.ToString(),
-                    privateKey);
-            }
 
-                
-            
+            AddExtensions(certificateGenerator, certificateInfo);
+            Org.BouncyCastle.Crypto.ISignatureFactory signatureFactory = CreateSignatureFactory(privateKey);
+
             return null;
         }
-        
-        
+
+
         public static Org.BouncyCastle.X509.X509Certificate GenerateRootCertificate(
               CertificateInfo certificateInfo
             , Org.BouncyCastle.Security.SecureRandom secureRandom
@@ -141,43 +170,13 @@ namespace AnySqlWebAdmin
             
             Org.BouncyCastle.Crypto.AsymmetricKeyParameter privateKey = 
                 KeyImportExport.ReadPrivateKey(certificateInfo.SubjectKeyPair.PrivateKey);
-            
-            
-            
+
+
+
             // certificateGenerator.SetPublicKey(publicKey);
 
-
-            foreach (var kvp in certificateInfo.CriticalExtensions)
-            {
-                certificateGenerator.AddExtension(kvp.Key, true, kvp.Value);
-            }
-            
-            
-            foreach (var kvp in certificateInfo.NonCriticalExtensions)
-            {
-                certificateGenerator.AddExtension(kvp.Key, false, kvp.Value);
-            }
-
-
-            
-            
-            
-            
-            Org.BouncyCastle.Crypto.ISignatureFactory signatureFactory;
-            if (privateKey is Org.BouncyCastle.Crypto.Parameters.ECPrivateKeyParameters)
-            {
-                // Org.BouncyCastle.Asn1.X9.X9ObjectIdentifiers.ECDsaWithSha512
-                signatureFactory = new Org.BouncyCastle.Crypto.Operators.Asn1SignatureFactory(
-                    Org.BouncyCastle.Asn1.X9.X9ObjectIdentifiers.ECDsaWithSha256.ToString(),
-                    privateKey);
-            }
-            else
-            {
-                // Org.BouncyCastle.Asn1.Pkcs.PkcsObjectIdentifiers.Sha512WithRsaEncryption
-                signatureFactory = new Org.BouncyCastle.Crypto.Operators.Asn1SignatureFactory(
-                    Org.BouncyCastle.Asn1.Pkcs.PkcsObjectIdentifiers.Sha256WithRsaEncryption.ToString(),
-                    privateKey);
-            }
+            AddExtensions(certificateGenerator, certificateInfo);
+            Org.BouncyCastle.Crypto.ISignatureFactory signatureFactory = CreateSignatureFactory(privateKey);
             
             
             // Serial Number
@@ -203,7 +202,7 @@ namespace AnySqlWebAdmin
         }
 
 
-        static Org.BouncyCastle.X509.X509Certificate GenerateCertificate(
+        private static Org.BouncyCastle.X509.X509Certificate GenerateCertificate(
             Org.BouncyCastle.Asn1.X509.X509Name issuer,
             Org.BouncyCastle.Asn1.X509.X509Name subject,
             Org.BouncyCastle.Crypto.AsymmetricKeyParameter issuerPrivate,
@@ -328,8 +327,12 @@ namespace AnySqlWebAdmin
         } // End Function ValidateSelfSignedCert 
         
 
-        public static Org.BouncyCastle.Asn1.X509.X509Name CreateSubject()
+        public static void Test()
         {
+            Org.BouncyCastle.Asn1.X509.X509Name caName = new Org.BouncyCastle.Asn1.X509.X509Name("CN=TestCA");
+            Org.BouncyCastle.Asn1.X509.X509Name eeName = new Org.BouncyCastle.Asn1.X509.X509Name("CN=TestEE");
+            Org.BouncyCastle.Asn1.X509.X509Name eeName25519 = new Org.BouncyCastle.Asn1.X509.X509Name("CN=TestEE25519");
+
             string countryIso2Characters = "EA";
             string stateOrProvince = "ERA";
             string localityOrCity = "NeutralZone";
@@ -338,20 +341,12 @@ namespace AnySqlWebAdmin
             string domainName = "sky.net";
             string email = "root@sky.net";
 
-            return CertificateInfo.CreateSubject(
+
+            Org.BouncyCastle.Asn1.X509.X509Name subj = CertificateInfo.CreateSubject(
                   countryIso2Characters, stateOrProvince
                 , localityOrCity, companyName
                 , division, domainName, email);
-        }
-        
-        
-        public static void Test()
-        {
-            Org.BouncyCastle.Asn1.X509.X509Name caName = new Org.BouncyCastle.Asn1.X509.X509Name("CN=TestCA");
-            Org.BouncyCastle.Asn1.X509.X509Name eeName = new Org.BouncyCastle.Asn1.X509.X509Name("CN=TestEE");
-            Org.BouncyCastle.Asn1.X509.X509Name eeName25519 = new Org.BouncyCastle.Asn1.X509.X509Name("CN=TestEE25519");
-            
-            Org.BouncyCastle.Asn1.X509.X509Name subj = CreateSubject();
+
             System.Console.WriteLine(subj);
 
             
