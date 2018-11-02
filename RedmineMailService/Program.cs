@@ -155,12 +155,10 @@ namespace RedmineMailService
         [System.STAThread]
         static void Main(string[] args)
         {
-
-
             // AnySqlWebAdmin.CerGenerator.CreateSignatureRequest();
             AnySqlWebAdmin.CerGenerator.Test();
             // RedmineMailService.MailGender.GetGenders();
-
+            
             RedmineMailService.SendMail.Test();
             
             
@@ -186,9 +184,9 @@ namespace RedmineMailService
             System.Console.WriteLine(" --- Press any key to continue --- ");
             System.Console.ReadKey();
         } // End Sub Main 
-
-
+        
+        
     } // End Class Program 
-
-
+    
+    
 } // End Namespace RedmineMailService 
