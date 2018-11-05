@@ -22,7 +22,8 @@ namespace AnySqlWebAdmin
         // https://stackoverflow.com/questions/44755155/store-pkcs12-container-pfx-with-bouncycastle
         // https://github.com/Worlaf/RSADemo/blob/328692e28e48db92340d55563480c8724d916384/RSADemo_WinForms/frmRsaDemo.cs
         public static void CreatePfxFile(
-              Org.BouncyCastle.X509.X509Certificate certificate
+              string fileName
+            , Org.BouncyCastle.X509.X509Certificate certificate
             , Org.BouncyCastle.Crypto.AsymmetricKeyParameter privateKey
             , string password
             , string keyFriendlyName)
@@ -63,8 +64,7 @@ namespace AnySqlWebAdmin
             byte[] result = Org.BouncyCastle.Pkcs.Pkcs12Utilities.ConvertToDefiniteLength(pfxBytes);
             // this.StoreCertificate(System.Convert.ToBase64String(result));
 
-            string outputFilename = "example.pfx";
-            using (System.IO.BinaryWriter writer = new System.IO.BinaryWriter(System.IO.File.Open(outputFilename, System.IO.FileMode.Create)))
+            using (System.IO.BinaryWriter writer = new System.IO.BinaryWriter(System.IO.File.Open(fileName, System.IO.FileMode.Create)))
             {
                 writer.Write(result);
             } // End Using writer 

@@ -25,8 +25,19 @@ namespace RedmineMailService.CertSSL
         public const string SHA256 = "SHA-256";
         public const string SHA384 = "SHA-384";
         public const string SHA512 = "SHA-512";
+
+        // RIPEMD-160 is an old algorithm that has been deprecated by all major security solutions in favor of more modern algorithms.
+        // And although there is no publicly known attack against it, its aging design coupled with new advances in attacks techniques 
+        // make it risky to continue relying on it.
         public const string RIPEMD160 = "RIPEMD160";
+
+        // The first cryptographic break for the GOST hash function was published in 2008. See cryptanalysis for more information.
+
         public const string GOST3411 = "GOST3411";
+
+        // The first cryptanalysis on a reduced version of the WHIRLPOOL hash function 
+        // (number of rounds R less than 10) was published in 2009. 
+        // There is no known attack on the full WHIRLPOOL hash function (10 rounds).
 
 
 

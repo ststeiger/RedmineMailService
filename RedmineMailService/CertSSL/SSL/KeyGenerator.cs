@@ -24,8 +24,11 @@ namespace RedmineMailService.CertSSL
             Org.BouncyCastle.Crypto.Generators.Gost3410KeyPairGenerator keyGenerator =
                 new Org.BouncyCastle.Crypto.Generators.Gost3410KeyPairGenerator();
             keyGenerator.Init(keygenParam);
+
             return keyGenerator.GenerateKeyPair();
         } // End Function GenerateRsaKeyPair 
+
+
 
 
         public static Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair GenerateRsaKeyPair(
@@ -39,6 +42,24 @@ namespace RedmineMailService.CertSSL
             Org.BouncyCastle.Crypto.Generators.RsaKeyPairGenerator keyGenerator =
                 new Org.BouncyCastle.Crypto.Generators.RsaKeyPairGenerator();
             keyGenerator.Init(keygenParam);
+
+            return keyGenerator.GenerateKeyPair();
+        } // End Function GenerateRsaKeyPair 
+
+
+
+        public static Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair GenerateDsaKeyPair(
+             int length
+            , Org.BouncyCastle.Security.SecureRandom secureRandom
+            )
+        {
+            Org.BouncyCastle.Crypto.KeyGenerationParameters keygenParam =
+                new Org.BouncyCastle.Crypto.KeyGenerationParameters(secureRandom, length);
+
+            Org.BouncyCastle.Crypto.Generators.DsaKeyPairGenerator keyGenerator =
+                new Org.BouncyCastle.Crypto.Generators.DsaKeyPairGenerator();
+            keyGenerator.Init(keygenParam);
+
             return keyGenerator.GenerateKeyPair();
         } // End Function GenerateRsaKeyPair 
 
@@ -68,6 +89,9 @@ namespace RedmineMailService.CertSSL
             )
         {
             Org.BouncyCastle.Asn1.X9.X9ECParameters ecParam = Org.BouncyCastle.Asn1.Sec.SecNamedCurves.GetByName(curveName);
+
+            if (ecParam == null)
+                ecParam = Org.BouncyCastle.Crypto.EC.CustomNamedCurves.GetByName(curveName);
 
             return GenerateEcKeyPair(ecParam, secureRandom);
         } // End Function GenerateEcKeyPair 

@@ -24,6 +24,8 @@ namespace RedmineMailService.CertSSL
         public PrivatePublicPemKeyPair SubjectKeyPair;
         public PrivatePublicPemKeyPair IssuerKeyPair;
 
+        public string[] AlternativeNames;
+
 
         public System.Collections.Generic.Dictionary<string, Org.BouncyCastle.Asn1.Asn1Encodable> NonCriticalExtensions;
         public System.Collections.Generic.Dictionary<string, Org.BouncyCastle.Asn1.Asn1Encodable> CriticalExtensions;
@@ -43,6 +45,22 @@ namespace RedmineMailService.CertSSL
                     , this.DomainName
                     , this.EMail
                 );
+            }
+        }
+
+        public Org.BouncyCastle.Asn1.DerSequence SubjectAlternativeNames
+        {
+            get
+            {
+                Org.BouncyCastle.Asn1.Asn1Encodable[] alternativeNames = new Org.BouncyCastle.Asn1.Asn1Encodable[this.AlternativeNames.Length];
+
+                for (int i = 0; i < this.AlternativeNames.Length; ++i)
+                {
+                    alternativeNames[i] = new Org.BouncyCastle.Asn1.X509.GeneralName(Org.BouncyCastle.Asn1.X509.GeneralName.DnsName, this.AlternativeNames[i]);
+                }
+
+                Org.BouncyCastle.Asn1.DerSequence subjectAlternativeNames = new Org.BouncyCastle.Asn1.DerSequence(alternativeNames);
+                return subjectAlternativeNames;
             }
         }
 
@@ -126,15 +144,7 @@ namespace RedmineMailService.CertSSL
 
         public void AddAlternativeNames(params string[] names)
         {
-            Org.BouncyCastle.Asn1.Asn1Encodable[] alternativeNames = new Org.BouncyCastle.Asn1.Asn1Encodable[names.Length];
-
-            for (int i = 0; i < names.Length; ++i)
-            {
-                alternativeNames[i] = new Org.BouncyCastle.Asn1.X509.GeneralName(Org.BouncyCastle.Asn1.X509.GeneralName.DnsName, names[i]);
-            }
-
-
-            Org.BouncyCastle.Asn1.DerSequence subjectAlternativeNames = new Org.BouncyCastle.Asn1.DerSequence(alternativeNames);
+            this.AlternativeNames = names;
         } // End Sub AddAlternativeNames 
 
 
