@@ -650,7 +650,7 @@ namespace AnySqlWebAdmin
         public static string ToPem(byte[] buf)
         {
             string cert_begin = "-----BEGIN CERTIFICATE-----\n";
-            string end_cert = "-----END CERTIFICATE-----";
+            string end_cert = "\n-----END CERTIFICATE-----";
             string pem = System.Convert.ToBase64String(buf);
             
             string pemCert = cert_begin + pem + end_cert;
