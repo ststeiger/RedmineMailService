@@ -157,6 +157,7 @@ namespace RedmineMailService
         {
             // AnySqlWebAdmin.CerGenerator.CreateSignatureRequest();
             AnySqlWebAdmin.CerGenerator.Test2();
+            return;
             // AnySqlWebAdmin.CerGenerator.Test();
             // RedmineMailService.MailGender.GetGenders();
 

@@ -63,8 +63,8 @@ namespace AnySqlWebAdmin
 
                 // Org.BouncyCastle.Asn1.X9.X9ObjectIdentifiers.ECDsaWithSha512
                 signatureFactory = new Org.BouncyCastle.Crypto.Operators.Asn1SignatureFactory(
-                      //Org.BouncyCastle.Asn1.X9.X9ObjectIdentifiers.ECDsaWithSha256.ToString()
-                      Org.BouncyCastle.Asn1.X9.X9ObjectIdentifiers.ECDsaWithSha512.ToString()
+                      Org.BouncyCastle.Asn1.X9.X9ObjectIdentifiers.ECDsaWithSha256.ToString()
+                      //Org.BouncyCastle.Asn1.X9.X9ObjectIdentifiers.ECDsaWithSha512.ToString()
                     , privateKey
                 );
             }
