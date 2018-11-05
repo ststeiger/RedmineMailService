@@ -460,7 +460,7 @@ namespace AnySqlWebAdmin
 
 
 
-                PfxGenerator.CreatePfxFile(@"obelix.pfx", caSsl, kp1.Private, null, "Obelix");
+                PfxGenerator.CreatePfxFile(@"obelix.pfx", caSsl, kp1.Private, "", "Obelix");
             }
 
 
