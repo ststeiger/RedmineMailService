@@ -18,6 +18,7 @@
 // https://code-examples.net/en/q/398779
 
 
+using System.Security.Cryptography.X509Certificates;
 using RedmineMailService.CertSSL;
 
 
@@ -467,20 +468,21 @@ namespace AnySqlWebAdmin
                 string domainName = "Skynet";
                 string email = "root@sky.net";
                 
-
+                
                 caCertInfo = new CertificateInfo(
                       countryIso2Characters, stateOrProvince
                     , localityOrCity, companyName
                     , division, domainName, email
                     , System.DateTime.UtcNow
                     , System.DateTime.UtcNow.AddYears(5)
-                    );
-
-
-
+                );
+                
+                
+                
                 // Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair kp1 = KeyGenerator.GenerateEcKeyPair("curve25519", s_secureRandom.Value);
-                Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair kp1 = KeyGenerator.GenerateRsaKeyPair(2048, s_secureRandom.Value);
-
+                // Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair kp1 = KeyGenerator.GenerateRsaKeyPair(2048, s_secureRandom.Value);
+                Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair kp1 = KeyGenerator.GenerateDsaKeyPair(1024, s_secureRandom.Value);
+                
                 // kp1 = KeyGenerator.GenerateGhostKeyPair(4096, s_secureRandom.Value);
 
                 caCertInfo.SubjectKeyPair = KeyImportExport.GetPemKeyPair(kp1);
@@ -511,17 +513,20 @@ namespace AnySqlWebAdmin
                 );
                 
                 ci.AddAlternativeNames("localhost", System.Environment.MachineName, "127.0.0.1");
-
+                
                 // Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair kp1 = KeyGenerator.GenerateEcKeyPair("curve25519", s_secureRandom.Value);
-                Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair kp1 = KeyGenerator.GenerateRsaKeyPair(2048, s_secureRandom.Value);
-
+                // Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair kp1 = KeyGenerator.GenerateRsaKeyPair(2048, s_secureRandom.Value);
+                Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair kp1 = KeyGenerator.GenerateDsaKeyPair(1024, s_secureRandom.Value);
+                
+                
+                
                 ci.SubjectKeyPair = KeyImportExport.GetPemKeyPair(kp1);
                 ci.IssuerKeyPair = caCertInfo.SubjectKeyPair;
                 
                 caSsl = GenerateSslCertificate(ci, s_secureRandom.Value, caRoot);
                 
                 // Just to clarify, an X.509 certificate does not contain the private key
-                //  The whole point of using certificates is to send them more or less openly, 
+                // The whole point of using certificates is to send them more or less openly, 
                 // without sending the private key, which must be kept secret.
                 // An X509Certificate2 object may have a private key associated with it (via its PrivateKey property), 
                 // but that's only a convenience as part of the design of this class.
@@ -720,6 +725,19 @@ namespace AnySqlWebAdmin
             string cert_begin = "-----BEGIN CERTIFICATE-----\n";
             string end_cert = "\n-----END CERTIFICATE-----";
             string pem = System.Convert.ToBase64String(buf);
+            
+            // Certificate Policies
+            /*
+            // https://stackoverflow.com/questions/12147986/how-to-extract-the-authoritykeyidentifier-from-a-x509certificate2-in-net/12148637
+            var sb = new SubjectAlternativeNameBuilder();
+            sb.AddDnsName("");
+            //sb.AddEmailAddress();
+            sb.AddIpAddress("");
+            //sb.AddUri("");
+            sb.AddUserPrincipalName("");
+            X509Extension sb.Build();
+            CertificateExtensions.Add(san);
+            */
             
             string pemCert = cert_begin + pem + end_cert;
             return pemCert;
