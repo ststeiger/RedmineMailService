@@ -46,54 +46,34 @@ namespace RedmineMailService.CertSSL
                     , this.EMail
                 );
             }
-        }
+        } // End Property Subject 
+
 
         public Org.BouncyCastle.Asn1.DerSequence SubjectAlternativeNames
         {
             get
             {
-                Org.BouncyCastle.Asn1.Asn1Encodable[] alternativeNames = new Org.BouncyCastle.Asn1.Asn1Encodable[this.AlternativeNames.Length];
-
-                for (int i = 0; i < this.AlternativeNames.Length; ++i)
-                {
-                    alternativeNames[i] = new Org.BouncyCastle.Asn1.X509.GeneralName(Org.BouncyCastle.Asn1.X509.GeneralName.DnsName, this.AlternativeNames[i]);
-                }
-
-                Org.BouncyCastle.Asn1.DerSequence subjectAlternativeNames = new Org.BouncyCastle.Asn1.DerSequence(alternativeNames);
-                return subjectAlternativeNames;
+                return CreateSubjectAlternativeNames(this.AlternativeNames);
             }
-        }
+        } // End Property SubjectAlternativeNames 
 
 
-        public CertificateInfo()
+        public static Org.BouncyCastle.Asn1.DerSequence CreateSubjectAlternativeNames(string[] names)
         {
-            this.NonCriticalExtensions = new System.Collections.Generic.Dictionary<string, Org.BouncyCastle.Asn1.Asn1Encodable>(System.StringComparer.OrdinalIgnoreCase);
-            this.CriticalExtensions = new System.Collections.Generic.Dictionary<string, Org.BouncyCastle.Asn1.Asn1Encodable>(System.StringComparer.OrdinalIgnoreCase);
-        } // End Constructor 
+            Org.BouncyCastle.Asn1.Asn1Encodable[] alternativeNames = new Org.BouncyCastle.Asn1.Asn1Encodable[names.Length];
 
+            for (int i = 0; i < names.Length; ++i)
+            {
+                System.Net.IPAddress ipa;
+                if (System.Net.IPAddress.TryParse(names[i], out ipa))
+                    alternativeNames[i] = new Org.BouncyCastle.Asn1.X509.GeneralName(Org.BouncyCastle.Asn1.X509.GeneralName.IPAddress, names[i]);
+                else
+                    alternativeNames[i] = new Org.BouncyCastle.Asn1.X509.GeneralName(Org.BouncyCastle.Asn1.X509.GeneralName.DnsName, names[i]);
+            } // Next i 
 
-        public CertificateInfo(
-              string countryIso2Characters
-            , string stateOrProvince
-            , string localityOrCity
-            , string companyName
-            , string division
-            , string domainName
-            , string email
-            , System.DateTime validFrom 
-            , System.DateTime validTo 
-            ) : this()
-        {
-            this.CountryIso2Characters = countryIso2Characters;
-            this.StateOrProvince = stateOrProvince;
-            this.LocalityOrCity = localityOrCity;
-            this.CompanyName = companyName;
-            this.Division = division;
-            this.DomainName = domainName;
-            this.EMail = email;
-            this.ValidFrom = validFrom;
-            this.ValidTo = validTo;
-        } // End Constructor 
+            Org.BouncyCastle.Asn1.DerSequence subjectAlternativeNames = new Org.BouncyCastle.Asn1.DerSequence(alternativeNames);
+            return subjectAlternativeNames;
+        } // End Function CreateSubjectAlternativeNames 
 
 
         // https://codereview.stackexchange.com/questions/84752/net-bouncycastle-csr-and-private-key-generation
@@ -140,6 +120,37 @@ namespace RedmineMailService.CertSSL
 
             return subject;
         } // End Function CreateSubject 
+
+
+        public CertificateInfo()
+        {
+            this.NonCriticalExtensions = new System.Collections.Generic.Dictionary<string, Org.BouncyCastle.Asn1.Asn1Encodable>(System.StringComparer.OrdinalIgnoreCase);
+            this.CriticalExtensions = new System.Collections.Generic.Dictionary<string, Org.BouncyCastle.Asn1.Asn1Encodable>(System.StringComparer.OrdinalIgnoreCase);
+        } // End Constructor 
+
+
+        public CertificateInfo(
+              string countryIso2Characters
+            , string stateOrProvince
+            , string localityOrCity
+            , string companyName
+            , string division
+            , string domainName
+            , string email
+            , System.DateTime validFrom
+            , System.DateTime validTo
+            ) : this()
+        {
+            this.CountryIso2Characters = countryIso2Characters;
+            this.StateOrProvince = stateOrProvince;
+            this.LocalityOrCity = localityOrCity;
+            this.CompanyName = companyName;
+            this.Division = division;
+            this.DomainName = domainName;
+            this.EMail = email;
+            this.ValidFrom = validFrom;
+            this.ValidTo = validTo;
+        } // End Constructor 
 
 
         public void AddAlternativeNames(params string[] names)

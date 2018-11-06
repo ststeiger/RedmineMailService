@@ -87,8 +87,8 @@ namespace AnySqlWebAdmin
             {
                 // Org.BouncyCastle.Asn1.Pkcs.PkcsObjectIdentifiers.Sha512WithRsaEncryption
                 signatureFactory = new Org.BouncyCastle.Crypto.Operators.Asn1SignatureFactory(
-                     //Org.BouncyCastle.Asn1.Pkcs.PkcsObjectIdentifiers.Sha256WithRsaEncryption.ToString()
-                     Org.BouncyCastle.Asn1.Pkcs.PkcsObjectIdentifiers.Sha512WithRsaEncryption.ToString()
+                      Org.BouncyCastle.Asn1.Pkcs.PkcsObjectIdentifiers.Sha256WithRsaEncryption.ToString()
+                    //Org.BouncyCastle.Asn1.Pkcs.PkcsObjectIdentifiers.Sha512WithRsaEncryption.ToString()
                     , privateKey
                 );
             }
@@ -142,10 +142,10 @@ namespace AnySqlWebAdmin
             certificateGenerator.SetNotBefore(certificateInfo.ValidFrom);
             certificateGenerator.SetNotAfter(certificateInfo.ValidTo);
             
-            Org.BouncyCastle.Crypto.AsymmetricKeyParameter publicKey = 
+            Org.BouncyCastle.Crypto.AsymmetricKeyParameter subjectPublicKey = 
                 KeyImportExport.ReadPublicKey(certificateInfo.SubjectKeyPair.PublicKey);
             
-            Org.BouncyCastle.Crypto.AsymmetricKeyParameter privateKey = 
+            Org.BouncyCastle.Crypto.AsymmetricKeyParameter issuerPrivateKey = 
                 KeyImportExport.ReadPrivateKey(certificateInfo.IssuerKeyPair.PrivateKey);
             
             
@@ -154,8 +154,24 @@ namespace AnySqlWebAdmin
                 , certificateInfo.SubjectAlternativeNames
             );
             
-            certificateGenerator.SetPublicKey(publicKey);
-            
+
+            certificateGenerator.SetPublicKey(subjectPublicKey);
+
+
+
+
+            Org.BouncyCastle.Asn1.X509.SubjectKeyIdentifier subjectKeyIdentifierExtension =
+                new Org.BouncyCastle.Asn1.X509.SubjectKeyIdentifier(
+                Org.BouncyCastle.X509.SubjectPublicKeyInfoFactory.CreateSubjectPublicKeyInfo(subjectPublicKey)
+            );
+
+            certificateGenerator.AddExtension(
+                  Org.BouncyCastle.Asn1.X509.X509Extensions.SubjectKeyIdentifier.Id
+                , false
+                , subjectKeyIdentifierExtension
+            );
+
+
             certificateGenerator.AddExtension(Org.BouncyCastle.Asn1.X509.X509Extensions.ExtendedKeyUsage.Id, false,
                 new Org.BouncyCastle.Asn1.X509.ExtendedKeyUsage(Org.BouncyCastle.Asn1.X509.KeyPurposeID.IdKPServerAuth)
             );
@@ -184,7 +200,7 @@ namespace AnySqlWebAdmin
             
             AddExtensions(certificateGenerator, certificateInfo);
             
-            Org.BouncyCastle.Crypto.ISignatureFactory signatureFactory = CreateSignatureFactory(privateKey);
+            Org.BouncyCastle.Crypto.ISignatureFactory signatureFactory = CreateSignatureFactory(issuerPrivateKey);
             return certificateGenerator.Generate(signatureFactory);
         } // End Function GenerateSslCertificate 
         
@@ -237,22 +253,58 @@ namespace AnySqlWebAdmin
             certificateGenerator.AddExtension(Org.BouncyCastle.Asn1.X509.X509Extensions.KeyUsage, true
                 , new Org.BouncyCastle.Asn1.X509.KeyUsage(
                       Org.BouncyCastle.Asn1.X509.KeyUsage.DigitalSignature
+                    | Org.BouncyCastle.Asn1.X509.KeyUsage.KeyCertSign
+                    | Org.BouncyCastle.Asn1.X509.KeyUsage.CrlSign
                     | Org.BouncyCastle.Asn1.X509.KeyUsage.KeyEncipherment
                     | Org.BouncyCastle.Asn1.X509.KeyUsage.DataEncipherment
-                    | Org.BouncyCastle.Asn1.X509.KeyUsage.KeyCertSign
                     | Org.BouncyCastle.Asn1.X509.KeyUsage.KeyAgreement
                     | Org.BouncyCastle.Asn1.X509.KeyUsage.NonRepudiation
-                    | Org.BouncyCastle.Asn1.X509.KeyUsage.CrlSign
                 )
             );
-            
-            
-            // Set certificate intended purposes to only Server Authentication
-            certificateGenerator.AddExtension(Org.BouncyCastle.Asn1.X509.X509Extensions.ExtendedKeyUsage.Id
-                , true 
-                , new Org.BouncyCastle.Asn1.X509.ExtendedKeyUsage(Org.BouncyCastle.Asn1.X509.KeyPurposeID.IdKPServerAuth)
+
+
+
+            Org.BouncyCastle.Asn1.X509.AuthorityKeyIdentifier authorityKeyIdentifierExtension =
+                new Org.BouncyCastle.Asn1.X509.AuthorityKeyIdentifier(
+                Org.BouncyCastle.X509.SubjectPublicKeyInfoFactory.CreateSubjectPublicKeyInfo(publicKey)
             );
+
+
+
+            Org.BouncyCastle.Asn1.X509.SubjectKeyIdentifier subjectKeyIdentifierExtension = 
+                new Org.BouncyCastle.Asn1.X509.SubjectKeyIdentifier(
+                Org.BouncyCastle.X509.SubjectPublicKeyInfoFactory.CreateSubjectPublicKeyInfo(publicKey)
+            );
+
+            certificateGenerator.AddExtension(
+                  Org.BouncyCastle.Asn1.X509.X509Extensions.SubjectKeyIdentifier.Id
+                , false
+                , subjectKeyIdentifierExtension
+            );
+
+            certificateGenerator.AddExtension(
+                 Org.BouncyCastle.Asn1.X509.X509Extensions.AuthorityKeyIdentifier.Id
+               , false
+               , authorityKeyIdentifierExtension
+           );
+
+
+
+            // Set certificate intended purposes to only Server Authentication
+            //certificateGenerator.AddExtension(Org.BouncyCastle.Asn1.X509.X509Extensions.ExtendedKeyUsage.Id
+            //    , true 
+            //    , new Org.BouncyCastle.Asn1.X509.ExtendedKeyUsage(Org.BouncyCastle.Asn1.X509.KeyPurposeID.IdKPServerAuth)
+            //);
             
+
+            certificateGenerator.AddExtension(Org.BouncyCastle.Asn1.X509.X509Extensions.ExtendedKeyUsage.Id, true
+                , new Org.BouncyCastle.Asn1.X509.ExtendedKeyUsage(new[] {
+                      Org.BouncyCastle.Asn1.X509.KeyPurposeID.IdKPClientAuth,
+                      Org.BouncyCastle.Asn1.X509.KeyPurposeID.IdKPServerAuth
+                })
+            );
+
+
             // Only if we generate a root-Certificate 
             certificateGenerator.AddExtension(Org.BouncyCastle.Asn1.X509.X509Extensions.BasicConstraints.Id
                 , true
@@ -355,7 +407,7 @@ namespace AnySqlWebAdmin
             // certGenerator.AddExtension(Org.BouncyCastle.Asn1.X509.X509Extensions.BasicConstraints.Id, true, new Org.BouncyCastle.Asn1.X509.BasicConstraints(3));
 
 
-            //Key Usage
+            // Key Usage
             certGenerator.AddExtension(Org.BouncyCastle.Asn1.X509.X509Extensions.KeyUsage, true
                 , new Org.BouncyCastle.Asn1.X509.KeyUsage(
                       Org.BouncyCastle.Asn1.X509.KeyUsage.DigitalSignature
@@ -369,9 +421,9 @@ namespace AnySqlWebAdmin
             );
 
             certGenerator.AddExtension(Org.BouncyCastle.Asn1.X509.X509Extensions.ExtendedKeyUsage.Id, true 
-                , new Org.BouncyCastle.Asn1.X509.ExtendedKeyUsage(
-                    new[] { Org.BouncyCastle.Asn1.X509.KeyPurposeID.IdKPClientAuth
-                , Org.BouncyCastle.Asn1.X509.KeyPurposeID.IdKPServerAuth
+                , new Org.BouncyCastle.Asn1.X509.ExtendedKeyUsage( new[] {
+                        Org.BouncyCastle.Asn1.X509.KeyPurposeID.IdKPClientAuth
+                      , Org.BouncyCastle.Asn1.X509.KeyPurposeID.IdKPServerAuth
                 })
             );
 
@@ -408,14 +460,13 @@ namespace AnySqlWebAdmin
 
             { 
                 string countryIso2Characters = "EA";
-                string stateOrProvince = "ERA";
+                string stateOrProvince = "Europe";
                 string localityOrCity = "NeutralZone";
-                string companyName = "Skynet mbH";
-                string division = "Skynet Earth Inc.";
-                string domainName = "sky.net";
+                string companyName = "Skynet Earth Inc.";
+                string division = "Skynet mbH";
+                string domainName = "Skynet";
                 string email = "root@sky.net";
-
-
+                
 
                 caCertInfo = new CertificateInfo(
                       countryIso2Characters, stateOrProvince
@@ -425,9 +476,11 @@ namespace AnySqlWebAdmin
                     , System.DateTime.UtcNow.AddYears(5)
                     );
 
-            
 
-                Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair kp1 = KeyGenerator.GenerateEcKeyPair("curve25519", s_secureRandom.Value);
+
+                // Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair kp1 = KeyGenerator.GenerateEcKeyPair("curve25519", s_secureRandom.Value);
+                Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair kp1 = KeyGenerator.GenerateRsaKeyPair(2048, s_secureRandom.Value);
+
                 // kp1 = KeyGenerator.GenerateGhostKeyPair(4096, s_secureRandom.Value);
 
                 caCertInfo.SubjectKeyPair = KeyImportExport.GetPemKeyPair(kp1);
@@ -435,7 +488,7 @@ namespace AnySqlWebAdmin
 
                 caRoot = GenerateRootCertificate(caCertInfo, s_secureRandom.Value);
 
-                PfxGenerator.CreatePfxFile(@"ca.pfx", caRoot, kp1.Private, null, "SkyNet");
+                PfxGenerator.CreatePfxFile(@"ca.pfx", caRoot, kp1.Private, null);
             }
 
 
@@ -443,7 +496,7 @@ namespace AnySqlWebAdmin
                 string countryIso2Characters = "GA";
                 string stateOrProvince = "Aremorica";
                 string localityOrCity = "Erquy, Bretagne";
-                string companyName = "Coopérative ménhir Obelix Gmbh & Co. KGaA";
+                string companyName = "Coopérative Ménhir Obelix Gmbh & Co. KGaA";
                 string division = "NT (Neanderthal Technology)";
                 string domainName = "localhost";
                 string email = "webmaster@localhost";
@@ -458,8 +511,10 @@ namespace AnySqlWebAdmin
                 );
                 
                 ci.AddAlternativeNames("localhost", System.Environment.MachineName, "127.0.0.1");
-                
-                Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair kp1 = KeyGenerator.GenerateEcKeyPair("curve25519", s_secureRandom.Value);
+
+                // Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair kp1 = KeyGenerator.GenerateEcKeyPair("curve25519", s_secureRandom.Value);
+                Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair kp1 = KeyGenerator.GenerateRsaKeyPair(2048, s_secureRandom.Value);
+
                 ci.SubjectKeyPair = KeyImportExport.GetPemKeyPair(kp1);
                 ci.IssuerKeyPair = caCertInfo.SubjectKeyPair;
                 
@@ -474,10 +529,10 @@ namespace AnySqlWebAdmin
                 // System.Console.WriteLine(cc.PublicKey);
                 // System.Console.WriteLine(cc.PrivateKey);
                 
-                // bool val = ValidateSelfSignedCert(caSsl, caRoot.GetPublicKey());
-                // System.Console.WriteLine(val);
+                bool val = ValidateSelfSignedCert(caSsl, caRoot.GetPublicKey());
+                System.Console.WriteLine(val);
                 
-                PfxGenerator.CreatePfxFile(@"obelix.pfx", caSsl, kp1.Private, "", "Obelix");
+                PfxGenerator.CreatePfxFile(@"obelix.pfx", caSsl, kp1.Private, "");
             }
             
             WriteCerAndCrt(@"ca", caRoot);
@@ -578,7 +633,7 @@ namespace AnySqlWebAdmin
             bool eeOk = ValidateSelfSignedCert(eeCert, caKey.Public);
             bool ee25519 = ValidateSelfSignedCert(eeCert, caKey.Public);
             
-            PfxGenerator.CreatePfxFile("example.pfx", caCert, caKey.Private, null, "mykey");
+            PfxGenerator.CreatePfxFile("example.pfx", caCert, caKey.Private, null);
             
             // System.IO.File.WriteAllBytes("fileName", caCert.Export(X509ContentType.Pkcs12, PfxPassword));
             

@@ -25,8 +25,7 @@ namespace AnySqlWebAdmin
               string fileName
             , Org.BouncyCastle.X509.X509Certificate certificate
             , Org.BouncyCastle.Crypto.AsymmetricKeyParameter privateKey
-            , string password
-            , string keyFriendlyName)
+            , string password)
         {
             // string password = System.Guid.NewGuid().ToString("N");
 
@@ -34,18 +33,26 @@ namespace AnySqlWebAdmin
             Org.BouncyCastle.Pkcs.X509CertificateEntry certEntry = 
                 new Org.BouncyCastle.Pkcs.X509CertificateEntry(certificate);
             string friendlyName = certificate.SubjectDN.ToString();
+            
+
 
             // get bytes of private key.
             Org.BouncyCastle.Asn1.Pkcs.PrivateKeyInfo keyInfo = Org.BouncyCastle.Pkcs.PrivateKeyInfoFactory.CreatePrivateKeyInfo(privateKey);
-            byte[] keyBytes = keyInfo.ToAsn1Object().GetEncoded();
+            //byte[] keyBytes = keyInfo.ToAsn1Object().GetEncoded();
 
             Org.BouncyCastle.Pkcs.Pkcs12StoreBuilder builder = new Org.BouncyCastle.Pkcs.Pkcs12StoreBuilder();
             builder.SetUseDerEncoding(true);
+
+
+
             Org.BouncyCastle.Pkcs.Pkcs12Store store = builder.Build();
+
+            store.SetCertificateEntry(friendlyName, certEntry);
 
             // create store entry
             store.SetKeyEntry(
-                  keyFriendlyName
+                  //keyFriendlyName
+                  friendlyName
                 , new Org.BouncyCastle.Pkcs.AsymmetricKeyEntry(privateKey)
                 , new Org.BouncyCastle.Pkcs.X509CertificateEntry[] {certEntry}
             );
@@ -58,9 +65,14 @@ namespace AnySqlWebAdmin
                 // Cert is contained in store
                 // null: no password, "": an empty passwords
                 store.Save(stream, password == null ? null: password.ToCharArray(), new Org.BouncyCastle.Security.SecureRandom());
+                // stream.Position = 0;
                 pfxBytes = stream.ToArray();
             } // End Using stream 
 
+
+#if WITH_MS_PFX 
+            WithMsPfx(pfxBytes, fileName, password);
+#else
             byte[] result = Org.BouncyCastle.Pkcs.Pkcs12Utilities.ConvertToDefiniteLength(pfxBytes);
             // this.StoreCertificate(System.Convert.ToBase64String(result));
 
@@ -68,10 +80,22 @@ namespace AnySqlWebAdmin
             {
                 writer.Write(result);
             } // End Using writer 
-
+#endif
+            
         }
-        
-        
+
+        public static void WithMsPfx(byte[] pfxBytes, string fileName, string password)
+        {
+            System.Security.Cryptography.X509Certificates.X509Certificate2 convertedCertificate =
+                new System.Security.Cryptography.X509Certificates.X509Certificate2(pfxBytes,
+                            "", // PW
+                            System.Security.Cryptography.X509Certificates.X509KeyStorageFlags.PersistKeySet | System.Security.Cryptography.X509Certificates.X509KeyStorageFlags.Exportable);
+
+            byte[] bytes = convertedCertificate.Export(System.Security.Cryptography.X509Certificates.X509ContentType.Pfx, password);
+            System.IO.File.WriteAllBytes(fileName, bytes);
+        }
+
+
     }
     
     
