@@ -53,7 +53,8 @@ namespace AnySqlWebAdmin
             {
 #if false 
                 // Values from Org.BouncyCastle.Crypto.Operators.X509Utilities // in Asn1Signature.cs 
-                // GOST3411WITHECGOST3410-2001
+                // GOST3411WITHECGOST3410-2001r
+
                 signatureFactory = new Org.BouncyCastle.Crypto.Operators.Asn1SignatureFactory(
                       Org.BouncyCastle.Asn1.CryptoPro.CryptoProObjectIdentifiers.GostR3411x94WithGostR3410x2001.ToString()
                     , privateKey
@@ -65,7 +66,7 @@ namespace AnySqlWebAdmin
                 // Org.BouncyCastle.Asn1.X9.X9ObjectIdentifiers.ECDsaWithSha512
                 signatureFactory = new Org.BouncyCastle.Crypto.Operators.Asn1SignatureFactory(
                       Org.BouncyCastle.Asn1.X9.X9ObjectIdentifiers.ECDsaWithSha256.ToString()
-                      //Org.BouncyCastle.Asn1.X9.X9ObjectIdentifiers.ECDsaWithSha512.ToString()
+                      // Org.BouncyCastle.Asn1.X9.X9ObjectIdentifiers.ECDsaWithSha512.ToString()
                     , privateKey
                 );
             }
