@@ -459,7 +459,10 @@ namespace AnySqlWebAdmin
             Org.BouncyCastle.X509.X509Certificate caRoot = null;
             Org.BouncyCastle.X509.X509Certificate caSsl = null;
             CertificateInfo caCertInfo = null;
-
+            string curveName = "curve25519";
+            curveName = "secp256k1";
+            
+            
             { 
                 string countryIso2Characters = "EA";
                 string stateOrProvince = "Europe";
@@ -478,11 +481,9 @@ namespace AnySqlWebAdmin
                     , System.DateTime.UtcNow.AddYears(5)
                 );
                 
-                
-                
-                Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair kp1 = KeyGenerator.GenerateEcKeyPair("curve25519", s_secureRandom.Value);
+                // Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair kp1 = KeyGenerator.GenerateEcKeyPair(curveName, s_secureRandom.Value);
                 // Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair kp1 = KeyGenerator.GenerateRsaKeyPair(2048, s_secureRandom.Value);
-                // Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair kp1 = KeyGenerator.GenerateDsaKeyPair(1024, s_secureRandom.Value);
+                Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair kp1 = KeyGenerator.GenerateDsaKeyPair(1024, s_secureRandom.Value);
                 // Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair kp1 = KeyGenerator.GenerateDHKeyPair(1024, s_secureRandom.Value);
                 
                 // kp1 = KeyGenerator.GenerateGhostKeyPair(4096, s_secureRandom.Value);
@@ -516,9 +517,9 @@ namespace AnySqlWebAdmin
                 
                 ci.AddAlternativeNames("localhost", System.Environment.MachineName, "127.0.0.1");
                 
-                Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair kp1 = KeyGenerator.GenerateEcKeyPair("curve25519", s_secureRandom.Value);
+                // Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair kp1 = KeyGenerator.GenerateEcKeyPair(curveName, s_secureRandom.Value);
                 // Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair kp1 = KeyGenerator.GenerateRsaKeyPair(2048, s_secureRandom.Value);
-                // Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair kp1 = KeyGenerator.GenerateDsaKeyPair(1024, s_secureRandom.Value);
+                Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair kp1 = KeyGenerator.GenerateDsaKeyPair(1024, s_secureRandom.Value);
                 // Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair kp1 = KeyGenerator.GenerateDHKeyPair(1024, s_secureRandom.Value);
                 
                 
@@ -554,15 +555,16 @@ namespace AnySqlWebAdmin
             )
         {
 
-            using (System.IO.Stream fs = System.IO.File.OpenWrite( fileName + ".cer"))
+            using (System.IO.Stream fs = System.IO.File.Open( fileName + ".cer", System.IO.FileMode.Create))
             {
                 byte[] buf = certificate.GetEncoded();
                 fs.Write(buf, 0, buf.Length);
+                fs.Flush();
             } // End Using fs 
-
+            
             // new System.Text.ASCIIEncoding(false)
             // new System.Text.UTF8Encoding(false)
-            using (System.IO.Stream fs = System.IO.File.OpenWrite(fileName + ".crt"))
+            using (System.IO.Stream fs = System.IO.File.Open(fileName + ".crt", System.IO.FileMode.Create))
             {
                 using (System.IO.StreamWriter sw = new System.IO.StreamWriter(fs, System.Text.Encoding.ASCII))
                 {
@@ -570,8 +572,10 @@ namespace AnySqlWebAdmin
                     string pem = ToPem(buf);
 
                     sw.Write(pem);
+                    sw.Flush();
+                    fs.Flush();
                 } // End Using sw 
-
+                
             } // End Using fs 
         } // End Sub WriteCerAndCrt 
         
@@ -662,27 +666,30 @@ namespace AnySqlWebAdmin
             // Most systems accept both formats, but if you need to you can convert one to the other via openssl 
             // Certificate file should be PEM-encoded X.509 Certificate file:
             // openssl x509 -inform DER -in certificate.cer -out certificate.pem
-            using (System.IO.Stream f = System.IO.File.OpenWrite("ca.cer"))
+            using (System.IO.Stream f = System.IO.File.Open("ca.cer", System.IO.FileMode.Create))
             {
                 byte[] buf = caCert.GetEncoded();
                 f.Write(buf, 0, buf.Length);
+                f.Flush();
             }
             
-            using (System.IO.Stream fs = System.IO.File.OpenWrite("ee.cer"))
+            using (System.IO.Stream fs = System.IO.File.Open("ee.cer", System.IO.FileMode.Create))
             {
                 byte[] buf = eeCert.GetEncoded();
                 fs.Write(buf, 0, buf.Length);
+                fs.Flush();
             } // End Using fs 
             
-            using (System.IO.Stream fs = System.IO.File.OpenWrite("ee25519.cer"))
+            using (System.IO.Stream fs = System.IO.File.Open("ee25519.cer", System.IO.FileMode.Create))
             {
                 byte[] buf = ee25519Cert.GetEncoded();
                 fs.Write(buf, 0, buf.Length);
+                fs.Flush();
             } // End Using fs 
             
             // new System.Text.ASCIIEncoding(false)
             // new System.Text.UTF8Encoding(false)
-            using (System.IO.Stream fs = System.IO.File.OpenWrite("ee.crt"))
+            using (System.IO.Stream fs = System.IO.File.Open("ee.crt", System.IO.FileMode.Create))
             {
                 using (System.IO.StreamWriter sw = new System.IO.StreamWriter(fs, System.Text.Encoding.ASCII))
                 {
@@ -694,7 +701,7 @@ namespace AnySqlWebAdmin
                 
             } // End Using fs 
             
-            using (System.IO.Stream fs = System.IO.File.OpenWrite("ee25519.crt"))
+            using (System.IO.Stream fs = System.IO.File.Open("ee25519.crt", System.IO.FileMode.Create))
             {
                 using (System.IO.StreamWriter sw = new System.IO.StreamWriter(fs, System.Text.Encoding.ASCII))
                 {
