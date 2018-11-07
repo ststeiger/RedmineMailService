@@ -1,13 +1,13 @@
 ﻿
 namespace RedmineMailService.CertSSL
 {
-
-
+    
+    
     // https://gist.github.com/therightstuff/aa65356e95f8d0aae888e9f61aa29414
     public class KeyImportExport
     {
-
-
+        
+        
         // KeyImportExport.GetPemKeyPair
         public static PrivatePublicPemKeyPair GetPemKeyPair(Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair keyPair)
         {
@@ -22,8 +22,8 @@ namespace RedmineMailService.CertSSL
 
                 result.PrivateKey = textWriter.ToString();
             } // End Using textWriter 
-
-
+            
+            
             // id_rsa.pub
             using (System.IO.TextWriter textWriter = new System.IO.StringWriter())
             {
@@ -33,22 +33,22 @@ namespace RedmineMailService.CertSSL
 
                 result.PublicKey = textWriter.ToString();
             } // End Using textWriter 
-
-
+            
+            
             // // This writes the same as private key, not both
             //using (System.IO.TextWriter textWriter = new System.IO.StringWriter())
             //{
             //    Org.BouncyCastle.OpenSsl.PemWriter pemWriter = new Org.BouncyCastle.OpenSsl.PemWriter(textWriter);
             //    pemWriter.WriteObject(keyPair);
             //    pemWriter.Writer.Flush();
-
+            
             //    bothKeys = textWriter.ToString();
             //} // End Using textWriter 
-
+            
             return result;
         } // End Sub GetPemKeyPair
-
-
+        
+        
         // KeyImportExport.ReadPublicKey
         public static Org.BouncyCastle.Crypto.AsymmetricKeyParameter ReadPublicKey(string publicKey)
         {
@@ -69,16 +69,15 @@ namespace RedmineMailService.CertSSL
 
                 keyParameter = (Org.BouncyCastle.Crypto.AsymmetricKeyParameter)obj;
             }
-
+            
             return keyParameter;
         } // End Function ReadPublicKey 
-
-
-
+        
+        
         public static Org.BouncyCastle.Crypto.AsymmetricKeyParameter ReadPrivateKey(string privateKey)
         {
             Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair keyPair = null;
-
+            
             using (System.IO.TextReader reader = new System.IO.StringReader(privateKey))
             {
                 Org.BouncyCastle.OpenSsl.PemReader pemReader =
@@ -94,18 +93,18 @@ namespace RedmineMailService.CertSSL
 
                 keyPair = (Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair)obj;
             } // End using reader 
-
+            
             // Org.BouncyCastle.Crypto.AsymmetricKeyParameter priv = keyPair.Private;
             // Org.BouncyCastle.Crypto.AsymmetricKeyParameter pub = keyPair.Public;
-
+            
             // Note: 
             // cipher.Init(false, key);
             // !!!
-
+            
             return keyPair.Private;
         } // End Function ReadPrivateKey
-
-
+        
+        
         public static Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair ReadKeyPair(string privateKey)
         {
             Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair keyPair = null;
@@ -114,29 +113,29 @@ namespace RedmineMailService.CertSSL
             {
                 Org.BouncyCastle.OpenSsl.PemReader pemReader =
                     new Org.BouncyCastle.OpenSsl.PemReader(reader);
-
+                
                 object obj = pemReader.ReadObject();
-
+                
                 if (obj is Org.BouncyCastle.Crypto.AsymmetricKeyParameter)
                     throw new System.ArgumentException("The given privateKey is a public key, not a privateKey...", "privateKey");
-
+                
                 if (!(obj is Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair))
                     throw new System.ArgumentException("The given privateKey is not a valid assymetric key.", "privateKey");
-
+                
                 keyPair = (Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair)obj;
             }
-
+            
             // Org.BouncyCastle.Crypto.AsymmetricKeyParameter priv = keyPair.Private;
             // Org.BouncyCastle.Crypto.AsymmetricKeyParameter pub = keyPair.Public;
-
+            
             // Note: 
             // cipher.Init(false, key);
             // !!!
-
+            
             return keyPair;
         } // End Function ReadPrivateKey
-
-
+        
+        
         public static Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair ReadKeyPairFromFile(string fileName)
         {
             Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair KeyPair = null;
@@ -157,8 +156,8 @@ namespace RedmineMailService.CertSSL
 
             return KeyPair;
         } // End Function ImportKeyPair 
-
-
+        
+        
         //public static void ReadPrivateKeyFile(string privateKeyFileName)
         //{
         //    Org.BouncyCastle.Crypto.Parameters.RsaPrivateCrtKeyParameters key = null;
@@ -174,7 +173,7 @@ namespace RedmineMailService.CertSSL
         //    // cipher.Init(false, key);
         //    // !!!
         //} // End Function ReadPrivateKey
-
+        
         
         public Org.BouncyCastle.Crypto.AsymmetricKeyParameter ReadPublicKeyFile(string pemFilename)
         {
@@ -188,8 +187,8 @@ namespace RedmineMailService.CertSSL
 
             return keyParameter;
         } // End Function ReadPublicKey 
-
-
+        
+        
         public static void ExportKeyPair(Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair keyPair)
         {
             string privateKey = null;
@@ -205,8 +204,8 @@ namespace RedmineMailService.CertSSL
 
             System.Console.WriteLine(privateKey);
         } // End Sub ExportKeyPair 
-
-
+        
+        
         // https://stackoverflow.com/questions/22008337/generating-keypair-using-bouncy-castle
         // https://stackoverflow.com/questions/14052485/converting-a-public-key-in-subjectpublickeyinfo-format-to-rsapublickey-format-ja
         // https://stackoverflow.com/questions/10963756/get-der-encoded-public-key
@@ -223,9 +222,9 @@ namespace RedmineMailService.CertSSL
             System.Console.WriteLine(privateKey);
             System.Console.WriteLine(publicKey);
         } // End Sub CerKeyInfo 
-
-
+        
+        
     } // End Class KeyImportExport 
-
-
+    
+    
 } // End Namespace RedmineMailService.CertSSL 

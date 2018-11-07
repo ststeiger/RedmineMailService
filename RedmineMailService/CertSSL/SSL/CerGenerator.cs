@@ -480,12 +480,13 @@ namespace AnySqlWebAdmin
                 
                 
                 
-                // Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair kp1 = KeyGenerator.GenerateEcKeyPair("curve25519", s_secureRandom.Value);
+                Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair kp1 = KeyGenerator.GenerateEcKeyPair("curve25519", s_secureRandom.Value);
                 // Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair kp1 = KeyGenerator.GenerateRsaKeyPair(2048, s_secureRandom.Value);
-                Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair kp1 = KeyGenerator.GenerateDsaKeyPair(1024, s_secureRandom.Value);
+                // Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair kp1 = KeyGenerator.GenerateDsaKeyPair(1024, s_secureRandom.Value);
+                // Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair kp1 = KeyGenerator.GenerateDHKeyPair(1024, s_secureRandom.Value);
                 
                 // kp1 = KeyGenerator.GenerateGhostKeyPair(4096, s_secureRandom.Value);
-
+                
                 caCertInfo.SubjectKeyPair = KeyImportExport.GetPemKeyPair(kp1);
                 caCertInfo.IssuerKeyPair = KeyImportExport.GetPemKeyPair(kp1);
 
@@ -515,9 +516,10 @@ namespace AnySqlWebAdmin
                 
                 ci.AddAlternativeNames("localhost", System.Environment.MachineName, "127.0.0.1");
                 
-                // Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair kp1 = KeyGenerator.GenerateEcKeyPair("curve25519", s_secureRandom.Value);
+                Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair kp1 = KeyGenerator.GenerateEcKeyPair("curve25519", s_secureRandom.Value);
                 // Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair kp1 = KeyGenerator.GenerateRsaKeyPair(2048, s_secureRandom.Value);
-                Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair kp1 = KeyGenerator.GenerateDsaKeyPair(1024, s_secureRandom.Value);
+                // Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair kp1 = KeyGenerator.GenerateDsaKeyPair(1024, s_secureRandom.Value);
+                // Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair kp1 = KeyGenerator.GenerateDHKeyPair(1024, s_secureRandom.Value);
                 
                 
                 
