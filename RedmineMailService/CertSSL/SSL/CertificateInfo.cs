@@ -1,6 +1,5 @@
 ﻿
 using AnySqlWebAdmin;
-using RedmineMailService.CertSSL;
 
 
 namespace RedmineMailService.CertSSL
@@ -74,8 +73,24 @@ namespace RedmineMailService.CertSSL
             Org.BouncyCastle.Asn1.DerSequence subjectAlternativeNames = new Org.BouncyCastle.Asn1.DerSequence(alternativeNames);
             return subjectAlternativeNames;
         } // End Function CreateSubjectAlternativeNames 
-
-
+        
+        
+        private static void BuildAlternativeNameNetCoreVariant(System.Security.Cryptography.X509Certificates.X509Certificate2 cert)
+        {
+            // Certificate Policies
+            // https://stackoverflow.com/questions/12147986/how-to-extract-the-authoritykeyidentifier-from-a-x509certificate2-in-net/12148637
+            var sb = new System.Security.Cryptography.X509Certificates.SubjectAlternativeNameBuilder();
+            sb.AddDnsName("example.com");
+            sb.AddEmailAddress("webmaster@example.com");
+            sb.AddIpAddress( System.Net.IPAddress.Parse("127.0.0.1") );
+            sb.AddUri(new System.Uri("https://www.google.com/bot.html"));
+            sb.AddUserPrincipalName("domain\\username");
+            sb.Build();
+            System.Security.Cryptography.X509Certificates.X509Extension san = sb.Build();
+            cert.Extensions.Add(san);
+        } // End Sub BuildAlternativeNameNetCoreVariant 
+        
+        
         // https://codereview.stackexchange.com/questions/84752/net-bouncycastle-csr-and-private-key-generation
         public static Org.BouncyCastle.Asn1.X509.X509Name CreateSubject(
               string countryIso2Characters

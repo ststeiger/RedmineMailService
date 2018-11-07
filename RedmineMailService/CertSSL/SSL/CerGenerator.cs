@@ -490,9 +490,9 @@ namespace AnySqlWebAdmin
                 
                 caCertInfo.SubjectKeyPair = KeyImportExport.GetPemKeyPair(kp1);
                 caCertInfo.IssuerKeyPair = KeyImportExport.GetPemKeyPair(kp1);
-
+                
                 caRoot = GenerateRootCertificate(caCertInfo, s_secureRandom.Value);
-
+                
                 PfxGenerator.CreatePfxFile(@"ca.pfx", caRoot, kp1.Private, null);
             }
 
@@ -735,19 +735,6 @@ namespace AnySqlWebAdmin
             string cert_begin = "-----BEGIN CERTIFICATE-----\n";
             string end_cert = "\n-----END CERTIFICATE-----";
             string pem = System.Convert.ToBase64String(buf);
-            
-            // Certificate Policies
-            /*
-            // https://stackoverflow.com/questions/12147986/how-to-extract-the-authoritykeyidentifier-from-a-x509certificate2-in-net/12148637
-            var sb = new SubjectAlternativeNameBuilder();
-            sb.AddDnsName("");
-            //sb.AddEmailAddress();
-            sb.AddIpAddress("");
-            //sb.AddUri("");
-            sb.AddUserPrincipalName("");
-            X509Extension sb.Build();
-            CertificateExtensions.Add(san);
-            */
             
             string pemCert = cert_begin + pem + end_cert;
             return pemCert;
