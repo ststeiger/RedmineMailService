@@ -494,6 +494,7 @@ namespace AnySqlWebAdmin
                 caRoot = GenerateRootCertificate(caCertInfo, s_secureRandom.Value);
                 
                 PfxGenerator.CreatePfxFile(@"ca.pfx", caRoot, kp1.Private, null);
+                WritePrivatePublicKey("issuer", caCertInfo.IssuerKeyPair);
             }
 
 
@@ -542,6 +543,7 @@ namespace AnySqlWebAdmin
                 System.Console.WriteLine(val);
                 
                 PfxGenerator.CreatePfxFile(@"obelix.pfx", caSsl, kp1.Private, "");
+                WritePrivatePublicKey("obelix", ci.SubjectKeyPair);
             }
             
             WriteCerAndCrt(@"ca", caRoot);
@@ -549,6 +551,18 @@ namespace AnySqlWebAdmin
         } // End Sub Test2 
         
         
+        public static void WritePrivatePublicKey(
+              string fileName
+            , PrivatePublicPemKeyPair keyPair
+        )
+        {
+            System.IO.File.WriteAllText(fileName + "_priv.pem", keyPair.PrivateKey, System.Text.Encoding.ASCII);
+            System.IO.File.WriteAllText(fileName + "_pub.pem", keyPair.PrivateKey, System.Text.Encoding.ASCII);
+        } // End Sub WritePrivatePublicKey 
+
+
+
+
         public static void WriteCerAndCrt(
              string fileName
             ,Org.BouncyCastle.X509.X509Certificate certificate
