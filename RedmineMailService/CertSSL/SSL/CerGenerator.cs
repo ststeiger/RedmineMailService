@@ -453,7 +453,7 @@ namespace AnySqlWebAdmin
 
 
 
-
+        // https://stackoverflow.com/questions/51703109/nginx-the-ssl-directive-is-deprecated-use-the-listen-ssl
         public static void Test2()
         {
             Org.BouncyCastle.X509.X509Certificate caRoot = null;
@@ -506,6 +506,7 @@ namespace AnySqlWebAdmin
                 string division = "NT (Neanderthal Technology)";
                 string domainName = "localhost";
                 domainName = "*.sql.guru";
+                domainName = "localhost";
                 string email = "webmaster@localhost";
                 
                 
@@ -517,8 +518,8 @@ namespace AnySqlWebAdmin
                     , System.DateTime.UtcNow.AddYears(5)
                 );
                 
-                ci.AddAlternativeNames("localhost", System.Environment.MachineName, "127.0.0.1", 
-                "sql.guru");
+                ci.AddAlternativeNames("localhost", System.Environment.MachineName, "127.0.0.1",
+                "sql.guru", "*.sql.guru");
                 
                 // Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair kp1 = KeyGenerator.GenerateEcKeyPair(curveName, s_secureRandom.Value);
                 Org.BouncyCastle.Crypto.AsymmetricCipherKeyPair kp1 = KeyGenerator.GenerateRsaKeyPair(2048, s_secureRandom.Value);
