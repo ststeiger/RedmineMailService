@@ -5,10 +5,64 @@ namespace AnySqlWebAdmin
     
     public class PfxGenerator
     {
+
+
+        public static System.Security.Cryptography.X509Certificates.X509Certificate2
+            LoadCertificate(string pfxLocation, string password)
+        {
+            System.Security.Cryptography.X509Certificates.X509Certificate2 cert =
+                    new System.Security.Cryptography.X509Certificates.X509Certificate2(
+                          pfxLocation
+                        , password);
+
+            return cert;
+        }
         
-        
+
+        public static System.Security.Cryptography.X509Certificates.X509Certificate2
+            LoadCertificate(string pfxLocation)
+        {
+            return LoadCertificate(pfxLocation, "");
+        }
+
+
+        public static Org.BouncyCastle.X509.X509Certificate LoadPfx(string path, string password)
+        {
+            Org.BouncyCastle.X509.X509Certificate cert = null;
+            Org.BouncyCastle.Pkcs.X509CertificateEntry ce = null;
+
+            using (System.IO.FileStream fs = System.IO.File.Open(path, System.IO.FileMode.Open, System.IO.FileAccess.Read, System.IO.FileShare.Read))
+            {
+                Org.BouncyCastle.Pkcs.Pkcs12Store store = new Org.BouncyCastle.Pkcs.Pkcs12Store(fs, password.ToCharArray());
+
+                foreach (string thisAlias in store.Aliases)
+                {
+                    System.Console.WriteLine(thisAlias);
+
+                    ce = store.GetCertificate(thisAlias);
+                    cert = ce.Certificate;
+                    break;
+                } // Next thisAlias 
+
+            } // End Using fs 
+
+            System.Console.WriteLine(cert);
+            return cert;
+        } // End Function LoadPfx 
+
+
+        public static Org.BouncyCastle.X509.X509Certificate LoadPfx(string path)
+        {
+            return LoadPfx(path, "");
+        } // End Function LoadPfx 
+
+
+
+
+
+
         // System.Security.Cryptography.X509Certificates.X509Certificate2.Import (string fileName);
-        
+
         // https://docs.microsoft.com/en-us/dotnet/api/system.security.cryptography.x509certificates.x509certificate2.import?view=netframework-4.7.2
         // https://gist.github.com/yutopio/a217a4af63cf6bcf0a530c14c074cf8f
         // https://gist.githubusercontent.com/yutopio/a217a4af63cf6bcf0a530c14c074cf8f/raw/42b2f8cb27f6d22b7e22d65da5bbd0f1ce9b2fff/cert.cs
@@ -57,7 +111,8 @@ namespace AnySqlWebAdmin
             {
                 // Cert is contained in store
                 // null: no password, "": an empty passwords
-                store.Save(stream, password == null ? null: password.ToCharArray(), new Org.BouncyCastle.Security.SecureRandom());
+                // note: Linux needs empty password on null...
+                store.Save(stream, password == null ? "".ToCharArray(): password.ToCharArray(), new Org.BouncyCastle.Security.SecureRandom());
                 // stream.Position = 0;
                 pfxBytes = stream.ToArray();
             } // End Using stream 

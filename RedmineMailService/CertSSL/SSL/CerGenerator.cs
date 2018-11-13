@@ -452,7 +452,6 @@ namespace AnySqlWebAdmin
         } // End Function ValidateSelfSignedCert 
 
 
-
         // https://stackoverflow.com/questions/51703109/nginx-the-ssl-directive-is-deprecated-use-the-listen-ssl
         public static void Test2()
         {
