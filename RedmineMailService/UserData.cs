@@ -18,5 +18,7 @@ namespace RedmineMailService.Trash
         public static string GMailSMTP = SecretManager.GetSecret<string>("GMailSMTP");
         public static string GMail = SecretManager.GetSecret<string>("GMail");
         public static string GMailPassword = AES.DeCrypt(SecretManager.GetSecret<string>("GMailPassword"));
+
+        public static string GoogleDirectionsApiKey = SecretManager.GetSecret<string>("GoogleDirectionsAPI");
     }
 }

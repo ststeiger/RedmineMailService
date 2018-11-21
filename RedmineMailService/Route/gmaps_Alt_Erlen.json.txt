@@ -1,0 +1,207 @@
+
+{
+   "geocoded_waypoints" : [
+      {
+         "geocoder_status" : "OK",
+         "place_id" : "ChIJIT1A0OgXm0cRJzLWhT88a3c",
+         "types" : [ "locality", "political" ]
+      },
+      {
+         "geocoder_status" : "OK",
+         "place_id" : "ChIJFSkDrtP6mkcRvjDoESh1IVU",
+         "types" : [ "locality", "political" ]
+      }
+   ],
+   "routes" : [
+      {
+         "bounds" : {
+            "northeast" : {
+               "lat" : 47.56370159999999,
+               "lng" : 9.6510871
+            },
+            "southwest" : {
+               "lat" : 47.3742448,
+               "lng" : 9.225552
+            }
+         },
+         "copyrights" : "Map data ©2018 GeoBasis-DE/BKG (©2009), Google",
+         "legs" : [
+            {
+               "arrival_time" : {
+                  "text" : "8:14am",
+                  "time_zone" : "Europe/Zurich",
+                  "value" : 1542784440
+               },
+               "departure_time" : {
+                  "text" : "7:08am",
+                  "time_zone" : "Europe/Zurich",
+                  "value" : 1542780480
+               },
+               "distance" : {
+                  "text" : "51.0 km",
+                  "value" : 50992
+               },
+               "duration" : {
+                  "text" : "1 hour 6 mins",
+                  "value" : 3960
+               },
+               "end_address" : "8586 Erlen, Switzerland",
+               "end_location" : {
+                  "lat" : 47.5512855,
+                  "lng" : 9.225558399999999
+               },
+               "start_address" : "Altstätten, Switzerland",
+               "start_location" : {
+                  "lat" : 47.3742562,
+                  "lng" : 9.556820999999999
+               },
+               "steps" : [
+                  {
+                     "distance" : {
+                        "text" : "23.8 km",
+                        "value" : 23750
+                     },
+                     "duration" : {
+                        "text" : "23 mins",
+                        "value" : 1380
+                     },
+                     "end_location" : {
+                        "lat" : 47.4777626,
+                        "lng" : 9.506175199999999
+                     },
+                     "html_instructions" : "Commuter train towards St. Gallen",
+                     "polyline" : {
+                        "points" : "cxc`Hcqiy@BGuC_BsBeAWQeB{@{Aw@]Sa@WyB}Bo@}@sAwBeAkBuA{BmAsB{@}AmBaDuA}BcCmEiCeEeB{CYc@IMIOaDsFaIaNS]Q[]m@{AwCYs@oAgD_@iA_AsC_CsH[}@_@aAoAaEoBwFiAuDmAqDIQoB{GSm@]k@GUgAaDcA{Ce@uA}@oCmAsDo@oB]eA]gAc@qAk@gBUq@o@qB}@iCa@iAK]e@yAm@mBq@oBOe@e@yA_@kAmAyDsAaEuAcEuCwIwBqGcBeFoBgGiBoFqA_EyAqEaAsCIYuAiEk@eBWw@iAgDwAoEsAgE[{@w@{Bk@gB}@gCoBgGsBoGcCqHaCsHyAiEe@wAEMIUi@aByEsNwAoEQo@mAiDw@uBACS[O[IO]q@Oc@CEw@qBwA{Cm@iAs@mA}@{A[e@e@u@iAcBo@_AS_@g@g@UWQSi@{@KKYg@wAuAwCcCaAq@oAs@sBqAk@]qC_B[QYQoC}A}BqA_IoE_LmGoBiAe@YoBgAwAu@eAa@oA_@e@Mq@Oq@KcAU]E_@GmCc@oGeAeF}@KAKC}@OaC_@gAQqAU_Es@yEm@y@KmJ}AoCc@e@I}B_@_Fy@MGg@QYIiAUo@Sq@YoAu@q@g@m@k@m@k@i@o@u@aA}@uAgAuBuAkCsAcCwEaJGKACuAmCqAuB_@e@aAeA][QS]W{Au@gBk@kAWwAQ_BGe@@e@@{Cb@qAf@e@PaB|@IDmA~@aBfBs@z@i@x@a@p@c@x@_@z@[`AM^ELGPW`A[zASnACJEb@Mz@OxAm@fFGj@w@~GuCzVF@In@]~Da@zC[bCE\\CRsCjUGh@Gf@_@`Da@dDc@rDc@zD]xC[`C]pC_@dD]hCW`C]vC]rCUrBOnAGj@Il@_@lCQ|A[xBc@hC[pBa@`Ce@jCe@tCa@~BW`Ba@~BUvAWxAShAUtAO|@UnAW`BQrAUtAObBKhAMjBCx@E`AIfBKfCMdCOjDKrBIxAIjAGp@Gn@Gp@Il@Gj@Gf@[|B[hBYdBk@|CWhBQrAIfAWdCMtAa@xC}@pDi@bBs@bB{@vA}@tAiAlA_Av@oBvAwBzA}AhAcChBqBvAyAbAw@h@}@n@yB`BmBtAmBfBiCpCgAxAo@~@eA|AsBbDeBlCiBtCkAhBoAnBmAjBmAlBq@hAUZWZEFGFa@n@OVa@n@_@l@mAlB_AvAA@_A~AGJU^SVQXi@|@k@bAa@x@GJEJQb@S`@a@bAOd@_@`AMd@c@nAc@dBS~@I^SjAQ`AStAUfB_@lCu@|FOhAOjAo@rEKx@ABc@~C_@tCa@vCQnAOfACLe@tDStASrAa@|CWpBU`BO~@_@vCUjBGf@Id@SzAgAtIu@rFs@hG[hDS~DE|AAtB?`DDnEd@|O^vNTtHf@lHd@dFnApJBXD`@ZlBDTvA|JDTz@~FfCfQFf@n@vE^rCLhBLlCFnB?hBChCAp@An@ElCG|FGfF?hEF~BD~@LlBLbBLfAf@vEz@rHRrBRlBTdCJzA\\~LXpJF~Ah@~MThHNlEB|@O@"
+                     },
+                     "start_location" : {
+                        "lat" : 47.3742562,
+                        "lng" : 9.556820999999999
+                     },
+                     "transit_details" : {
+                        "arrival_stop" : {
+                           "location" : {
+                              "lat" : 47.4777626,
+                              "lng" : 9.506175199999999
+                           },
+                           "name" : "Rorschach"
+                        },
+                        "arrival_time" : {
+                           "text" : "7:31am",
+                           "time_zone" : "Europe/Zurich",
+                           "value" : 1542781860
+                        },
+                        "departure_stop" : {
+                           "location" : {
+                              "lat" : 47.3742562,
+                              "lng" : 9.556820999999999
+                           },
+                           "name" : "Altstätten SG"
+                        },
+                        "departure_time" : {
+                           "text" : "7:08am",
+                           "time_zone" : "Europe/Zurich",
+                           "value" : 1542780480
+                        },
+                        "headsign" : "St. Gallen",
+                        "line" : {
+                           "agencies" : [
+                              {
+                                 "name" : "THURBO",
+                                 "url" : "http://sbb.ch/"
+                              }
+                           ],
+                           "color" : "#5c6bc0",
+                           "short_name" : "S2",
+                           "text_color" : "#ffffff",
+                           "vehicle" : {
+                              "icon" : "//maps.gstatic.com/mapfiles/transit/iw2/6/ch-zurich-train.png",
+                              "name" : "Commuter train",
+                              "type" : "COMMUTER_TRAIN"
+                           }
+                        },
+                        "num_stops" : 7
+                     },
+                     "travel_mode" : "TRANSIT"
+                  },
+                  {
+                     "distance" : {
+                        "text" : "27.2 km",
+                        "value" : 27242
+                     },
+                     "duration" : {
+                        "text" : "36 mins",
+                        "value" : 2160
+                     },
+                     "end_location" : {
+                        "lat" : 47.5512855,
+                        "lng" : 9.225558399999999
+                     },
+                     "html_instructions" : "Commuter train towards Weinfelden",
+                     "polyline" : {
+                        "points" : "y_x`H_t_y@FALvDNrELfEJlA\\nN?B?vA?pAEx@AJCX_@vBe@vBYzA]lBWfBQzAUnBE`@Gn@GlAE|A?DEn@QtBIf@EXUhAc@`BOh@On@OfAIz@IlBEfACh@AnAEl@A^SnEIrBKjBIjAOxAIbAS~AUbBMv@}@|Ek@rBc@hB]hAo@jBm@rAc@v@q@lAm@bA}@lAeAnAsEnEgE|Dg@j@[`@q@l@eBdBk@l@o@x@_BhC_C|D[d@MRGJEFCDQTEFINwD|Gw@pAiCrEuBnDu@nAILEHGLw@rAm@lAs@|A[|@KTGLY|@{@lCELq@nCEPMh@q@pDOx@oA|Fm@zCOp@ERg@pBUpA{@|CiAlF[rAq@lDMd@yA`HcAdFi@|BGR?@ENe@fCc@hC]nBYpA]~Aa@xAc@vA{AnEYx@IVGLmDrJiCjH_BjEIZCFCDELADCDk@|Ao@jBsAtDM^CFiDdJyBbGwAzCWb@U`@gAdB{BnCILeAhAuEfDo@^UJi@Zu@Xg@Vq@Zk@Nu@RiAN[?iBF}JRoBDa@Jq@HeAB_BBuBLiH`@oABgGV_AHaBNcATe@To@\\e@Xm@d@SNCDMJ[d@k@bAg@hAo@fBgApDGVmA`E{@zCUv@_@vAa@rAs@dCW~@]hAY~@w@rCOd@?@Uz@gA~Cs@tAmAzBe@n@gAfAEHg@Za@\\}@n@{A~@yAfAcAz@e@h@[f@q@dAk@~@_CrE_CxEeApBaAlBeHbNyBzEwFxKo@hAYj@uEbJoDfH_BbDmDfHoClFi@bAWl@m@zAs@hBEJ_E|LyJ~ZGPoBfGiB`GENaEjM{@jC]hAq@vB_@hAoCnIoBzF_@lAw@bCIV_BbFa@xAAHGVKZ_@lA_BpCeB`B}@h@{@`@{ATaBPwAFcADoEZkERqGZ}Ij@w@BsAFS@aCNq@Ds@HoB`@e@B{@DyAHcBDmBGuAMgAKqA[uAe@cB}@cB}@iAc@aAe@sBs@sAYi@M}@CyBAxB@|@Bh@LfA`@jBt@JBPB|@d@\\Rl@n@x@pA^j@b@dARl@j@lBFRFPDNPdAxAzHhA`GfB~JXbB\\bBTfAJd@fArFTrAr@lDP~@b@~Bf@tCdBxIP`AdC~M`AxEF^H`@`P~y@H^rDpRHb@vBlL@HJh@BJxH~`@F\\H^Fb@Nx@^tB`@`CZxCRbBJhAL~BHzBJnFBlCAxCO|FOnEi@tMmAvXAl@Cl@?@a@rKu@tQQfE_A|Ua@lJAn@Cn@eBv`@Cz@?X?V_@tGQ`DOtDwAha@Et@Ax@wAr^SlEGlBEt@ARMpCAZG|AM~C[zGSnFQvE_@xHQfFE~AUxF]pIe@jKUtFU`HAXKpCCd@AVmAtYgA`Y_@zJMlCi@vMcAxUGlAA\\yBbl@?NC^a@tJIfH?pFPtFPvC^pD\\zC\\jCb@jCh@bCvB`IfAzD|CpKDPPn@JX~DrN\\fADJhAfE@@@C"
+                     },
+                     "start_location" : {
+                        "lat" : 47.477891,
+                        "lng" : 9.506081399999999
+                     },
+                     "transit_details" : {
+                        "arrival_stop" : {
+                           "location" : {
+                              "lat" : 47.5512855,
+                              "lng" : 9.225558399999999
+                           },
+                           "name" : "Erlen"
+                        },
+                        "arrival_time" : {
+                           "text" : "8:14am",
+                           "time_zone" : "Europe/Zurich",
+                           "value" : 1542784440
+                        },
+                        "departure_stop" : {
+                           "location" : {
+                              "lat" : 47.477891,
+                              "lng" : 9.506081399999999
+                           },
+                           "name" : "Rorschach"
+                        },
+                        "departure_time" : {
+                           "text" : "7:38am",
+                           "time_zone" : "Europe/Zurich",
+                           "value" : 1542782280
+                        },
+                        "headsign" : "Weinfelden",
+                        "line" : {
+                           "agencies" : [
+                              {
+                                 "name" : "THURBO",
+                                 "url" : "http://sbb.ch/"
+                              }
+                           ],
+                           "color" : "#cd6634",
+                           "short_name" : "S7",
+                           "text_color" : "#ffffff",
+                           "vehicle" : {
+                              "icon" : "//maps.gstatic.com/mapfiles/transit/iw2/6/ch-zurich-train.png",
+                              "name" : "Commuter train",
+                              "type" : "COMMUTER_TRAIN"
+                           }
+                        },
+                        "num_stops" : 10
+                     },
+                     "travel_mode" : "TRANSIT"
+                  }
+               ],
+               "traffic_speed_entry" : [],
+               "via_waypoint" : []
+            }
+         ],
+         "overview_polyline" : {
+            "points" : "cxc`Hcqiy@BGuC_BkCwAaG_DyB}Bo@}@yCcFmIoNyEkIoFaJoEuHeKiQuBkEoBqF{FgQwIaXyBmHSm@]k@oAwDiBqFyEyNcCsHqHaUcg@}{AmGwR}DgLiN}b@oCeImJuYeC_HU_@gAaC{@wBeCeFsDeGyBcD{@gAg@k@u@gAYg@wAuAyEuDaKcGcIsEuZaQgE}BuCaAmE_A{MwBwWoEsGy@}NaCcDi@mFaAaA[yBi@aCoA_BsAwA{AsBwCiMgVqDsGaBkBo@o@yBmAgBk@kAWwAQ_BGkAB{Cb@qAf@gCnAwAdAuCbDkAjBcAtBw@`Cs@|CWzAqA`L_AjIuCzVF@g@nF}@~GeDfXmBbPoFrd@kAbKwArKiG`_@gDtSe@xDYtD_@jJs@~Na@~Eu@~FyBvMaAvJa@xC}@pD}AfEyBlDiCdCiMfJaItFgFvDwFxFwBxCyD`GkJ|NcF~HgAzAiHhLeBnC{AtCwAnDm@fBgAtDcAlF_ChQcEtZmDtWiEd\\iB|No@hJGrEDpJdAt_@TtHf@lHd@dFnApJHz@~BvOzFfa@l@|FT|FGtIMjKGpLL~DZpEdCfUh@rFh@zO`Bze@RjGi@TFALvD\\zKJlA\\nN?zAEjCEd@}BxLeAtIU`FWdDO`AyAdGYbCOtDMfE]bIUvDY|Ci@bEkAtGoA|EmAtDqAjC_BpCcC|C{KlKcAlAwCrC{AfBiG`Kc@n@_GfK_I`NsBxDcB~DuAjEw@|CuAfHsC~M}@bE{@|CiAlFmA`GgBfIuBxJmBpKw@pDeApDgCnHqLh\\iNv_@oB~D}AfCeC|CeAhAuEfDeAj@_Bt@yAr@aBb@eBNgNZoBDa@JwBLuEPyJd@gI`@aBNcATuAr@sA~@WTi@p@sAlCwBxGgDlLmGtTU|@gA~Cs@tAsBjDmApAcFhD}CbCaApA}AdC_GlLgC~EeHbNyBzEgHbNoFnKmQ`^aApBaBdEgQzi@mQ|j@wI|WmC~ISr@_@lA_BpCeB`B}@h@{@`@{ATyDXsG`@}Mn@uKn@{G^cDj@aBH}DNcEUgAKqA[uAe@cB}@cB}@iAc@uDyA}Bg@wDEvDDpBn@vBx@nAh@jAbAxA|Bv@rBr@`CL`@jB`KhFhY~BtLpCbO|Zv_BhS`fA`ArF|@zG^lDVzFN|JAxCO|Fy@dTsAt[iDn{@mCdo@CtA_@lHa@vI}A~b@uBhj@}A`_@q@pOWfIoBle@g@rNwDj`AcClk@_Cpn@a@tJIfH?pFPtFp@hIz@fHlAnG~D|N`ElNlHnWBA"
+         },
+         "summary" : "",
+         "warnings" : [],
+         "waypoint_order" : []
+      }
+   ],
+   "status" : "OK"
+}

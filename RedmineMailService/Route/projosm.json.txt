@@ -1,0 +1,39 @@
+﻿
+{
+  "routes": [
+    {
+      "legs": [
+        {
+          "summary": "",
+          "weight": 4249.5,
+          "duration": 3924.5,
+          "steps": [],
+          "distance": 67010.7
+        }
+      ],
+      "weight_name": "routability",
+      "weight": 4249.5,
+      "duration": 3924.5,
+      "distance": 67010.7
+    }
+  ],
+  "waypoints": [
+    {
+      "hint": "a7dggPtmlYQWAAAABgAAABMAAAAGAAAAIxhiQXc4kED3uT1B97k9QRYAAAAGAAAAEwAAAAYAAAAWqAAAtZaRAODv0gKdlpEAq-_SAgEA_xEV9gD-",
+      "name": "Trogenerstrasse",
+      "location": [
+        9.541301,
+        47.3784
+      ]
+    },
+    {
+      "hint": "O1XDgP___38wAAAAxAAAAE4AAAAAAAAANfqgQZ1QdUEXZQBCAAAAADAAAABiAAAATgAAAAAAAAAWqAAACQGLAEzQ1QL6AIsAR9DVAgcAjwkV9gD-",
+      "name": "Marktstrasse",
+      "location": [
+        9.109769,
+        47.566924
+      ]
+    }
+  ],
+  "code": "Ok"
+}
