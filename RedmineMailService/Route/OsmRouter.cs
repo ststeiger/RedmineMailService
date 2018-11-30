@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-
+witter
 
 namespace RedmineMailService.Route
 {
@@ -70,7 +70,8 @@ namespace RedmineMailService.Route
         [JsonProperty("location")]
         public List<double> Location { get; set; }
     }
-
+    
+    
     public partial class RootNode
     {
         public static RootNode FromJson(string json)
@@ -78,7 +79,8 @@ namespace RedmineMailService.Route
             return JsonConvert.DeserializeObject<RootNode>(json, Converter.Settings);
         }
     }
-
+    
+    
     public static class Serialize
     {
         public static string ToJson(this RootNode self)
@@ -86,6 +88,7 @@ namespace RedmineMailService.Route
             return JsonConvert.SerializeObject(self, Converter.Settings);
         }
     }
+    
 
     internal static class Converter
     {
@@ -99,4 +102,6 @@ namespace RedmineMailService.Route
             },
         };
     }
+    
+    
 }
