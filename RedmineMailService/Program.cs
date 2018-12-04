@@ -150,17 +150,21 @@ namespace RedmineMailService
         } // End Sub ToCertUtil 
 
 
-
         // https://twitter.com/gitlost
         // https://badhtml.com/
         [System.STAThread]
         static void Main(string[] args)
         {
-            // AnySqlWebAdmin.CerGenerator.CreateSignatureRequest();
-            AnySqlWebAdmin.CerGenerator.Test2();
+            System.Console.WriteLine(System.Environment.OSVersion.VersionString);
+
+            RedmineMailService.MailGender.GetGenders();
             return;
+
+            // AnySqlWebAdmin.CerGenerator.CreateSignatureRequest();
+            // AnySqlWebAdmin.CerGenerator.Test2();
+
             // AnySqlWebAdmin.CerGenerator.Test();
-            // RedmineMailService.MailGender.GetGenders();
+
 
             RedmineMailService.SendMail.Test();
             
