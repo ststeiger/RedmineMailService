@@ -155,11 +155,7 @@ namespace RedmineMailService
         [System.STAThread]
         static void Main(string[] args)
         {
-            System.Console.WriteLine(System.Environment.OSVersion.VersionString);
-
-            RedmineMailService.MailGender.GetGenders();
-            return;
-
+            // RedmineMailService.MailGender.GetGenders();
             // AnySqlWebAdmin.CerGenerator.CreateSignatureRequest();
             // AnySqlWebAdmin.CerGenerator.Test2();
 
