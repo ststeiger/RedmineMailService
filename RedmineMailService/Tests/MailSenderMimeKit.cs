@@ -14,6 +14,24 @@ namespace RedmineMailService.Tests
     {
 
 
+        public static void GmailWithOauth(MimeKit.MimeMessage message)
+        {
+            using (MailKit.Net.Smtp.SmtpClient client = new MailKit.Net.Smtp.SmtpClient())
+            {
+                client.Connect("smtp.gmail.com", 587, MailKit.Security.SecureSocketOptions.StartTls);
+
+                // use the access token
+                var oauth2 = new MailKit.Security.SaslMechanismOAuth2("cor.managementsysteme@gmail.com", "credential.Token.AccessToken");
+                client.Authenticate(oauth2);
+
+                client.Send(message);
+
+                client.Disconnect(true);
+            }
+        }
+
+
+
         public static void foo()
         {
             System.Data.DataTable dt = new System.Data.DataTable();
