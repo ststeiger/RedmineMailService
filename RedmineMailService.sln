@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Exchange.WebServi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Titanium.Web.Proxy", "Titanium.Web.Proxy\Titanium.Web.Proxy.csproj", "{2EF37724-E6D6-4E27-8AB3-C9EC2B30BA10}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Html2Textile", "Html2Textile\Html2Textile.csproj", "{53259850-A475-4B00-9997-FCBDF904744B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Html2Textile", "Html2Textile\Html2Textile.csproj", "{53259850-A475-4B00-9997-FCBDF904744B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

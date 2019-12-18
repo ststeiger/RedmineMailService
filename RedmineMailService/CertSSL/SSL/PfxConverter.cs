@@ -71,13 +71,16 @@ namespace RedmineMailService.CertSSL.SSL
                     System.Console.WriteLine(cert2.PrivateKey);
                 }
 
-
             }
 
+        }
 
 
 
-
+        public static void TestParser()
+        {
+            string pfxLocation = @"D:\lol\certificate.pfx";
+            pfxLocation = @"D:\username\Desktop\DesktopArchiv\20180329_Desktop\CORMailService\CORMailService\CORMailService\CORMailService_TemporaryKey.pfx";
 
 
 
@@ -104,13 +107,11 @@ namespace RedmineMailService.CertSSL.SSL
 
                 // var signer = Org.BouncyCastle.Security.SignerUtilities.GetSigner(Sdk.SIGNATURE_ALGORITHM);
             }
-        }
 
-        public static void TestParser()
-        {
+
             X509CertificateParser certParser = new X509CertificateParser();
 
-            using (var fs = System.IO.File.OpenRead(@"D:\lol\certificate.pfx"))
+            using (var fs = System.IO.File.OpenRead(pfxLocation))
             {
                 certParser.ReadCertificate(fs);
             }
