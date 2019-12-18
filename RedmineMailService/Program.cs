@@ -162,6 +162,11 @@ namespace RedmineMailService
             // AnySqlWebAdmin.CerGenerator.Test();
 
 
+
+            RedmineMailService.CertSSL.SSL.PfxConverter.Test();
+            System.Console.WriteLine("hi");
+
+
             RedmineMailService.SendMail.Test();
             
             
