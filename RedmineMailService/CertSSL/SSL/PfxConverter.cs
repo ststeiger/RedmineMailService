@@ -26,21 +26,21 @@ namespace RedmineMailService.CertSSL.SSL
         {
             string pfxLocation = @"D:\lol\certificate.pfx";
             pfxLocation = @"D:\username\Desktop\DesktopArchiv\20180329_Desktop\CORMailService\CORMailService\CORMailService\CORMailService_TemporaryKey.pfx";
-
-
+            
+            
             Org.BouncyCastle.Pkcs.Pkcs12Store store = null;
-
+            
             using (System.IO.Stream pfxStream = System.IO.File.OpenRead(pfxLocation))
             {
                 store = new Org.BouncyCastle.Pkcs.Pkcs12Store(pfxStream, "".ToCharArray());
             }
-
+            
             System.Console.WriteLine(store);
-
+            
             foreach (string alias in store.Aliases)
             {
                 System.Console.WriteLine(alias);
-
+                
                 // https://7thzero.com/blog/bouncy-castle-convert-a-bouncycastle-asymmetrickeyentry-to-a-.ne
                 if (store.IsKeyEntry((string)alias))
                 {
@@ -48,35 +48,34 @@ namespace RedmineMailService.CertSSL.SSL
                     System.Console.WriteLine(keyEntry);
                     AsymmetricKeyParameter privateKey = keyEntry.Key;
                     System.Console.WriteLine(privateKey.IsPrivate);
-                }
-
-
+                } // End if (store.IsKeyEntry((string)alias))
+                
+                
                 Org.BouncyCastle.Pkcs.X509CertificateEntry certEntry = store.GetCertificate(alias);
                 Org.BouncyCastle.X509.X509Certificate cert = certEntry.Certificate;
                 System.Console.WriteLine(cert);
-
-
-
+                
                 AsymmetricKeyParameter publicKey = cert.GetPublicKey();
                 System.Console.WriteLine(publicKey);
-
-
-
+                
+                // Org.BouncyCastle.Pkcs.X509CertificateEntry[] chain = store.GetCertificateChain(alias);
+                
                 // System.Security.Cryptography.X509Certificates.X509Certificate2 cert2 = new System.Security.Cryptography.X509Certificates.X509Certificate2(cert.GetEncoded());
-
+                // Org.BouncyCastle.Security.DotNetUtilities.ToX509Certificate(cert);
+                
                 System.Security.Cryptography.X509Certificates.X509Certificate2 cert2 = new System.Security.Cryptography.X509Certificates.X509Certificate2(pfxLocation);
-
+                // cert2.PrivateKey = null;
+                
                 if (cert2.HasPrivateKey)
                 {
                     System.Console.WriteLine(cert2.PrivateKey);
                 }
-
+                
             }
-
+            
         }
-
-
-
+        
+        
         public static void TestParser()
         {
             string pfxLocation = @"D:\lol\certificate.pfx";
