@@ -39,19 +39,19 @@ namespace Titanium.Web.Proxy.Examples.Basic
 
                 try
                 {
-                        var color = Console.ForegroundColor;
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        if (exception is ProxyHttpException phex)
-                        {
-                            Console.WriteLine(exception.Message + ": " + phex.InnerException?.Message);
-                        }
-                        else
-                        {
+                    var color = Console.ForegroundColor;
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    if (exception is ProxyHttpException phex)
+                    {
+                        Console.WriteLine(exception.Message + ": " + phex.InnerException?.Message);
+                    }
+                    else
+                    {
+                        if (exception.Message.IndexOf("trendmicro") == -1)
                             Console.WriteLine(exception.Message);
-                        }
+                    }
 
-                        Console.ForegroundColor = color;
-                    
+                    Console.ForegroundColor = color;
                 }
                 finally
                 {
@@ -140,7 +140,8 @@ namespace Titanium.Web.Proxy.Examples.Basic
         private async Task OnBeforeTunnelConnectRequest(object sender, TunnelConnectSessionEventArgs e)
         {
             string hostname = e.WebSession.Request.RequestUri.Host;
-            await WriteToConsole("Tunnel to: " + hostname);
+            if(hostname.IndexOf("trendmicro")!=-1)
+                await WriteToConsole("Tunnel to: " + hostname);
 
             if (hostname.Contains("dropbox.com"))
             {
@@ -159,7 +160,7 @@ namespace Titanium.Web.Proxy.Examples.Basic
         // intecept & cancel redirect or update requests
         private async Task OnRequest(object sender, SessionEventArgs e)
         {
-            await WriteToConsole("Active Client Connections:" + ((ProxyServer)sender).ClientConnectionCount);
+            // await WriteToConsole("Active Client Connections:" + ((ProxyServer)sender).ClientConnectionCount);
             await WriteToConsole(e.WebSession.Request.Url);
 
             // store it in the UserData property
@@ -210,7 +211,7 @@ namespace Titanium.Web.Proxy.Examples.Basic
 
         private async Task OnResponse(object sender, SessionEventArgs e)
         {
-            await WriteToConsole("Active Server Connections:" + ((ProxyServer)sender).ServerConnectionCount);
+            // await WriteToConsole("Active Server Connections:" + ((ProxyServer)sender).ServerConnectionCount);
 
             string ext = System.IO.Path.GetExtension(e.WebSession.Request.RequestUri.AbsolutePath);
 
