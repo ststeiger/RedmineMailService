@@ -150,6 +150,36 @@ namespace RedmineMailService
         } // End Sub ToCertUtil 
 
 
+        // https://superuser.com/questions/1323563/change-systemwide-proxy-in-windows
+        // Titanium/ProxyServer.cs
+        // Titanium/Helpers/SystemProxy.cs
+        
+        
+        /*
+export http_proxy=http://localhost:8000/;
+export https_proxy=http://localhost:8000/;
+export ftp_proxy=http://localhost:8000/;
+
+export HTTP_PROXY=http://localhost:8000/;
+export HTTPS_PROXY=http://localhost:8000/;
+export FTP_PROXY=http://localhost:8000/;
+
+export no_proxy="localhost,127.0.0.1,localaddress,.localdomain.com"
+export NO_PROXY="localhost,127.0.0.1,localaddress,.localdomain.com"
+         */
+        
+        public static void RunProxy()
+        {
+            Titanium.Web.Proxy.Examples.Basic.ProxyTestController controller = Titanium.Web.Proxy.Examples.Basic.ProxyServerProgram.Start();
+            
+            System.Console.WriteLine("Press any key to continue");
+            System.Console.ReadKey();
+            
+            controller.Stop();
+        }
+
+
+
         // https://twitter.com/gitlost
         // https://badhtml.com/
         [System.STAThread]
@@ -160,21 +190,15 @@ namespace RedmineMailService
             // AnySqlWebAdmin.CerGenerator.Test2();
 
             // AnySqlWebAdmin.CerGenerator.Test();
-
-            Titanium.Web.Proxy.Examples.Basic.ProxyTestController controller666 = Titanium.Web.Proxy.Examples.Basic.ProxyServerProgram.Start();
-
-            System.Console.WriteLine("Press any key to continue");
-            System.Console.ReadKey();
-
-            controller666.Stop();
+            
+            RunProxy();
             return;
-
-
-
+            
+            
             RedmineMailService.CertSSL.SSL.PfxConverter.Test();
             System.Console.WriteLine("hi");
-
-
+            
+            
             RedmineMailService.SendMail.Test();
             
             
