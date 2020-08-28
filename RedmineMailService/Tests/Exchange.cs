@@ -357,8 +357,8 @@ namespace RedmineMailService
                 FileAttachment fileAttach = email.Attachments.AddFileAttachment(inputFileName, myStream);
                 email.Attachments[0].IsInline = true; // Requires Exchange 2010+
 
-                email.Attachments.AddFileAttachment(@"D:\username\Desktop\Intro to Docker.pdf");
-                email.Attachments.AddFileAttachment(@"D:\username\Desktop\NET_Core-2.0-Getting_Started_Guide-en-US.pdf");
+                // email.Attachments.AddFileAttachment(@"D:\username\Desktop\Intro to Docker.pdf");
+                // email.Attachments.AddFileAttachment(@"D:\username\Desktop\NET_Core-2.0-Getting_Started_Guide-en-US.pdf");
 
                 MessageBody htmlBody = new MessageBody();
                 htmlBody.BodyType = BodyType.HTML;

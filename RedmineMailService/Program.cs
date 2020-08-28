@@ -161,25 +161,25 @@ namespace RedmineMailService
 
             // AnySqlWebAdmin.CerGenerator.Test();
 
-            Titanium.Web.Proxy.Examples.Basic.ProxyTestController controller666 = Titanium.Web.Proxy.Examples.Basic.ProxyServerProgram.Start();
+            //Titanium.Web.Proxy.Examples.Basic.ProxyTestController controller666 = Titanium.Web.Proxy.Examples.Basic.ProxyServerProgram.Start();
 
-            System.Console.WriteLine("Press any key to continue");
-            System.Console.ReadKey();
+            //System.Console.WriteLine("Press any key to continue");
+            //System.Console.ReadKey();
 
-            controller666.Stop();
-            return;
-
-
-
-            RedmineMailService.CertSSL.SSL.PfxConverter.Test();
-            System.Console.WriteLine("hi");
+            //controller666.Stop();
+            //return;
 
 
-            RedmineMailService.SendMail.Test();
+
+            // RedmineMailService.CertSSL.SSL.PfxConverter.Test();
+            // System.Console.WriteLine("hi");
+
+
+            // RedmineMailService.SendMail.Test();
             
             
             // RedmineMailService.Tests.StructureInfo.Test();
-            MailSender.Test();
+            // MailSender.Test();
             
             
             System.Configuration.ConfigurationManager.AppSettings.Get();
