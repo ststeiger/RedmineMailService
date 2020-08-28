@@ -241,6 +241,8 @@ namespace Titanium.Web.Proxy.Network
         
         private string getRootCertificateDirectory()
         {
+            //  return "/usr/share/ca-certificates/mozilla/";
+            
             string assemblyLocation = Assembly.GetExecutingAssembly().Location;
 
             // dynamically loaded assemblies returns string.Empty location
@@ -567,7 +569,7 @@ namespace Titanium.Web.Proxy.Network
             {
                 ExceptionFunc(e);
             }
-
+            
             if (persistToFile && RootCertificate != null)
             {
                 try
